@@ -45,7 +45,7 @@ return require('packer').startup(function(use)
 	-- TODO Configurar
 	use 'mfussenegger/nvim-dap'
 
-
+	-- TODO Configurar atalhos e configuracao
     use {
         'VonHeikemen/lsp-zero.nvim',
         requires = {
@@ -107,7 +107,7 @@ return require('packer').startup(function(use)
 
 	-- Muda o foreground color com base no atual Vim Mode
 	-- TODO Configurar
-	use "mawkler/modicator.nvim"	
+	use "mawkler/modicator.nvim"
 
 	-- Plugin para facilitar comentar multiplas linhas adicionando atalhos
 	-- TODO Configurar
@@ -118,6 +118,16 @@ return require('packer').startup(function(use)
         end
     }
 
+	--Plugin para utilizar um terminal dentro do nvim como maior facilidade
+	--TODO Configurar
+	use 'akinsho/toggleterm.nvim'
+
+	--Plugin que adiciona uma status line que mostra o atual contexto do codigo
+	--TODO Configurar
+	use { "SmiteshP/nvim-navic",requires = "neovim/nvim-lspconfig"}
+
+
+	use 'fgheng/winbar.nvim'
 end)
 
 

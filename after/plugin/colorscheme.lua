@@ -1,13 +1,13 @@
 require('onedark').setup {
     style = 'darker',
-	transparent = false,
+	transparent = true,
 	term_colors = true,
 	code_style  = {
 		comments = 'italic',
-		keyword  = 'bold,underline',
-		functions= 'bold',
+		keyword  = 'bold',
+		functions= 'italic,bold',
 		strings  = 'italic',
-		variables= 'bold'
+		-- variables= ''
 	},
 	diagnostics  = {
 		undercurl = false,
@@ -16,7 +16,7 @@ require('onedark').setup {
 		    bright_orange = "#ffff00",
 	},
 	highlighths = {
-			["@string"] = {fg = '#ffff00', sp = '$cyan'},
-	}
+			["@string"] = {fg = '#ffff00', sp = '#ffff00'},
+	},
 }
 require('onedark').load()
