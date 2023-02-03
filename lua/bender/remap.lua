@@ -2,6 +2,7 @@ vim.g.mapleader = " "
 
 -- Atalho para operacoes do proprio editor <Control> + comando
 vim.keymap.set('n', '<C-s>',":w<CR>",{}) 	--Ctrl + s para salvar
+vim.keymap.set('n', '<C-q>',":wq<CR>",{})   --Ctrl + q para salvar e sair
 vim.keymap.set('n', '<C-n>',":tabnew<CR>")  --Cria um arquivo novo
 
 -- Atalho para navegacao e busca de arquivos <shift> + comando
