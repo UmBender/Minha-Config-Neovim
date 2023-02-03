@@ -128,6 +128,16 @@ return require('packer').startup(function(use)
 
 
 	use 'fgheng/winbar.nvim'
+
+	-- Plugin para gerar a lista que mostra os diagnosticos, referencias, quickfix ...
+	-- TODO Configurar
+	use 'folke/trouble.nvim'
+
+	-- Plugin que lista possiveis atalhos para comandos que voce comecou a digitar
+	-- TODO Configurar
+	use 'folke/which-key.nvim'
+
+
 end)
 
 
