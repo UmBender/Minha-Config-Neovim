@@ -1,6 +1,7 @@
 # Configuração Neovim do Bender
 
 <p> Esta é minha configuração neovim, use da forma que você desejar </p>
+> Esta configuração está ainda em desenvolvimento
 
 ## Lista de Plugins
 	- Packer
