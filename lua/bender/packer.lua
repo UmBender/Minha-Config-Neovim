@@ -137,6 +137,10 @@ return require('packer').startup(function(use)
 	-- TODO Configurar
 	use 'folke/which-key.nvim'
 
+	-- Plugin que cria uma página inicial para o nvim 
+	-- TODO Configurar
+	use 'glepnir/dashboard-nvim'
+
 
 end)
 
