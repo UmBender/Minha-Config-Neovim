@@ -71,6 +71,9 @@ return require('packer').startup(function(use)
     -- O meu esquema de cores
     use 'navarasu/onedark.nvim'
 
+	-- Novo esquema de cores teste
+	use 'catppuccin/nvim'
+
     -- Uma tabline para o nvim
     -- TODO Configurar
     use { 'romgrk/barbar.nvim', wants = 'nvim-web-devicons' }
@@ -148,5 +151,6 @@ return require('packer').startup(function(use)
 	-- Plugin para criar um terminal flutuante
 	-- TODO Configurar
 	use 'voldikss/vim-floaterm'
+
 
 end)
