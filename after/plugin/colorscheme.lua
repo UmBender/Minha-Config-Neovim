@@ -27,7 +27,7 @@ require("catppuccin").setup({
     --    light = "latte",
     --     dark = "mocha",
     -- },
-    transparent_background = true,
+    transparent_background = false,
     show_end_of_buffer = false, -- show the '~' characters after the end of buffers
     term_colors = false,
     dim_inactive = {
@@ -65,4 +65,5 @@ require("catppuccin").setup({
 })
 
 -- setup must be called before loading
-vim.cmd.colorscheme "catppuccin"
+require("catppuccin").load();
+-- vim.cmd.colorscheme "catppuccin-mocha"
