@@ -1,69 +1,89 @@
-require('onedark').setup {
-    style = 'darker',
-	transparent = true,
-	term_colors = true,
-	code_style  = {
-		comments = 'italic',
-		keyword  = 'bold',
-		functions= 'italic,bold',
-		strings  = 'italic',
-		-- variables= ''
-	},
-	diagnostics  = {
-		undercurl = false,
-	},
-	colors = {
-		    bright_orange = "#ffff00",
-	},
-	highlighths = {
-			["@string"] = {fg = '#ffff00', sp = '#ffff00'},
-	},
-}
--- require('onedark').load()
---
-require("catppuccin").setup({
-    flavour = "mocha", -- latte, frappe, macchiato, mocha
-    -- background = { -- :h background
-    --    light = "latte",
-    --     dark = "mocha",
-    -- },
-    transparent_background = true,
-    show_end_of_buffer = false, -- show the '~' characters after the end of buffers
-    term_colors = false,
-    dim_inactive = {
-        enabled = false,
-        shade = "dark",
-        percentage = 0.15,
-    },
-    no_italic = false, -- Force no italic
-    no_bold = false, -- Force no bold
-    styles = {
-        comments = { "italic" },
-        conditionals = { "italic" },
-        loops = {},
-        functions = {"italic,bold"},
-        keywords = { "bold" },
-        strings = {"italic"},
-        variables = {},
-        numbers = {},
-        booleans = {},
-        properties = {},
-        types = {},
-        operators = {},
-    },
-    color_overrides = {},
-    custom_highlights = {},
-    integrations = {
-        cmp = true,
-        gitsigns = true,
-        nvimtree = true,
-        telescope = true,
-        notify = false,
-        mini = false,
-        -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
-    },
-})
+-- require('onedark').setup {
+--     style = 'darker',
+-- 	transparent = true,
+-- 	term_colors = true,
+-- 	code_style  = {
+-- 		comments = 'italic',
+-- 		keyword  = 'bold',
+-- 		functions= 'italic,bold',
+-- 		strings  = 'italic',
+-- 		-- variables= ''
+-- 	},
+-- 	diagnostics  = {
+-- 		undercurl = false,
+-- 	},
+-- 	colors = {
+-- 		    bright_orange = "#ffff00",
+-- 	},
+-- 	highlighths = {
+-- 			["@string"] = {fg = '#ffff00', sp = '#ffff00'},
+-- 	},
+-- }
+-- -- require('onedark').load()
+-- --
+-- colorscheme_cat = {
+-- 	"latte",
+-- 	"frappe",
+-- 	"macchiato",
+-- 	"mocha"
+-- }
 
--- setup must be called before loading
-require("catppuccin").load();
--- vim.cmd.colorscheme "catppuccin-mocha"
+-- option_color_cat =1
+
+-- transparent_background_config = true
+-- if colorscheme_cat[option_color_cat] == "latte" then
+-- 	transparent_background_config = false
+-- end
+
+-- require("catppuccin").setup({
+-- 	flavour = colorscheme_cat[option_color_cat], -- latte, frappe, macchiato, mocha
+-- 	-- background = { -- :h background
+-- 	--    light = "latte",
+-- 	--     dark = "mocha",
+-- 	-- },
+-- 	transparent_background = transparent_background_config,
+-- 	show_end_of_buffer = false, -- show the '~' characters after the end of buffers
+-- 	term_colors = true,
+-- 	dim_inactive = {
+-- 		enabled = false,
+-- 		shade = "dark",
+-- 		percentage = 0.15,
+-- 	},
+-- 	no_italic = false, -- Force no italic
+-- 	no_bold = false, -- Force no bold
+-- 	styles = {
+-- 		comments = { "italic" },
+-- 		conditionals = { "italic" },
+-- 		loops = {},
+-- 		functions = {"italic,bold"},
+-- 		keywords = { "bold" },
+-- 		strings = {"italic"},
+-- 		variables = {},
+-- 		numbers = {},
+-- 		booleans = {},
+-- 		properties = {},
+-- 		types = {},
+-- 		operators = {},
+-- 	},
+-- 	color_overrides = {},
+-- 	custom_highlights = {},
+-- 	integrations = {
+-- 		cmp = true,
+-- 		gitsigns = true,
+-- 		nvimtree = true,
+-- 		telescope = true,
+-- 		notify = true,
+-- 		mini = false,
+-- 		dashboard = true,
+-- 		indent_blankline = {
+-- 			enabled = true,
+-- 			colored_indent_levels = true,
+-- 		},
+-- 		mason = true,
+--         -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
+--     },
+-- })
+
+-- -- setup must be called before loading
+-- -- require("catppuccin").load();
+-- -- vim.cmd.colorscheme "catppuccin-mocha"
