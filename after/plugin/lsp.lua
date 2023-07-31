@@ -6,6 +6,29 @@ require'lspconfig'.clojure_lsp.setup{}
 require'lspconfig'.ccls.setup{}
 require'lspconfig'.gopls.setup{}
 require'lspconfig'.marksman.setup{}
+require'lspconfig'.solargraph.setup{}
+require'lspconfig'.html.setup{
+	cmd = { "html-languageserver", "--stdio"},
+	on_attach = on_attach,
+	capabilities = capabilities,
+	flags = lsp_flags
+}
+require'lspconfig'.cssls.setup{
+	cmd = { "css-languageserver", "--stdio"},
+	on_attach = on_attach,
+	capabilities = capabilities,
+	flags = lsp_flags
+}
+require'lspconfig'.jsonls.setup{
+	cmd = { "json-languageserver", "--stdio"},
+	on_attach = on_attach,
+	capabilities = capabilities,
+	flags = lsp_flags
+}
+
+
+
+
 
 --lsp.on_attach(function(client, bufnr)
 --  lsp.default_keymaps({buffer = bufnr})
