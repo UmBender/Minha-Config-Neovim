@@ -8,3 +8,5 @@ vim.keymap.set('n', '<C-p>',":FloatermNew --autoclose=0 zsh ./build.sh <CR>")
 -- vim.keymap.set('n', '<C-p>',":FloatermNew --autoclose=0 g++ % -o %< && ./%<<CR>")
 vim.keymap.set('n', '<C-r>',":FloatermNew --autoclose=0 cargo run -q --color always <CR>")
 
+vim.keymap.set('n', '<C-t>',":FloatermNew <CR>")
+vim.keymap.set('t', '<C-t>', "exit <CR> <CR>")
