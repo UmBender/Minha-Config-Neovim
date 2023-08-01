@@ -15,6 +15,7 @@ vim.keymap.set('n', '<S-l>',':BufferNext<CR>')      --Anda para as abas para dir
 vim.keymap.set('n', '<S-h>',':BufferPrevious<CR>')  --Anda para as abas para esquerda
 
 vim.keymap.set('n', '<S-e>',vim.cmd.NvimTreeFocus)  --Abre o NVimTree
+vim.keymap.set('n', '<S-q>',':q<CR>')
 
 
 
