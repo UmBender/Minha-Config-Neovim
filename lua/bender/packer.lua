@@ -165,4 +165,8 @@ return require('packer').startup(function(use)
 			'nvim-lua/plenary.nvim'
 		}
 	}
+
+	-- Highlight color for neovim
+	use 'norcalli/nvim-colorizer.lua'
+
 end)
