@@ -5,7 +5,7 @@ colorscheme_cat = {
 	"mocha"
 }
 
-option_color_cat =4
+option_color_cat =1
 
 
 transparent_background_config = false

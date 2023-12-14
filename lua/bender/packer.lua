@@ -169,4 +169,9 @@ return require('packer').startup(function(use)
 	-- Highlight color for neovim
 	use 'norcalli/nvim-colorizer.lua'
 
+	-- New colorscheme
+	use 'nyoom-engineering/oxocarbon.nvim'
+
+	use 'JuliaEditorSupport/julia-vim'
+
 end)
