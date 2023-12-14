@@ -4,7 +4,7 @@ return require('packer').startup(function(use)
 
 	--Pacote instalado do telescope
 	use 'nvim-lua/plenary.nvim'
-	use { 'nvim-telescope/telescope.nvim', tag = '0.1.0' }
+	use { 'nvim-telescope/telescope.nvim', tag = '0.1.5' }
 
 	--Instalacao do treesitter
 	use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
