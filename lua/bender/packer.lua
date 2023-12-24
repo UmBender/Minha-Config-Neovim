@@ -174,4 +174,8 @@ return require('packer').startup(function(use)
 
 	use 'JuliaEditorSupport/julia-vim'
 
+	use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+
+	use {'terrortylor/nvim-comment'}
+
 end)
