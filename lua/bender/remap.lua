@@ -9,6 +9,7 @@ vim.keymap.set('n', '<C-c>',":BufferClose<CR>") -- Fecha a aba atual
 -- Atalho para navegacao e busca de arquivos <shift> + comando
 local telescope = require('telescope.builtin')
 vim.keymap.set('n', '<S-f>',telescope.find_files)
+vim.keymap.set('n', '<S-t>',telescope.grep_string)
 
 
 vim.keymap.set('n', '<S-l>',':BufferNext<CR>')      --Anda para as abas para direita
