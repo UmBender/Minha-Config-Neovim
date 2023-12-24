@@ -21,7 +21,14 @@ hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
     vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
 end)
 
+
 require("ibl").setup { 
-	indent = { highlight = highlight },
-	scope = {enabled = true, show_start = false, show_end = false}
+	indent = { highlight = highlight,smart_indent_cap = true },
+	scope = {enabled = true, show_start = true, show_end = true, exclude = {language = {"lua"}}}
 }
+require "ibl".overwrite {
+ exclude = { filetypes = {"dashboard"} }
+}
+require "ibl".refresh()
+
+
