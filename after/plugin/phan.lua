@@ -1,1 +1,2 @@
-require'lspconfig'.phan.setup{}
+-- require'lspconfig'.phan.setup{}
+--
