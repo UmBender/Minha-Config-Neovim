@@ -8,7 +8,7 @@ colorscheme_cat = {
 option_color_cat =1
 
 
-transparent_background_config = false
+transparent_background_config = true
 if colorscheme_cat[option_color_cat] == "latte" then
 	transparent_background_config = false
 end
