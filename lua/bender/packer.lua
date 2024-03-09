@@ -6,21 +6,21 @@ return require('packer').startup(function(use)
 		branch = 'v3.x',
 		requires = {
 			--- Uncomment these if you want to manage LSP servers from neovim
-			{'williamboman/mason.nvim'},
-			{'williamboman/mason-lspconfig.nvim'},
+			{ 'williamboman/mason.nvim' },
+			{ 'williamboman/mason-lspconfig.nvim' },
 
 			-- LSP Support
-			{'neovim/nvim-lspconfig'},
+			{ 'neovim/nvim-lspconfig' },
 			-- Autocompletion
-			{'hrsh7th/nvim-cmp'		},
-			{'hrsh7th/cmp-nvim-lsp'},
-			{'L3MON4D3/LuaSnip',
-			tag = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-			-- install jsregexp (optional!:).
-			run = "make install_jsregexp"},
+			{ 'hrsh7th/nvim-cmp' },
+			{ 'hrsh7th/cmp-nvim-lsp' },
+			{ 'L3MON4D3/LuaSnip',
+				tag = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+				-- install jsregexp (optional!:).
+				run = "make install_jsregexp" },
 		}
 	}
-	use { "rafamadriz/friendly-snippets" }	
+	use { "rafamadriz/friendly-snippets" }
 	use { 'L3MON4D3/LuaSnip' }
 
 	-- auto-completion engine
@@ -187,5 +187,4 @@ return require('packer').startup(function(use)
 
 	-- For latex
 	use { 'lervag/vimtex' }
-
 end)
