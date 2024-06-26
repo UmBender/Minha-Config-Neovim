@@ -48,7 +48,7 @@ return require('packer').startup(function(use)
 		requires = {
 			'nvim-tree/nvim-web-devicons',
 		},
-		 
+
 	}
 
 	--Servidor para linguagem rust
@@ -187,4 +187,7 @@ return require('packer').startup(function(use)
 
 	-- For latex
 	use { 'lervag/vimtex' }
+
+	-- Elixir Tools
+	use({ "elixir-tools/elixir-tools.nvim", tag = "stable", requires = { "nvim-lua/plenary.nvim" } })
 end)
