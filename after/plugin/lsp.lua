@@ -16,7 +16,10 @@ require('mason-lspconfig').setup({
 				single_file_support = true,
 				on_attach = function(client, bufnr)
 					print('hello tsserver')
-				end
+				end,
+				init_options={
+					fallbackFlags = {'--std=c++20'}
+				},
 			})
 		end,
 	},
