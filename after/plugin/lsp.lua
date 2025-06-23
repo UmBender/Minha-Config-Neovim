@@ -1,4 +1,5 @@
 local lsp_zero = require('lsp-zero')
+lsp_zero.preset('recommended')
 
 lsp_zero.on_attach(function(client, bufnr)
 	-- see :help lsp-zero-keybindings
@@ -6,9 +7,18 @@ lsp_zero.on_attach(function(client, bufnr)
 	lsp_zero.default_keymaps({ buffer = bufnr })
 end)
 
+lsp_zero.configure('rust_analyzer', {
+	settings = {
+		['rust-analyzer'] = {
+			checkOnSave = true,
+		},
+	},
+})
+
+
 require('mason').setup({})
 require('mason-lspconfig').setup({
-	ensure_installed = { "clangd" },
+	ensure_installed = { "clangd", },
 	handlers = {
 		lsp_zero.default_setup,
 		clangd = function()
@@ -17,8 +27,8 @@ require('mason-lspconfig').setup({
 				on_attach = function(client, bufnr)
 					print('hello tsserver')
 				end,
-				init_options={
-					fallbackFlags = {'--std=c++20'}
+				init_options = {
+					fallbackFlags = { '--std=c++20' }
 				},
 			})
 		end,

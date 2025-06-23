@@ -179,7 +179,7 @@ return require('packer').startup(function(use)
 	use { 'norcalli/nvim-colorizer.lua' }
 
 	-- New colorscheme
-	use { 'nyoom-engineering/oxocarbon.nvim' }
+	use { "bluz71/vim-moonfly-colors" }
 
 
 	use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
@@ -191,4 +191,16 @@ return require('packer').startup(function(use)
 
 	-- Elixir Tools
 	use({ "elixir-tools/elixir-tools.nvim", tag = "stable", requires = { "nvim-lua/plenary.nvim" } })
+
+	use {
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		config = function()
+			require("nvim-autopairs").setup {}
+		end
+	}
+	use {
+		'elixir-tools/elixir-tools.nvim',
+		requires = { 'nvim-lua/plenary.nvim' }
+	}
 end)
