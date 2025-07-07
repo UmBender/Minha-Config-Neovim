@@ -199,8 +199,10 @@ return require('packer').startup(function(use)
 			require("nvim-autopairs").setup {}
 		end
 	}
+
+	use { "ellisonleao/gruvbox.nvim" }
 	use {
-		'elixir-tools/elixir-tools.nvim',
-		requires = { 'nvim-lua/plenary.nvim' }
+		'sphamba/smear-cursor.nvim',
 	}
+	use { "karb94/neoscroll.nvim" }
 end)

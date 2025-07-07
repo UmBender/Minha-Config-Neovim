@@ -8,7 +8,7 @@ vim.o.termguicolors    = true
 vim.o.cursorline       = true
 vim.o.number           = true
 vim.o.mouse            = nil
-_G.colorscheme_select  = "moonfly"
+--_G.colorscheme_select  = "moonfly"
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "php",
 	callback = function()
@@ -20,4 +20,17 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.bo.smartindent = true
 	end,
 })
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "gleam",
+	callback = function()
+		vim.bo.expandtab = true
+		vim.bo.shiftwidth = 2
+		vim.bo.tabstop = 2
+		vim.bo.softtabstop = 2
+		vim.bo.autoindent = true
+		vim.bo.smartindent = true
+	end,
+})
+
+
 vim.opt.clipboard = 'unnamedplus'

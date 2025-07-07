@@ -15,6 +15,7 @@ lsp_zero.configure('rust_analyzer', {
 	},
 })
 
+require('lspconfig').gleam.setup({})
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
