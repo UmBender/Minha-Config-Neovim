@@ -201,8 +201,8 @@ return require('packer').startup(function(use)
 	}
 
 	use { "ellisonleao/gruvbox.nvim" }
-	use {
-		'sphamba/smear-cursor.nvim',
-	}
-	use { "karb94/neoscroll.nvim" }
+	use { 'j-hui/fidget.nvim' }
+	use { 'rcarriga/nvim-dap-ui' }
+	use { "jay-babu/mason-nvim-dap.nvim" }
+	use { "nvim-neotest/nvim-nio" }
 end)

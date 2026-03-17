@@ -29,8 +29,11 @@ vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
 vim.keymap.set('n', '<space>fe', function()
 	vim.lsp.buf.format { async = true }
 end, opts)
-vim.keymap.set('n', '<leader>s', ":LspZeroFormat<CR>:w<CR>", { silent = true }) --Ctrl + s para salvar
-vim.keymap.set('n', '<leader>q', ":LspZeroFormat<CR>:wq<CR>", {silent = true})             --Ctrl + q para salvar e sair
-vim.keymap.set('n', '<leader>n', ":tabnew<CR>")                               --Cria um arquivo novo
-vim.keymap.set('n', '<leader>c', ":BufferClose<CR>")                          -- Fecha a aba atual
-vim.keymap.set('n', '<leader>p', ":!./build.sh<CR>")                          -- Fecha a aba atual
+vim.keymap.set('n', '<leader>s', ":LspZeroFormat<CR>:w<CR>", { silent = true })  --Ctrl + s para salvar
+vim.keymap.set('n', '<leader>q', ":LspZeroFormat<CR>:wq<CR>", { silent = true }) --Ctrl + q para salvar e sair
+vim.keymap.set('n', '<leader>n', ":tabnew<CR>")                                  --Cria um arquivo novo
+vim.keymap.set('n', '<leader>c', ":BufferClose<CR>")                             -- Fecha a aba atual
+vim.keymap.set('n', '<leader>p', ":!./build.sh<CR>")                             -- Fecha a aba atual
+
+require('dapui').setup()
+vim.keymap.set('n', '<leader>dt', '<cmd>lua require("dapui").toggle()<cr>', opts)
