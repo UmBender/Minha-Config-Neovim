@@ -56,6 +56,10 @@ notebook -> ~/gempro-notebook   ICPC library symlink, NOT tracked (see below)
 6. **Commit** on the branch (conventional message), set the task `status: done`.
 7. **Merge**: `git checkout main && git merge --ff-only task/T-NNN-<slug> && git branch -d task/T-NNN-<slug>`.
    Do **not** push unless the user asks.
+8. **Clear context**: once a task is merged, stop and don't start the next task in the same session.
+   Ask the user to run `/clear` (an agent can't clear its own context), then begin the next task
+   fresh from `AGENTS.md`, `tasks/Home.md` and the task note. So the task note has to hold
+   everything needed to resume a task: its plan, log and open decisions.
 
 The user has authorized steps 6 and 7 as part of this pipeline.
 

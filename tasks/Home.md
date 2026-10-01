@@ -25,7 +25,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-009 | [[T-009 Migrate dsa group A]] | agent |
 | T-010 | [[T-010 Migrate dsa group B]] | agent |
 | T-011 | [[T-011 Migrate dsa group C]] | agent |
-| T-012 | [[T-012 Port graph templates]] | todo |
+| T-012 | [[T-012 Port graph templates]] | done |
 | T-013 | [[T-013 Editor aesthetics]] | done |
 
 ## Decisions
