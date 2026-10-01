@@ -165,7 +165,7 @@ function M.insert(id, buf)
     local item = get(dep)
     if not present[item.title] then
       vim.list_extend(chunk, vim.fn.readfile(item.file))
-      chunk[#chunk + 1] = ""
+      vim.list_extend(chunk, { "// End: " .. item.title, "" }) -- closes the template's fold (util.fold)
       inserted[#inserted + 1] = dep
     end
   end
@@ -178,6 +178,9 @@ end
 
 local function notify_insert(id, buf)
   local inserted = M.insert(id, buf)
+  require("util.fold").close(buf, vim.tbl_map(function(dep)
+    return get(dep).title
+  end, inserted))
   local msg = #inserted > 0 and ("Inserted " .. table.concat(inserted, ", ")) or (id .. " is already in the file")
   vim.notify(msg, vim.log.levels.INFO, { title = "CP Library" })
 end

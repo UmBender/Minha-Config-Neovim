@@ -18,6 +18,7 @@ See [[Competitive Programming]] for the workflow.
 | `<leader>rc` | Compile only; errors/warnings go to quickfix |
 | `<leader>rn` | Insert the solution template into the current buffer |
 | `<leader>rl` | Insert from the template library (picker; structures with variants open a second menu: normal, educational, common uses; see [[Template Library]]) |
+| `<leader>rf` | Collapse all library templates (or open them all if all are collapsed); `za` toggles the one under the cursor. See [[Template Library]] |
 | `<leader>rt` | Run all test cases |
 | `<leader>rT` | Run test cases without recompiling |
 | `<leader>ru` | Show the test cases UI |

@@ -30,6 +30,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-014 | [[T-014 Performance]] | done |
 | T-015 | [[T-015 Template variant menu]] | done |
 | T-016 | [[T-016 Port strings templates]] | done |
+| T-017 | [[T-017 Collapsible templates]] | done |
 
 ## Decisions
 
@@ -46,6 +47,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 - [[D-011 Font and Material icons]]
 - [[D-012 Performance budget]]
 - [[D-013 Template variants]]
+- [[D-014 Collapsible templates with native folds]]
 
 ## Guides
 

@@ -24,6 +24,7 @@ examples/<area>/<name>.cpp   runnable usage example per template/variant (checke
 tests/                   tests for lib/ (tests/<area>/<name>.cpp) and nvim helpers (tests/nvim/)
 tasks/Library/           generated docs, one page per template (tests/run.py --write-docs)
 lua/util/lib.lua         library picker / insertion
+lua/util/fold.lua        collapsible inserted templates (`// Title:` .. `// End:` folds)
 .clang-format            fallback style when a project has none
 lazy-lock.json           plugin lockfile (commit it)
 tasks/                   Obsidian vault: tasks, decisions, guides (see below)

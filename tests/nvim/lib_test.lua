@@ -76,6 +76,19 @@ test("educational and normal count as the same template", function()
   eq(lib.insert("x/top", buf), { "x/top" })
 end)
 
+test("insert closes each template with an End line", function()
+  local buf = buf_with({ "void solve() {}" })
+  lib.insert("x/top", buf)
+  local l = lines(buf)
+  local base_end = vim.fn.index(l, "// End: Base") + 1
+  local top = vim.fn.index(l, "// Title: Top") + 1
+  assert(base_end > 1 and base_end < top, "Base ends before Top starts")
+  eq(l[base_end - 1], "int base() { return 1; }")
+  eq(l[base_end + 1], "")
+  eq(l[#l - 2], "// End: Top")
+  eq(l[#l - 1], "")
+end)
+
 test("resolve puts dependencies first", function()
   eq(lib.resolve("x/top"), { "x/base", "x/top" })
   eq(lib.resolve("x/base"), { "x/base" })

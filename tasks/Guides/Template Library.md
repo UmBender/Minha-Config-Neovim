@@ -21,7 +21,12 @@ Tested C++ templates in `lib/<area>/<name>.cpp`, based on the ICPC notebook but 
 3. The code goes **above `void solve()`** (or `int main()`, or below the cursor), together with any
    templates it `Requires`. Templates already in the file are skipped (normal and educational
    count as the same template).
-4. Read the `Usage:` comment at the top of the inserted code. Each structure's page in [[Library]]
+4. The inserted code ends with a `// End: <Title>` line and is **collapsed** to its
+   `// Title:` line ([[D-014 Collapsible templates with native folds]]). Templates are collapsed
+   again whenever the file opens. `za` / `zo` / `zc` open or close the one under the cursor,
+   `<leader>rf` collapses (or opens) all of them. Keep the End line: without it the template
+   doesn't fold.
+5. Read the `Usage:` comment at the top of the inserted code (`zo` to see it). Each structure's page in [[Library]]
    has a full example per variant.
 
 Conventions in every template: 0-indexed, half-open ranges `[l, r)`, generic types, operations

@@ -14,6 +14,10 @@ map("<leader>rr", function() cp.run() end, "Compile & Run")
 map("<leader>rd", function() cp.run({ debug = true }) end, "Compile & Run (sanitizers)")
 map("<leader>rn", function() cp.insert_template() end, "Insert Template")
 map("<leader>rl", function() require("util.lib").pick() end, "Insert from Library")
+map("<leader>rf", function() require("util.fold").toggle(0) end, "Toggle Template Folds")
+
+-- library templates (`// Title:` .. `// End:`) open collapsed
+require("util.fold").attach(0)
 
 -- test cases (CompetiTest)
 map("<leader>rt", "<cmd>CompetiTest run<cr>", "Run Testcases")
