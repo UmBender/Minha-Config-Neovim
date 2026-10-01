@@ -51,6 +51,28 @@ int main() {
             CHECK_EQ(inv_seen, want);
         }
     }
+    // CTAD: the value type comes from the vector
+    vector<int> small = {5, 1, 4};
+    WaveletMatrix ctad(small);
+    static_assert(is_same_v<decltype(ctad), WaveletMatrix<int>>);
+    CHECK_EQ(ctad.kth(0, 3, 1), 4);
+
+    // preset: number of distinct values in a[l, r)
+    CHECK_EQ(DistinctCount(vector<int>{}).query(0, 0), 0);
+    for (int it = 0; it < 300; it++) {
+        int n = (int)test::rnd(1, 60);
+        vector<ll> a = test::rndVec<ll>(n, it % 2 ? -3 : -(ll)1e18, it % 2 ? 3 : (ll)1e18);
+        DistinctCount dc(a);
+        for (int q = 0; q < 50; q++) {
+            int l = (int)test::rnd(0, n), r = (int)test::rnd(l, n);
+            CHECK_EQ(dc.query(l, r), (int)set<ll>(a.begin() + l, a.begin() + r).size());
+        }
+    }
+    vector<string> words = {"a", "b", "a", "c", "b"};
+    DistinctCount dw(words);
+    CHECK_EQ(dw.query(0, 5), 3);
+    CHECK_EQ(dw.query(1, 3), 2);
+
     // single distinct value
     WaveletMatrix<int> same(vector<int>(5, 7));
     CHECK_EQ(same.kth(1, 4, 2), 7);

@@ -32,6 +32,46 @@ int main() {
             }
         }
     }
+    // presets: T = long long by default, default range x in [-1e9, 1e9]
+    {
+        LiChao def;
+        static_assert(is_same_v<decltype(def), LiChao<ll, false>>);
+        MinLiChao mn;
+        MaxLiChao mx;
+        static_assert(is_same_v<decltype(mn), LiChao<ll, false>>);
+        static_assert(is_same_v<decltype(mx), LiChao<ll, true>>);
+        MaxLiChao<int> small(0, 10);
+        static_assert(is_same_v<decltype(small), LiChao<int, true>>);
+        small.addLine(2, 1);
+        CHECK_EQ(small.query(9), 19);
+        const ll C = (ll)1e9;
+        {  // the default range is closed: segments reach x = 1e9 (and stop before it when asked)
+            MinLiChao seg;
+            seg.addSegment(1, 0, C - 5, C + 1);
+            seg.addSegment(-1, 0, -C, -C + 1);
+            CHECK_EQ(seg.query(C), C);
+            CHECK_EQ(seg.query(-C), C);
+            CHECK_EQ(seg.query(0), seg.NONE);
+            MaxLiChao part;
+            part.addSegment(1, 0, C - 5, C);
+            CHECK_EQ(part.query(C - 1), C - 1);
+            CHECK_EQ(part.query(C), part.NONE);
+        }
+        vector<pair<ll, ll>> lines;
+        for (int q = 0; q < 3000; q++) {
+            if (q % 2 == 0) {
+                ll a = test::rnd(-1e6, 1e6), b = test::rnd(-1e9, 1e9);
+                def.addLine(a, b), mn.addLine(a, b), mx.addLine(a, b), lines.push_back({a, b});
+            } else {
+                ll x = q % 10 == 1 ? -C : q % 10 == 3 ? C : test::rnd(-C, C);
+                ll wantMin = LLONG_MAX, wantMax = LLONG_MIN;
+                for (auto [a, b] : lines) wantMin = min(wantMin, a * x + b), wantMax = max(wantMax, a * x + b);
+                CHECK_EQ(def.query(x), wantMin);
+                CHECK_EQ(mn.query(x), wantMin);
+                CHECK_EQ(mx.query(x), wantMax);
+            }
+        }
+    }
     // doubles
     LiChao<double> d(0, 100);
     d.addLine(0.5, 1), d.addLine(-0.25, 10);

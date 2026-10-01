@@ -11,10 +11,12 @@
 //                               are exactly the a[i], i in [l, r), with lo <= a[i] < hi.
 //   wm.pos[h][i]             position of a[i] in level h (h = wm.lg: original order, h = 0: sorted)
 //     -> keep one Fenwick per level indexed by position to support weight updates in rectangles.
+// Presets:
+//   WaveletMatrix wm(a);                     // T deduced from a
+//   DistinctCount dc(a);  dc.query(l, r)     // # of distinct values in a[l, r) (any ordered T)
 // Complexity: O(n log n) build, O(log n) per query (visit: O(log n) ranges).
 // Verify: https://judge.yosupo.jp/problem/range_kth_smallest
 // Verify: https://judge.yosupo.jp/problem/static_range_count_distinct
-// Pending: example + presets (T-009..T-011), remove when done
 template <class T> struct WaveletMatrix {
     using S = conditional_t<is_integral_v<T>, long long, T>;
     using Acc = conditional_t<is_integral_v<T>, unsigned long long, T>;  // wrapping prefix sums
@@ -106,4 +108,21 @@ template <class T> struct WaveletMatrix {
         };
         if (cl < ch) rec(rec, lg, l, r, 0);
     }
+};
+
+// distinct values in a[l, r) = # of i in [l, r) whose previous occurrence is before l
+struct DistinctCount {
+    WaveletMatrix<int> wm;
+    template <class T> static vector<int> prevOccurrence(const vector<T> &a) {
+        map<T, int> last;
+        vector<int> prv(a.size());
+        for (int i = 0; i < (int)a.size(); i++) {
+            auto it = last.find(a[i]);
+            prv[i] = it == last.end() ? -1 : it->second;
+            last[a[i]] = i;
+        }
+        return prv;
+    }
+    template <class T> DistinctCount(const vector<T> &a) : wm(prevOccurrence(a)) {}
+    int query(int l, int r) const { return wm.countLess(l, r, l); }
 };

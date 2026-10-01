@@ -6,6 +6,8 @@ int main() {
     CHECK(none.can(0));
     CHECK(!none.can(1));
     CHECK(none.recover(0).empty());
+    CHECK_EQ(none.maxAtMost(5), 0);
+    CHECK_EQ(none.maxAtMost(-1), -1);
 
     for (int it = 0; it < 300; it++) {
         int n = (int)test::rnd(0, 25);
@@ -27,6 +29,13 @@ int main() {
                 for (int i : idx) CHECK(0 <= i && i < n), sum += w[i];
                 CHECK_EQ(sum, (long long)s);
             }
+        }
+        // preset: largest subset sum <= s (-1 if s < 0), on a sample of s (it is O(S) per call)
+        for (int q = 0; q < 60; q++) {
+            int s = q < 3 ? total + q - 1 : (int)test::rnd(-2, total + 5);
+            int best = min(s, total);
+            while (best >= 0 && !dp[best]) best--;
+            CHECK_EQ(ss.maxAtMost(s), max(best, -1));
         }
     }
 }
