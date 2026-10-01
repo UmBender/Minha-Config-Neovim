@@ -38,6 +38,44 @@ test("list parses headers", function()
   eq(top.file, lib.root .. "/x/top.cpp")
 end)
 
+test("list groups variants under their structure", function()
+  local items = lib.list()
+  local base, top = items[1], items[2]
+  eq(vim.tbl_map(function(v) return v.id end, base.variants), { "x/base.edu", "x/base.one", "x/base.two" })
+  eq(vim.tbl_map(function(v) return v.variant end, base.variants), { "edu", "one", "two" })
+  eq(base.variants[2].title, "Base (one)")
+  eq(base.variants[2].file, lib.root .. "/x/base.one.cpp")
+  eq(top.variants, {})
+  assert(base.search:find("Common-use fixture that returns one", 1, true), "search covers variant descriptions")
+  assert(base.search:find("x/base.two", 1, true), "search covers variant ids")
+end)
+
+test("menu lists normal, educational, then common uses", function()
+  local base = lib.list()[1]
+  eq(vim.tbl_map(function(e) return { e.id, e.label } end, lib.menu(base)), {
+    { "x/base", "normal" },
+    { "x/base.edu", "educational" },
+    { "x/base.one", "one" },
+    { "x/base.two", "two" },
+  })
+  eq(lib.menu(lib.list()[2]), {})
+end)
+
+test("insert a common variant with its dependencies", function()
+  local buf = buf_with({ "void solve() {}" })
+  eq(lib.insert("x/base.two", buf), { "x/base", "x/top", "x/base.two" })
+  eq(lines(buf)[#lines(buf)], "void solve() {}")
+  eq(lib.insert("x/base.one", buf), { "x/base.one" })
+end)
+
+test("educational and normal count as the same template", function()
+  local buf = buf_with({ "void solve() {}" })
+  eq(lib.insert("x/base.edu", buf), { "x/base.edu" })
+  eq(lines(buf)[6], "// returns 1, always")
+  eq(lib.insert("x/base", buf), {})
+  eq(lib.insert("x/top", buf), { "x/top" })
+end)
+
 test("resolve puts dependencies first", function()
   eq(lib.resolve("x/top"), { "x/base", "x/top" })
   eq(lib.resolve("x/base"), { "x/base" })

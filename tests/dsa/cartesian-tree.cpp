@@ -14,9 +14,6 @@ template <class F> void brute(int l, int r, int parent, F above, vector<int> &pa
 
 int main() {
     CHECK(cartesianTree(0, [](int, int) { return false; }).empty());
-    CHECK(minCartesianTree(vector<int>{}).empty());
-    CHECK_EQ(minCartesianTree(vector<long long>{3, 1, 2}), (vector<int>{1, -1, 1}));
-    CHECK_EQ(maxCartesianTree(vector<long long>{3, 1, 2}), (vector<int>{-1, 2, 0}));
     for (int it = 0; it < 500; it++) {
         int n = (int)test::rnd(1, 50);
         vector<int> a = test::rndVec<int>(n, 0, it % 2 ? 5 : 1000);
@@ -29,10 +26,5 @@ int main() {
         auto maxRight = [&](int i, int j) { return a[i] >= a[j]; };
         brute(0, n, -1, [&](int i, int j) { return a[i] > a[j] || (a[i] == a[j] && i > j); }, want);
         CHECK_EQ(cartesianTree(n, maxRight), want);
-        // presets: ties -> the leftmost one is the ancestor
-        brute(0, n, -1, minLeft, want);
-        CHECK_EQ(minCartesianTree(a), want);
-        brute(0, n, -1, [&](int i, int j) { return a[i] > a[j]; }, want);
-        CHECK_EQ(maxCartesianTree(a), want);
     }
 }

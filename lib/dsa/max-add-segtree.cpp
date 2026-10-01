@@ -5,10 +5,7 @@
 //   seg.add(l, r, v)    add v to [l, r)
 //   seg.query(l, r)     max of [l, r), requires l < r
 //   seg.get(i)
-//   For min: MinAddSegtree below (same API, stores negated values).
-// Presets:
-//   MaxAddSegtree seg(n);           // T defaults to long long
-//   MinAddSegtree seg(n or a);      // range add, range min: seg.add(l, r, v); seg.query(l, r); seg.get(i)
+//   T defaults to long long: MaxAddSegtree seg(n).  For min: the min variant in the <leader>rl menu.
 // Complexity: O(log n) per operation.
 template <class T = long long> struct MaxAddSegtree {
     int n;
@@ -49,16 +46,3 @@ template <class T = long long> struct MaxAddSegtree {
     T get(int i) { return query(i, i + 1); }
 };
 
-// ---- presets ----
-template <class T = long long> struct MinAddSegtree {
-    MaxAddSegtree<T> seg;  // holds -a (T must be signed)
-    static vector<T> neg(vector<T> a) {
-        for (T &x : a) x = -x;
-        return a;
-    }
-    MinAddSegtree(int n, T init = T{}) : seg(n, -init) {}
-    MinAddSegtree(const vector<T> &a) : seg(neg(a)) {}
-    void add(int l, int r, T v) { seg.add(l, r, -v); }
-    T query(int l, int r) { return -seg.query(l, r); }
-    T get(int i) { return -seg.get(i); }
-};

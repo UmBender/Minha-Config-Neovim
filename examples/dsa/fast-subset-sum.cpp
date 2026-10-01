@@ -23,7 +23,7 @@ int main() {
     for (auto &x : w) cin >> x;
 
     SubsetSum ss(w);
-    int half = ss.maxAtMost(ss.total / 2);  // preset: closest subset sum not above total / 2
+    int half = ss.maxAtMost(ss.total / 2);  // closest subset sum not above total / 2
     cout << ss.total - 2 * half << '\n';
     vector<int> group = ss.recover(half);
     sort(group.begin(), group.end());

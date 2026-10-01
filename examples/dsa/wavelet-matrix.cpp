@@ -1,6 +1,6 @@
 // Problem: static array a of n numbers and q queries on a[l, r). "1 l r k" prints the k-th smallest
 //   (0-indexed), "2 l r x y" the count of values in [x, y), "3 l r x" the largest value < x
-//   ("none" if there is none) and "4 l r" the number of distinct values.
+//   ("none" if there is none) and "4 l r x" the sum of values < x.
 // Input:
 //   8
 //   5 2 7 2 9 5 1 7
@@ -9,20 +9,20 @@
 //   1 2 6 0
 //   2 1 7 2 6
 //   3 0 4 5
-//   4 0 8
-//   4 1 4
+//   4 0 8 6
+//   4 1 4 8
 // Output:
 //   5
 //   2
 //   3
 //   2
-//   5
-//   2
+//   15
+//   11
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
 
-#include "dsa/wavelet-matrix.cpp"  // in a solution: <leader>rl -> dsa/wavelet-matrix
+#include "dsa/wavelet-matrix.cpp"  // in a solution: <leader>rl -> dsa/wavelet-matrix -> normal
 
 int main() {
     int n, q;
@@ -32,7 +32,6 @@ int main() {
     cin >> q;
 
     WaveletMatrix wm(a);  // T deduced from a
-    DistinctCount dc(a);  // preset: distinct values in a range
 
     while (q--) {
         int type, l, r;
@@ -52,7 +51,9 @@ int main() {
             if (p) cout << *p << '\n';
             else cout << "none\n";
         } else {
-            cout << dc.query(l, r) << '\n';
+            ll x;
+            cin >> x;
+            cout << wm.sum(l, r, LLONG_MIN, x) << '\n';
         }
     }
 }

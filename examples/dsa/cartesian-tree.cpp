@@ -12,7 +12,7 @@
 using namespace std;
 using ll = long long;
 
-#include "dsa/cartesian-tree.cpp"  // in a solution: <leader>rl -> dsa/cartesian-tree
+#include "dsa/cartesian-tree.cpp"  // in a solution: <leader>rl -> dsa/cartesian-tree -> normal
 
 int main() {
     int n;
@@ -20,12 +20,12 @@ int main() {
     vector<ll> h(n);
     for (auto &x : h) cin >> x;
 
-    vector<int> par = minCartesianTree(h);  // preset: parents, min at the root, -1 for the root
+    // parents, min at the root (ties: leftmost is the ancestor), -1 for the root
+    vector<int> par = cartesianTree(n, [&](int i, int j) { return h[i] < h[j]; });
     for (int p : par) cout << p << ' ';
     cout << '\n';
-    for (int p : maxCartesianTree(h)) cout << p << ' ';
+    for (int p : cartesianTree(n, [&](int i, int j) { return h[i] > h[j]; })) cout << p << ' ';
     cout << '\n';
-    // general form, e.g. ties to the right: cartesianTree(n, [&](int i, int j) { return h[i] <= h[j]; })
 
     vector<vector<int>> ch(n);
     int root = -1;

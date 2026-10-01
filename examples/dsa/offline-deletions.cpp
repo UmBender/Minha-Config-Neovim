@@ -17,7 +17,7 @@
 using namespace std;
 
 #include "dsa/dsu-rollback.cpp"       // in a solution: <leader>rl -> dsa/dsu-rollback
-#include "dsa/offline-deletions.cpp"  // and dsa/offline-deletions
+#include "dsa/offline-deletions.cpp"  // and dsa/offline-deletions -> normal
 
 int main() {
     int n, q;
@@ -35,11 +35,8 @@ int main() {
     }
 
     RollbackDSU dsu(n);
-    // presets: each one runs od, so use a copy for the second
-    auto od2 = od;
-    vector<int> comps = componentCounts(od, dsu);
-    vector<int> conn = connectedAt(od2, dsu, ask);
-    // general form, for any structure with insert + undo-last:
-    //   od.run([&](auto e) { dsu.unite(e.first, e.second); }, [&] { dsu.undo(); }, [&](int qi) { ... });
+    vector<int> comps(ask.size()), conn(ask.size());
+    od.run([&](auto e) { dsu.unite(e.first, e.second); }, [&] { dsu.undo(); },
+           [&](int qi) { comps[qi] = dsu.count(), conn[qi] = dsu.same(ask[qi].first, ask[qi].second); });
     for (int i = 0; i < (int)ask.size(); i++) cout << comps[i] << ' ' << (conn[i] ? "YES" : "NO") << '\n';
 }

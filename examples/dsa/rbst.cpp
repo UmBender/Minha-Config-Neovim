@@ -28,7 +28,7 @@ int main() {
     for (auto &x : a) cin >> x;
     cin >> q;
 
-    PersistentRBST t;  // preset: values are long long (PersistentRBST<char> for strings)
+    PersistentRBST t;  // values are long long (default T) (PersistentRBST<char> for strings)
     vector<int> root = {t.build(a)};
     while (q--) {
         int type, v;

@@ -17,11 +17,6 @@ Insert with `<leader>rl` → `dsa/fast-subset-sum`.
 SubsetSum ss(w);           // w: vector<int>, w[i] >= 0
 ss.can(s)                  // is s a subset sum?
 ss.recover(s)              // indices of one subset with sum s (requires can(s))
-```
-
-## Presets
-
-```cpp
 ss.maxAtMost(s)            // largest subset sum <= s (-1 if s < 0)
 int diff = ss.total - 2 * ss.maxAtMost(ss.total / 2);   // most balanced split into two parts
 ```
@@ -48,7 +43,7 @@ int main() {
     for (auto &x : w) cin >> x;
 
     SubsetSum ss(w);
-    int half = ss.maxAtMost(ss.total / 2);  // preset: closest subset sum not above total / 2
+    int half = ss.maxAtMost(ss.total / 2);  // closest subset sum not above total / 2
     cout << ss.total - 2 * half << '\n';
     vector<int> group = ss.recover(half);
     sort(group.begin(), group.end());

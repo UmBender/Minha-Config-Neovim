@@ -8,20 +8,20 @@ int main() {
         vector<vector<ll>> a(n, vector<ll>(m));
         for (auto &row : a)
             for (auto &x : row) x = test::rnd(-1e9, 1e9);
-        ll bestMin = LLONG_MAX, bestMax = LLONG_MIN;
+        ll bestMin = LLONG_MAX;
         vector<int> used(m, 0);
         auto rec = [&](auto self, int i, ll s) -> void {
             if (i == n) {
-                bestMin = min(bestMin, s), bestMax = max(bestMax, s);
+                bestMin = min(bestMin, s);
                 return;
             }
             for (int j = 0; j < m; j++)
                 if (!used[j]) used[j] = 1, self(self, i + 1, s + a[i][j]), used[j] = 0;
         };
         rec(rec, 0, 0);
-        for (int maximize = 0; maximize < 2; maximize++) {
-            auto [cost, col] = maximize ? hungarianMax(a) : hungarian(a);
-            CHECK_EQ(cost, maximize ? bestMax : bestMin);
+        {
+            auto [cost, col] = hungarian(a);
+            CHECK_EQ(cost, bestMin);
             CHECK_EQ((int)col.size(), n);
             set<int> cols(col.begin(), col.end());
             CHECK_EQ((int)cols.size(), n);

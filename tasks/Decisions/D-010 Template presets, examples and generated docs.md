@@ -30,3 +30,5 @@ range add + range sum) without writing the lambdas.
 ## Related
 - Tasks: [[T-008 Template presets and examples]]
 - Supersedes nothing; extends [[D-009 Template library format]].
+- **Presets part superseded by [[D-013 Template variants]]** (2026-10-01); examples and generated
+  docs still apply.

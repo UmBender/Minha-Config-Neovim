@@ -7,8 +7,7 @@
 //   Sums of integer types are long long (S).
 //   Low level: auto [a, b] = t.split(t.root, k);  t.root = t.merge(a, b);    // roots are node ids
 //   To aggregate something else, edit Node, pull() and applyAdd().
-// Presets:
-//   ImplicitTreap t;   // T defaults to long long  (ImplicitTreap t(a) deduces T from a)
+//   T defaults to long long: ImplicitTreap t;  (ImplicitTreap t(a) deduces T from a)
 // Complexity: O(log n) expected per operation.
 // Verify: https://judge.yosupo.jp/problem/dynamic_sequence_range_affine_range_sum
 template <class T = long long> struct ImplicitTreap {

@@ -48,7 +48,7 @@ int main() {
         for (size_t i = 0; i < roots.size(); i++) CHECK_EQ(t.toVector(roots[i]), vers[i]);
     }
 
-    // preset: T defaults to long long
+    // T defaults to long long
     {
         PersistentRBST d;
         static_assert(is_same_v<decltype(d), PersistentRBST<long long>>);

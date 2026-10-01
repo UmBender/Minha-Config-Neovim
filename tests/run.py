@@ -3,11 +3,13 @@
 
 Stages:
   1. lint        every lib/<area>/<name>.cpp has a valid header, a test (tests/<area>/<name>.cpp)
-                 and an example (examples/<area>/<name>.cpp)
+                 and an example (examples/<area>/<name>.cpp); variants (<name>.<variant>.cpp) too,
+                 except educational ones (<name>.edu.cpp), which run the normal test instead
   2. standalone  every template compiles alone (bits/stdc++.h + using namespace std + its Requires)
-  3. tests       every tests/<area>/<name>.cpp compiles (-Werror, sanitizers, debug STL) and passes
+  3. tests       every tests/<area>/<name>.cpp compiles (-Werror, sanitizers, debug STL) and passes;
+                 the normal test also runs against each <name>.edu.cpp
   4. examples    every example compiles the same way and prints its `Output:` for its `Input:`
-  5. docs        tasks/Library/ (generated from templates + examples) is up to date
+  5. docs        tasks/Library/ (one page per structure, from templates + variants + examples) is up to date
   6. nvim        tests/nvim/*_test.lua pass
 
 Usage: tests/run.py [FILTER ...] [-j N] [--no-nvim] [--write-docs]
@@ -49,6 +51,7 @@ TEST_FLAGS = WARN + [
 TIMEOUT = 60
 REQUIRED_KEYS = ["Title", "Description", "Usage", "Complexity"]
 EXAMPLE_KEYS = ["Problem", "Output"]
+EDU = "edu"
 FORBIDDEN = [
     (re.compile(r"^\s*#\s*include\b"), "#include (templates must be self-contained)"),
     (re.compile(r"^\s*#\s*define\b"), "#define (no macros in templates)"),
@@ -61,7 +64,28 @@ GREEN, RED, DIM, RESET = ("\033[32m", "\033[31m", "\033[2m", "\033[0m") if sys.s
 
 
 def lib_ids():
+    """Templates and their variants: "dsa/segtree", "dsa/segtree.edu", "dsa/segtree.sum", ..."""
     return sorted(str(p.relative_to(LIB).with_suffix("")) for p in LIB.rglob("*.cpp"))
+
+
+def base_of(tid):
+    """"dsa/segtree.sum" -> "dsa/segtree" (a normal template is its own base)."""
+    return tid.split(".")[0]
+
+
+def variant_of(tid):
+    """"dsa/segtree.sum" -> "sum", None for a normal template."""
+    return tid.split(".", 1)[1] if "." in tid else None
+
+
+def variants(tid):
+    """Variants of a normal template: educational first, then common uses by name."""
+    vs = [v for v in lib_ids() if base_of(v) == tid and v != tid]
+    return sorted(vs, key=lambda v: (variant_of(v) != EDU, v))
+
+
+def edu_ids():
+    return [t for t in lib_ids() if variant_of(t) == EDU]
 
 
 def test_ids():
@@ -119,6 +143,19 @@ def lint(ids, match=lambda tid: True):
         for key in REQUIRED_KEYS:
             if not meta.get(key):
                 errors.append(f"{tid}: missing header key '{key}'")
+        var = variant_of(tid)
+        if var is not None and base_of(tid) not in all_ids:
+            errors.append(f"{tid}: variant of unknown template '{base_of(tid)}'")
+        if any(re.match(r"^// Presets\b", l) for l in path.read_text().splitlines()):
+            errors.append(f"{tid}: 'Presets' are gone, move them to variants (D-013)")
+        if var == EDU:
+            base = LIB / f"{base_of(tid)}.cpp"
+            if base.exists() and meta.get("Title") != parse_header(base).get("Title"):
+                errors.append(f"{tid}: an educational variant keeps the Title of {base_of(tid)}")
+            for d in (TESTS, EXAMPLES):
+                if (d / f"{tid}.cpp").exists():
+                    errors.append(f"{d.name}/{tid}.cpp: educational variants use the normal test/example")
+            continue
         if re.search(r'[\\/:#^\[\]|]', meta.get("Title", "")):
             errors.append(f"{tid}: Title can't contain \\ / : # ^ [ ] | (it names the docs page)")
         for dep in requires(tid):
@@ -131,7 +168,7 @@ def lint(ids, match=lambda tid: True):
         if not (TESTS / f"{tid}.cpp").exists():
             errors.append(f"{tid}: no test (expected tests/{tid}.cpp)")
         ex = EXAMPLES / f"{tid}.cpp"
-        if meta.get("Pending"):  # migration in progress: example/presets not required yet
+        if meta.get("Pending"):  # migration in progress: example not required yet
             if ex.exists():
                 errors.append(f"{tid}: has an example but is still marked 'Pending:' (remove the marker)")
         elif not ex.exists():
@@ -180,17 +217,29 @@ def included_files(path, acc=None):
 
 
 def build_and_run(tid, src=None, stdin=None):
+    """Builds and runs tests/<tid>.cpp (or `src`). For an educational variant "<base>.edu" it builds the
+    normal test of <base> with `#include "<base>.cpp"` redirected to the .edu.cpp (an include overlay)."""
+    flags, extra = TEST_FLAGS, []
+    if src is None and variant_of(tid) == EDU:
+        src = TESTS / f"{base_of(tid)}.cpp"
+        overlay = BUILD / "overlay" / tid
+        shim = overlay / f"{base_of(tid)}.cpp"
+        shim.parent.mkdir(parents=True, exist_ok=True)
+        text = f'#include "{LIB / tid}.cpp"\n'
+        if not shim.exists() or shim.read_text() != text:
+            shim.write_text(text)
+        flags, extra = [f"-I{overlay}", *TEST_FLAGS], [LIB / f"{tid}.cpp"]
     src = src or TESTS / f"{tid}.cpp"
-    h = hashlib.sha256(" ".join([CXX, *TEST_FLAGS]).encode())
-    for p in sorted({src.resolve(), *included_files(src)}):
+    h = hashlib.sha256(" ".join([CXX, *flags]).encode())
+    for p in sorted({src.resolve(), *included_files(src), *extra}):
         h.update(str(p).encode() + p.read_bytes())
-    exe = BUILD / src.relative_to(ROOT).with_suffix("") / h.hexdigest()[:16]
+    exe = BUILD / (Path("edu") / tid if extra else src.relative_to(ROOT).with_suffix("")) / h.hexdigest()[:16]
     t0 = time.time()
     if not exe.exists():
         if exe.parent.exists():
             shutil.rmtree(exe.parent)
         exe.parent.mkdir(parents=True)
-        r = subprocess.run([CXX, *TEST_FLAGS, str(src), "-o", str(exe)], capture_output=True, text=True)
+        r = subprocess.run([CXX, *flags, str(src), "-o", str(exe)], capture_output=True, text=True)
         if r.returncode != 0:
             return False, "compile error\n" + r.stderr, time.time() - t0
     try:
@@ -243,28 +292,57 @@ def page_name(tid):
     return parse_header(LIB / f"{tid}.cpp")["Title"]
 
 
-def gen_page(tid):
+def usage_sections(tid, level):
+    """Usage, complexity, example and judge links of one template or variant."""
     meta = parse_header(LIB / f"{tid}.cpp")
-    area = tid.split("/")[0]
-    out = ["---", f"tags: [library, {area}]", "generated: true", "---", f"# {meta['Title']}", ""]
-    out += ["> [!info] Generated by `tests/run.py --write-docs` from", f"> `lib/{tid}.cpp` and `examples/{tid}.cpp`. Edit those, not this page.", ""]
-    out += [meta["Description"], "", f"Insert with `<leader>rl` → `{tid}`."]
-    if requires(tid):
-        out += ["Requires: " + ", ".join(f"[[{page_name(d)}]]" for d in requires(tid)) + " (inserted automatically)."]
-    out += ["", "## Usage", "", "```cpp", meta["Usage"], "```"]
-    if meta.get("Presets"):
-        out += ["", "## Presets", "", "```cpp", meta["Presets"], "```"]
-    out += ["", "## Complexity", "", meta["Complexity"]]
+    h = "#" * level
+    out = ["", f"{h} Usage", "", "```cpp", meta["Usage"], "```"]
+    out += ["", f"{h} Complexity", "", meta["Complexity"]]
     ex = EXAMPLES / f"{tid}.cpp"
     if ex.exists():
         em = parse_header(ex)
-        out += ["", "## Example", "", em.get("Problem", ""), "", "```cpp", code_lines(ex), "```"]
+        out += ["", f"{h} Example", "", em.get("Problem", ""), "", "```cpp", code_lines(ex), "```"]
         if em.get("Input"):
             out += ["", "Input:", "", "```", em["Input"], "```"]
         out += ["", "Output:", "", "```", em.get("Output", ""), "```"]
     verify = [v for v in meta.get("Verify", "").splitlines() if v.strip()]
     if verify:
-        out += ["", "## Verify", ""] + [f"- {v.strip()}" for v in verify]
+        out += ["", f"{h} Verify", ""] + [f"- {v.strip()}" for v in verify]
+    return out
+
+
+def variant_label(tid):
+    var = variant_of(tid)
+    return "normal" if var is None else "educational" if var == EDU else var
+
+
+def gen_page(tid):
+    meta = parse_header(LIB / f"{tid}.cpp")
+    area = tid.split("/")[0]
+    vs = variants(tid)
+    out = ["---", f"tags: [library, {area}]", "generated: true", "---", f"# {meta['Title']}", ""]
+    srcs = " and ".join(f"`{d}/{tid}.cpp`" for d in ("lib", "examples")) + (" (plus variants)" if vs else "")
+    out += ["> [!info] Generated by `tests/run.py --write-docs` from", f"> {srcs}. Edit those, not this page.", ""]
+    pick = f"`{tid}` → normal" if vs else f"`{tid}`"
+    out += [meta["Description"], "", f"Insert with `<leader>rl` → {pick}."]
+    if requires(tid):
+        out += ["Requires: " + ", ".join(f"[[{page_name(d)}]]" for d in requires(tid)) + " (inserted automatically)."]
+    if vs:
+        out += ["", "## Variants", "", "Chosen in the second `<leader>rl` menu.", ""]
+        out += ["| Variant | Id | Description |", "| ------- | -- | ----------- |"]
+        for v in [tid, *vs]:
+            desc = parse_header(LIB / f"{v}.cpp")["Description"].replace("|", "\\|")
+            link = f"[[#{parse_header(LIB / f'{v}.cpp')['Title']}]]" if variant_of(v) not in (None, EDU) else variant_label(v)
+            out.append(f"| {link} | `{v}` | {desc} |")
+    out += usage_sections(tid, 2)
+    for v in vs:
+        if variant_of(v) == EDU:
+            continue
+        vm = parse_header(LIB / f"{v}.cpp")
+        out += ["", f"## {vm['Title']}", "", vm["Description"], "", f"Insert with `<leader>rl` → `{tid}` → {variant_of(v)}."]
+        if requires(v):
+            out += ["Requires: " + ", ".join(f"[[{page_name(d)}]]" for d in requires(v)) + " (inserted automatically)."]
+        out += usage_sections(v, 3)
     return "\n".join(out) + "\n"
 
 
@@ -272,20 +350,22 @@ def gen_index():
     out = ["---", "tags: [library, index]", "generated: true", "---", "# Library", ""]
     out += ["Generated by `tests/run.py --write-docs`. One page per template in `lib/`; see [[Template Library]].", ""]
     by_area = {}
-    for tid in lib_ids():
+    for tid in filter(lambda t: variant_of(t) is None, lib_ids()):
         by_area.setdefault(tid.split("/")[0], []).append(tid)
     for area, tids in by_area.items():
-        out += [f"## {area}", "", "| Template | Description |", "| -------- | ----------- |"]
+        out += [f"## {area}", "", "| Template | Description | Variants |", "| -------- | ----------- | -------- |"]
         for tid in tids:
             meta = parse_header(LIB / f"{tid}.cpp")
-            out.append(f"| [[{meta['Title']}]] | {meta['Description'].replace('|', '\\|')} |")
+            vs = ", ".join(variant_label(v) for v in variants(tid))
+            out.append(f"| [[{meta['Title']}]] | {meta['Description'].replace('|', '\\|')} | {vs} |")
         out.append("")
     return "\n".join(out)
 
 
 def docs(ids, write, full):
     """Returns the stale/extra pages (or the written ones when write=True)."""
-    wanted = {DOCS / tid.split("/")[0] / f"{page_name(tid)}.md": gen_page(tid) for tid in ids}
+    bases = sorted({base_of(t) for t in ids if (LIB / f"{base_of(t)}.cpp").exists()})
+    wanted = {DOCS / tid.split("/")[0] / f"{page_name(tid)}.md": gen_page(tid) for tid in bases}
     if full:
         wanted[DOCS / "Library.md"] = gen_index()
     changed = [p for p, text in wanted.items() if not p.exists() or p.read_text() != text]
@@ -349,7 +429,7 @@ def main():
                 report(f"standalone {tid}", ok, out)
                 failed += 1
         print(f"== tests")
-        tids = [t for t in test_ids() if match(t)]
+        tids = sorted([t for t in test_ids() if match(t)] + [t for t in edu_ids() if match(t)])
         for tid, (ok, out, secs) in zip(tids, pool.map(build_and_run, tids)):
             report(tid, ok, out, secs)
             failed += not ok

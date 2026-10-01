@@ -20,7 +20,7 @@
 using namespace std;
 using ll = long long;
 
-#include "dsa/zeta.cpp"  // in a solution: <leader>rl -> dsa/zeta
+#include "dsa/zeta.cpp"  // in a solution: <leader>rl -> dsa/zeta -> normal
 
 void print(const vector<ll> &c, int from) {
     for (int i = from; i < (int)c.size(); i++) cout << c[i] << " \n"[i + 1 == (int)c.size()];
@@ -32,8 +32,14 @@ int main() {
     vector<ll> a(n + 1), b(n + 1);  // indices 1..n
     for (int i = 1; i <= n; i++) cin >> a[i];
     for (int i = 1; i <= n; i++) cin >> b[i];
-    print(gcdConv(a, b), 1);  // presets; gcdConv(a, b, 998244353) for a modulus
-    print(lcmConv(a, b), 1);
+    // gcd convolution: sums over multiples, multiply pointwise, invert (gcd-conv variant: ready-made)
+    vector<ll> A = multipleZeta(a), B = multipleZeta(b), C(n + 1);
+    for (int i = 0; i <= n; i++) C[i] = A[i] * B[i];
+    print(multipleMobius(C), 1);
+    // lcm convolution: the same with divisors
+    A = divisorZeta(a), B = divisorZeta(b);
+    for (int i = 0; i <= n; i++) C[i] = A[i] * B[i];
+    print(divisorMobius(C), 1);
 
     int k, m;
     cin >> k >> m;

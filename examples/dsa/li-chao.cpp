@@ -24,8 +24,8 @@ using ll = long long;
 #include "dsa/li-chao.cpp"  // in a solution: <leader>rl -> dsa/li-chao
 
 int main() {
-    MinLiChao mn;  // preset: long long, x in [-1e9, 1e9]
-    MaxLiChao mx;  // other ranges/types: LiChao<double, true> lc(lo, hi)
+    LiChao mn;            // min; defaults: long long, x in [-1e9, 1e9]
+    LiChao<ll, true> mx;  // max; other ranges: LiChao<ll, true> mx(lo, hi)
     int q;
     cin >> q;
     while (q--) {

@@ -15,7 +15,7 @@
 using namespace std;
 using ll = long long;
 
-#include "dsa/segtree.cpp"  // in a solution: <leader>rl -> dsa/segtree
+#include "dsa/segtree.cpp"  // in a solution: <leader>rl -> dsa/segtree -> normal
 
 int main() {
     int n, q;
@@ -23,9 +23,8 @@ int main() {
     vector<ll> a(n);
     for (auto &x : a) cin >> x;
 
-    auto mn = minSegtree(a);   // preset: min over ranges
-    auto sum = sumSegtree(a);  // preset: sums, used for the binary search
-    // the general form, e.g. for gcd: Segtree g(a, 0LL, [](ll x, ll y) { return gcd(x, y); });
+    Segtree mn(a, LLONG_MAX, [](ll x, ll y) { return min(x, y); });
+    Segtree sum(a, 0LL, [](ll x, ll y) { return x + y; });  // used for the binary search
 
     while (q--) {
         int type;

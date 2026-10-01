@@ -1,6 +1,5 @@
-// Problem: "1 l r x" adds x to a[l..r), "2 l r" prints the sum of a[l..r) (preset), then
-//   "3 l r b c" maps a[i] -> b * a[i] + c (mod 998244353) and "4 l r" prints the sum mod p
-//   (general LazySegtree with custom lambdas).
+// Problem: "1 l r x" adds x to a[l..r), "2 l r" prints the sum of a[l..r), then
+//   "3 l r b c" maps a[i] -> b * a[i] + c (mod 998244353) and "4 l r" prints the sum mod p.
 // Input:
 //   4
 //   1 2 3 4
@@ -18,7 +17,7 @@
 using namespace std;
 using ll = long long;
 
-#include "dsa/lazy-segtree.cpp"  // in a solution: <leader>rl -> dsa/lazy-segtree
+#include "dsa/lazy-segtree.cpp"  // in a solution: <leader>rl -> dsa/lazy-segtree -> normal
 
 const ll MOD = 998244353;
 struct Node { ll sum, len; };  // store the length when the update depends on it
@@ -31,7 +30,12 @@ int main() {
     for (auto &x : a) cin >> x;
     cin >> q;
 
-    RangeAddSum<ll> seg(a);  // preset: range add + range sum
+    // range add + range sum (the add-sum variant does exactly this without lambdas)
+    vector<Node> sums;
+    for (ll x : a) sums.push_back({x, 1});
+    LazySegtree seg(
+        sums, Node{0, 0}, 0LL, [](Node x, Node y) { return Node{x.sum + y.sum, x.len + y.len}; },
+        [](ll f, Node x) { return Node{x.sum + f * x.len, x.len}; }, [](ll f, ll g) { return f + g; });
 
     vector<Node> init;
     for (ll x : a) init.push_back({x % MOD, 1});
@@ -47,10 +51,10 @@ int main() {
         if (type == 1) {
             ll x;
             cin >> x;
-            seg.add(l, r, x);
+            seg.apply(l, r, x);
             aff.apply(l, r, Aff{1, x});
         } else if (type == 2) {
-            cout << seg.sum(l, r) << '\n';
+            cout << seg.query(l, r).sum << '\n';
         } else if (type == 3) {
             ll b, c;
             cin >> b >> c;

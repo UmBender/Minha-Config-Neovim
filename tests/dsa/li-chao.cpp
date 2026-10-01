@@ -32,27 +32,25 @@ int main() {
             }
         }
     }
-    // presets: T = long long by default, default range x in [-1e9, 1e9]
+    // defaults: T = long long, default range x in [-1e9, 1e9]
     {
         LiChao def;
         static_assert(is_same_v<decltype(def), LiChao<ll, false>>);
-        MinLiChao mn;
-        MaxLiChao mx;
+        LiChao<> mn;
+        LiChao<ll, true> mx;
         static_assert(is_same_v<decltype(mn), LiChao<ll, false>>);
-        static_assert(is_same_v<decltype(mx), LiChao<ll, true>>);
-        MaxLiChao<int> small(0, 10);
-        static_assert(is_same_v<decltype(small), LiChao<int, true>>);
+        LiChao<int, true> small(0, 10);
         small.addLine(2, 1);
         CHECK_EQ(small.query(9), 19);
         const ll C = (ll)1e9;
         {  // the default range is closed: segments reach x = 1e9 (and stop before it when asked)
-            MinLiChao seg;
+            LiChao<> seg;
             seg.addSegment(1, 0, C - 5, C + 1);
             seg.addSegment(-1, 0, -C, -C + 1);
             CHECK_EQ(seg.query(C), C);
             CHECK_EQ(seg.query(-C), C);
             CHECK_EQ(seg.query(0), seg.NONE);
-            MaxLiChao part;
+            LiChao<ll, true> part;
             part.addSegment(1, 0, C - 5, C);
             CHECK_EQ(part.query(C - 1), C - 1);
             CHECK_EQ(part.query(C), part.NONE);

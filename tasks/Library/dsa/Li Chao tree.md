@@ -20,10 +20,7 @@ lc.addLine(a, b);                        // on the whole range
 lc.addSegment(a, b, l, r);               // only for x in [l, r)
 lc.query(x)                              // best value at x, LiChao<...>::NONE if no line covers x
 Watch overflow: |a x + b| must fit in T.
-Presets (T = long long by default; default range x in [-1e9, 1e9], i.e. [-1e9, 1e9 + 1)):
-LiChao lc;  MinLiChao lc;            // min, long long
-MaxLiChao lc;  MaxLiChao lc(lo, hi);  // max, long long
-MaxLiChao<double> lc(lo, hi);        // other types
+Defaults: T = long long, range x in [-1e9, 1e9] (i.e. [-1e9, 1e9 + 1)):  LiChao lc;
 ```
 
 ## Complexity
@@ -44,8 +41,8 @@ using ll = long long;
 #include "dsa/li-chao.cpp"  // in a solution: <leader>rl -> dsa/li-chao
 
 int main() {
-    MinLiChao mn;  // preset: long long, x in [-1e9, 1e9]
-    MaxLiChao mx;  // other ranges/types: LiChao<double, true> lc(lo, hi)
+    LiChao mn;            // min; defaults: long long, x in [-1e9, 1e9]
+    LiChao<ll, true> mx;  // max; other ranges: LiChao<ll, true> mx(lo, hi)
     int q;
     cin >> q;
     while (q--) {

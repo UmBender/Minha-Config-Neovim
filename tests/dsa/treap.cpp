@@ -43,7 +43,7 @@ int main() {
             }
         }
     }
-    // preset: T defaults to long long
+    // T defaults to long long
     {
         ImplicitTreap d;
         static_assert(is_same_v<decltype(d), ImplicitTreap<ll>>);

@@ -20,12 +20,7 @@ t.reverse(l, r);  t.add(l, r, x);  t.sum(l, r);  t.min(l, r) (l < r)     // rang
 Sums of integer types are long long (S).
 Low level: auto [a, b] = t.split(t.root, k);  t.root = t.merge(a, b);    // roots are node ids
 To aggregate something else, edit Node, pull() and applyAdd().
-```
-
-## Presets
-
-```cpp
-ImplicitTreap t;   // T defaults to long long  (ImplicitTreap t(a) deduces T from a)
+T defaults to long long: ImplicitTreap t;  (ImplicitTreap t(a) deduces T from a)
 ```
 
 ## Complexity
@@ -48,7 +43,7 @@ using ll = long long;
 int main() {
     int n, q;
     cin >> n;
-    ImplicitTreap t;  // preset: values are long long
+    ImplicitTreap t;  // values are long long (default T)
     for (int i = 0; i < n; i++) {
         ll x;
         cin >> x;

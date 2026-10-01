@@ -24,7 +24,7 @@ using ll = long long;
 int main() {
     int n, q;
     cin >> n;
-    ImplicitTreap t;  // preset: values are long long
+    ImplicitTreap t;  // values are long long (default T)
     for (int i = 0; i < n; i++) {
         ll x;
         cin >> x;

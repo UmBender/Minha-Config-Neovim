@@ -16,7 +16,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "dsa/dsu.cpp"  // in a solution: <leader>rl -> dsa/dsu
+#include "dsa/dsu.cpp"  // in a solution: <leader>rl -> dsa/dsu -> normal
 
 int main() {
     int n, m;

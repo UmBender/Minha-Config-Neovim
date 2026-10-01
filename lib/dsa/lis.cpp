@@ -5,8 +5,7 @@
 //   lis(a, false)                              // non-decreasing
 //   lis(a, true, greater<long long>())         // strictly decreasing
 //   lisEnding(a, strict, cmp)[i]               // length of the longest one ending at i
-// Presets:
-//   int len = lisLength(a);                    // just the length (same strict/cmp arguments)
+//   Only the length: the length variant in the <leader>rl menu.
 // Complexity: O(n log n).
 template <class T, class Cmp = less<T>> vector<int> lis(const vector<T> &a, bool strict = true, Cmp cmp = Cmp()) {
     int n = (int)a.size();
@@ -42,7 +41,3 @@ template <class T, class Cmp = less<T>> vector<int> lisEnding(const vector<T> &a
     return len;
 }
 
-template <class T, class Cmp = less<T>> int lisLength(const vector<T> &a, bool strict = true, Cmp cmp = Cmp()) {
-    vector<int> len = lisEnding(a, strict, cmp);
-    return len.empty() ? 0 : *max_element(len.begin(), len.end());
-}

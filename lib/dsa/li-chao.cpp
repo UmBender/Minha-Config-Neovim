@@ -7,10 +7,7 @@
 //   lc.addSegment(a, b, l, r);               // only for x in [l, r)
 //   lc.query(x)                              // best value at x, LiChao<...>::NONE if no line covers x
 //   Watch overflow: |a x + b| must fit in T.
-// Presets (T = long long by default; default range x in [-1e9, 1e9], i.e. [-1e9, 1e9 + 1)):
-//   LiChao lc;  MinLiChao lc;            // min, long long
-//   MaxLiChao lc;  MaxLiChao lc(lo, hi);  // max, long long
-//   MaxLiChao<double> lc(lo, hi);        // other types
+//   Defaults: T = long long, range x in [-1e9, 1e9] (i.e. [-1e9, 1e9 + 1)):  LiChao lc;
 // Complexity: O(log C) per line and query, O(log^2 C) per segment, C = hi - lo.
 // Verify: https://judge.yosupo.jp/problem/line_add_get_min
 // Verify: https://judge.yosupo.jp/problem/segment_add_get_min
@@ -73,5 +70,3 @@ template <class T = long long, bool MAX = false> struct LiChao {
     }
 };
 
-template <class T = long long> using MinLiChao = LiChao<T, false>;
-template <class T = long long> using MaxLiChao = LiChao<T, true>;

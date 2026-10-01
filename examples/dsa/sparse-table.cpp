@@ -1,5 +1,4 @@
-// Problem: a static array and q queries [l, r): print the range min, max and gcd, and the
-//   bitwise OR (general form, any idempotent operation).
+// Problem: a static array and q queries [l, r): print the range min, max, gcd and bitwise OR.
 // Input:
 //   6 3
 //   12 18 6 9 3 24
@@ -14,7 +13,7 @@
 using namespace std;
 using ll = long long;
 
-#include "dsa/sparse-table.cpp"  // in a solution: <leader>rl -> dsa/sparse-table
+#include "dsa/sparse-table.cpp"  // in a solution: <leader>rl -> dsa/sparse-table -> normal
 
 int main() {
     int n, q;
@@ -22,10 +21,10 @@ int main() {
     vector<ll> a(n);
     for (auto &x : a) cin >> x;
 
-    auto mn = minSparseTable(a);  // presets
-    auto mx = maxSparseTable(a);
-    auto g = gcdSparseTable(a);
-    SparseTable orT(a, [](ll x, ll y) { return x | y; });  // general form: op must be idempotent
+    SparseTable mn(a, [](ll x, ll y) { return min(x, y); });  // op must be idempotent
+    SparseTable mx(a, [](ll x, ll y) { return max(x, y); });
+    SparseTable g(a, [](ll x, ll y) { return gcd(x, y); });
+    SparseTable orT(a, [](ll x, ll y) { return x | y; });
 
     while (q--) {
         int l, r;

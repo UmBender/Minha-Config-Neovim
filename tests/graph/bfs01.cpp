@@ -16,21 +16,17 @@ int main() {
     for (int it = 0; it < 400; it++) {
         int n = (int)test::rnd(1, 10), m = (int)test::rnd(0, 25);
         vector<vector<pair<int, int>>> g(n);
-        vector<vector<int>> ug(n);
-        vector<array<int, 3>> edges, uedges;
+        vector<array<int, 3>> edges;
         for (int e = 0; e < m; e++) {
             int u = (int)test::rnd(0, n - 1), v = (int)test::rnd(0, n - 1), w = (int)test::rnd(0, 1);
             g[u].push_back({v, w}), edges.push_back({u, v, w});
-            ug[u].push_back(v), uedges.push_back({u, v, 1});
         }
         vector<int> src = {(int)test::rnd(0, n - 1)};
         if (test::rnd(0, 1)) src.push_back((int)test::rnd(0, n - 1));
-        auto want = bellman(n, edges, src), uwant = bellman(n, uedges, src);
+        auto want = bellman(n, edges, src);
         BFS01 b(g, src);
-        BFS ub(ug, src);
         for (int v = 0; v < n; v++) {
             CHECK_EQ(b.dist[v], want[v]);
-            CHECK_EQ(ub.dist[v], uwant[v]);
             CHECK_EQ(b.reached(v), want[v] != INF);
             if (!b.reached(v)) {
                 CHECK(b.path(v).empty());
@@ -49,10 +45,8 @@ int main() {
                 len += best;
             }
             CHECK_EQ(len, want[v]);
-            auto up = ub.path(v);
-            CHECK_EQ((int)up.size() - 1, uwant[v]);
         }
-        BFS single(ug, src[0]);
+        BFS01 single(g, src[0]);
         CHECK_EQ(single.dist[src[0]], 0);
     }
 }

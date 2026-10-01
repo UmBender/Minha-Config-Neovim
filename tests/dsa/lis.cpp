@@ -16,7 +16,6 @@ template <class T, class Cmp> void check(const vector<T> &a, bool strict, Cmp cm
         CHECK(ok(idx[k - 1], idx[k]));
     }
     CHECK_EQ(lisEnding(a, strict, cmp), dp);
-    CHECK_EQ(lisLength(a, strict, cmp), best);
 }
 
 int main() {
@@ -24,12 +23,6 @@ int main() {
     CHECK_EQ(lis(vector<int>{3, 1, 2}), (vector<int>{1, 2}));
     CHECK_EQ((int)lis(vector<int>{2, 2, 2}).size(), 1);
     CHECK_EQ((int)lis(vector<int>{2, 2, 2}, false).size(), 3);
-    // preset: length only, default strict
-    CHECK_EQ(lisLength(vector<int>{}), 0);
-    CHECK_EQ(lisLength(vector<int>{5, 1, 6, 2, 7, 3, 8}), 4);
-    CHECK_EQ(lisLength(vector<int>{2, 2, 2}), 1);
-    CHECK_EQ(lisLength(vector<int>{2, 2, 2}, false), 3);
-    CHECK_EQ(lisLength(vector<long long>{3, 2, 2, 1}, true, greater<long long>()), 3);
     for (int it = 0; it < 500; it++) {
         int n = (int)test::rnd(0, 40);
         vector<long long> a = test::rndVec<long long>(n, -5, 5);

@@ -28,7 +28,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-012 | [[T-012 Port graph templates]] | done |
 | T-013 | [[T-013 Editor aesthetics]] | done |
 | T-014 | [[T-014 Performance]] | done |
-| T-015 | [[T-015 Template variant menu]] | todo |
+| T-015 | [[T-015 Template variant menu]] | done |
 | T-016 | [[T-016 Port strings templates]] | todo |
 
 ## Decisions
@@ -45,6 +45,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 - [[D-010 Template presets, examples and generated docs]]
 - [[D-011 Font and Material icons]]
 - [[D-012 Performance budget]]
+- [[D-013 Template variants]]
 
 ## Guides
 

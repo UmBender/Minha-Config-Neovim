@@ -16,14 +16,13 @@
 using namespace std;
 using ll = long long;
 
-#include "dsa/suffix-max.cpp"  // in a solution: <leader>rl -> dsa/suffix-max
+#include "dsa/suffix-max.cpp"  // in a solution: <leader>rl -> dsa/suffix-max -> normal
 
 int main() {
     int q;
     cin >> q;
-    SuffixMax heavy(-1LL);  // preset defaults: long long keys/values; max value over weight >= W
-    PrefixMax light(-1LL);  // max value over weight <= W
-    // also SuffixMin / PrefixMin, and without an argument the identity is the worst value
+    SuffixMax heavy(-1LL);                                // max value over weight >= W (long long)
+    SuffixMax<ll, ll, less<ll>, greater<ll>> light(-1);   // max value over weight <= W
     while (q--) {
         char op;
         cin >> op;

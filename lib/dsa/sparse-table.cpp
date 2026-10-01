@@ -4,8 +4,7 @@
 //   SparseTable st(a, [](int x, int y) { return min(x, y); });
 //   st.query(l, r)   op over [l, r), requires l < r
 //   op must be idempotent (op(x, x) == x): sums need a prefix-sum array instead.
-// Presets:
-//   auto st = minSparseTable(a);  auto st = maxSparseTable(a);  auto st = gcdSparseTable(a);   // a: vector<T>
+//   Plain min / max / gcd tables: the min, max, gcd variants in the <leader>rl menu.
 // Complexity: O(n log n) build, O(1) query.
 // Verify: https://judge.yosupo.jp/problem/staticrmq
 template <class T, class Op> struct SparseTable {
@@ -24,12 +23,3 @@ template <class T, class Op> struct SparseTable {
     }
 };
 
-template <class T> auto minSparseTable(const vector<T> &a) {
-    return SparseTable(a, [](T x, T y) { return min(x, y); });
-}
-template <class T> auto maxSparseTable(const vector<T> &a) {
-    return SparseTable(a, [](T x, T y) { return max(x, y); });
-}
-template <class T> auto gcdSparseTable(const vector<T> &a) {
-    return SparseTable(a, [](T x, T y) { return gcd(x, y); });
-}

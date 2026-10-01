@@ -21,24 +21,4 @@ int main() {
             CHECK_EQ(g.query(l, r), want);
         }
     }
-
-    // presets
-    for (int it = 0; it < 300; it++) {
-        int n = (int)test::rnd(1, 70);
-        vector<ll> a = test::rndVec<ll>(n, -1e12, 1e12);
-        auto mn = minSparseTable(a);
-        auto mx = maxSparseTable(a);
-        auto g = gcdSparseTable(a);
-        for (int q = 0; q < 100; q++) {
-            int l = (int)test::rnd(0, n - 1), r = (int)test::rnd(l + 1, n);
-            CHECK_EQ(mn.query(l, r), *min_element(a.begin() + l, a.begin() + r));
-            CHECK_EQ(mx.query(l, r), *max_element(a.begin() + l, a.begin() + r));
-            ll want = 0;
-            for (int i = l; i < r; i++) want = gcd(want, a[i]);
-            CHECK_EQ(g.query(l, r), want);
-        }
-    }
-    auto ints = minSparseTable(vector<int>{5, 3, 9});
-    CHECK_EQ(ints.query(0, 3), 3);
-    CHECK_EQ(gcdSparseTable(vector<int>{12, 18, 8}).query(0, 2), 6);
 }

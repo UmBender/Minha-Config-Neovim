@@ -30,7 +30,7 @@ int main() {
                 CHECK_EQ(sum, (long long)s);
             }
         }
-        // preset: largest subset sum <= s (-1 if s < 0), on a sample of s (it is O(S) per call)
+        // largest subset sum <= s (-1 if s < 0), on a sample of s (it is O(S) per call)
         for (int q = 0; q < 60; q++) {
             int s = q < 3 ? total + q - 1 : (int)test::rnd(-2, total + 5);
             int best = min(s, total);

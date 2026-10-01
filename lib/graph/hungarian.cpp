@@ -1,10 +1,9 @@
 // Title: Hungarian algorithm
-// Description: Min/max cost assignment of n rows to distinct columns of an n x m matrix (n <= m).
+// Description: Min-cost assignment of n rows to distinct columns of an n x m matrix (n <= m).
 // Usage:
 //   auto [cost, col] = hungarian(a);      // a: vector<vector<T>>, T = long long, double, ...
 //   col[i] = column assigned to row i; cost = sum of a[i][col[i]] (minimum)
-// Presets:
-//   auto [cost, col] = hungarianMax(a);   // maximum-cost assignment
+//   Maximum cost: the max variant in the <leader>rl menu.
 // Complexity: O(n^2 m).
 // Verify: https://judge.yosupo.jp/problem/assignment
 template <class T> pair<T, vector<int>> hungarian(const vector<vector<T>> &a) {
@@ -47,11 +46,3 @@ template <class T> pair<T, vector<int>> hungarian(const vector<vector<T>> &a) {
     return {cost, col};
 }
 
-// ---- presets ----
-template <class T> pair<T, vector<int>> hungarianMax(const vector<vector<T>> &a) {
-    vector<vector<T>> b = a;
-    for (auto &row : b)
-        for (auto &x : row) x = -x;
-    auto [cost, col] = hungarian(b);
-    return {-cost, col};
-}

@@ -13,7 +13,7 @@
 using namespace std;
 using ll = long long;
 
-#include "dsa/lis.cpp"  // in a solution: <leader>rl -> dsa/lis
+#include "dsa/lis.cpp"  // in a solution: <leader>rl -> dsa/lis -> normal
 
 int main() {
     int n;
@@ -21,12 +21,12 @@ int main() {
     vector<ll> a(n);
     for (auto &x : a) cin >> x;
 
-    cout << lisLength(a) << '\n';  // preset: just the length
-
-    for (int i : lis(a)) cout << a[i] << ' ';  // lis returns the indices of one LIS
+    vector<int> idx = lis(a);  // indices of one LIS
+    cout << idx.size() << '\n';
+    for (int i : idx) cout << a[i] << ' ';
     cout << '\n';
 
-    cout << lisLength(a, false) << ' ' << lisLength(a, true, greater<ll>()) << '\n';
+    cout << lis(a, false).size() << ' ' << lis(a, true, greater<ll>()).size() << '\n';
 
     for (int len : lisEnding(a)) cout << len << ' ';
     cout << '\n';

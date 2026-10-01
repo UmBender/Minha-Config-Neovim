@@ -7,9 +7,7 @@
 //     a[i] <= a[j] -> min-heap, ties: rightmost is the ancestor
 //     a[i] > a[j]  -> max-heap
 //   In-order traversal of the tree is 0, 1, ..., n - 1.
-// Presets (a: vector<T>; ties: the leftmost one is the ancestor):
-//   vector<int> par = minCartesianTree(a);   // min at the root
-//   vector<int> par = maxCartesianTree(a);   // max at the root
+//   Plain min / max trees from a vector: the min, max variants in the <leader>rl menu.
 // Complexity: O(n).
 template <class F> vector<int> cartesianTree(int n, F above) {
     vector<int> par(n, -1), st;
@@ -23,9 +21,3 @@ template <class F> vector<int> cartesianTree(int n, F above) {
     return par;
 }
 
-template <class T> vector<int> minCartesianTree(const vector<T> &a) {
-    return cartesianTree((int)a.size(), [&](int i, int j) { return a[i] < a[j]; });
-}
-template <class T> vector<int> maxCartesianTree(const vector<T> &a) {
-    return cartesianTree((int)a.size(), [&](int i, int j) { return a[j] < a[i]; });
-}

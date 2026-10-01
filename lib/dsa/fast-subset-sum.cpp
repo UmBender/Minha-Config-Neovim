@@ -4,7 +4,6 @@
 //   SubsetSum ss(w);           // w: vector<int>, w[i] >= 0
 //   ss.can(s)                  // is s a subset sum?
 //   ss.recover(s)              // indices of one subset with sum s (requires can(s))
-// Presets:
 //   ss.maxAtMost(s)            // largest subset sum <= s (-1 if s < 0)
 //   int diff = ss.total - 2 * ss.maxAtMost(ss.total / 2);   // most balanced split into two parts
 // Complexity: O(n S / 64) time, O(S) memory, S = sum of weights; maxAtMost O(S).

@@ -1,0 +1,38 @@
+// Problem: items arrive online as "+ w v" (weight, value); a query "? W" prints the
+//   best value among items with weight <= W (-1 if none).
+// Input:
+//   6
+//   + 5 10
+//   ? 3
+//   + 2 7
+//   ? 3
+//   + 8 4
+//   ? 6
+// Output:
+//   -1
+//   7
+//   10
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+#include "dsa/suffix-max.prefix-max.cpp"  // in a solution: <leader>rl -> dsa/suffix-max -> prefix-max
+
+int main() {
+    int q;
+    cin >> q;
+    PrefixMax s(-1LL);  // long long weights and values, -1 when nothing qualifies
+    while (q--) {
+        char op;
+        cin >> op;
+        if (op == '+') {
+            ll w, v;
+            cin >> w >> v;
+            s.add(w, v);
+        } else {
+            ll w;
+            cin >> w;
+            cout << s.query(w) << '\n';
+        }
+    }
+}

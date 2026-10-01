@@ -18,8 +18,9 @@ lua/util/cp.lua          g++ compile/run helpers used by the <leader>r keymaps
 after/ftplugin/cpp.lua   buffer-local C++ keymaps (<leader>r group)
 templates/cp.cpp         template for new *.cpp files and CompetiTest received problems
 snippets/cpp.json        VS Code-style snippets, loaded by blink.cmp
-lib/<area>/<name>.cpp    C++ template library (inserted with <leader>rl), see "Template library"
-examples/<area>/<name>.cpp   runnable usage example per template (checked by the runner)
+lib/<area>/<name>.cpp    C++ template library (inserted with <leader>rl), see "Template library";
+                         variants: <name>.edu.cpp (educational), <name>.<use>.cpp (common uses)
+examples/<area>/<name>.cpp   runnable usage example per template/variant (checked by the runner)
 tests/                   tests for lib/ (tests/<area>/<name>.cpp) and nvim helpers (tests/nvim/)
 tasks/Library/           generated docs, one page per template (tests/run.py --write-docs)
 lua/util/lib.lua         library picker / insertion
@@ -84,24 +85,25 @@ flexibility, since typing is free here (the picker inserts the code).
   // Verify: https://judge.yosupo.jp/problem/point_add_range_sum   (optional, repeatable)
   // Requires: dsa/other-template                                 (optional)
   ```
-- **Presets**: every generic template also offers its most common uses as one-liners, inside the
-  same file (so they're inserted with it): default template arguments (`Fenwick fw(n)` is
-  `long long`), factory functions (`auto seg = minSegtree(a)`) or small wrapper structs with plain
-  values in and out (`RangeAddSum<long long> seg(a); seg.add(l, r, x); seg.sum(l, r)`). List them in
-  an optional `// Presets:` header key. Presets are tested like everything else.
-- **Example**: every template has `examples/<area>/<name>.cpp`, a complete small solution that
-  `#include "<area>/<name>.cpp"` and shows the typical use (presets first, then the general form
-  when it adds something). Header keys: `Problem:` (statement), `Input:` (stdin, optional),
-  `Output:` (exact expected stdout). The runner compiles it like a test, feeds `Input` and compares
+- **Variants** (`tasks/Decisions/D-013`): a structure can have variants next to it, picked in a
+  second `<leader>rl` menu. `lib/<area>/<name>.edu.cpp` is the **educational** one (same code, API
+  and `Title`, commented to explain how it works; the runner runs the normal test against it).
+  `lib/<area>/<name>.<use>.cpp` are **common uses** (`segtree.sum`, `lazy-segtree.add-min`, ...):
+  short standalone specialized code with its own `Title`, test and example, like any template.
+  The normal file holds only the generic structure (default template arguments are fine).
+  `// Presets:` is gone (lint rejects it). Add variants only where a structure has clear common uses.
+- **Example**: every template (and common variant) has `examples/<area>/<name>.cpp`, a complete
+  small solution that `#include "<area>/<name>.cpp"` and shows the typical use. Header keys:
+  `Problem:` (statement), `Input:` (stdin, optional), `Output:` (exact expected stdout). The runner compiles it like a test, feeds `Input` and compares
   `Output`, so examples can't rot.
-- **Docs**: `tasks/Library/<area>/<Title>.md` (one page per template) and `tasks/Library/Library.md`
-  (catalog) are **generated** from the template header + example by
+- **Docs**: `tasks/Library/<area>/<Title>.md` (one page per structure, variants included) and
+  `tasks/Library/Library.md` (catalog) are **generated** from the template headers + examples by
   `python3 tests/run.py --write-docs`. Never edit them by hand; a normal run fails when they are
   stale. Titles name the pages: no `\ / : # ^ [ ] |`.
-- `// Pending:` (temporary, migration only) marks a template whose example/presets are not done yet;
+- `// Pending:` (temporary, migration only) marks a template whose example is not done yet;
   lint skips the example requirement for it. Remove it when the template is migrated.
-- Every template has a test at `tests/<area>/<name>.cpp` (lint fails otherwise): fixed edge cases
-  plus a randomized **stress test against a brute force**. Tests include `test.h` (`tests/include/`, `CHECK`,
+- Every template and common variant has a test at `tests/<area>/<name>.cpp` (lint fails
+  otherwise): fixed edge cases plus a randomized **stress test against a brute force**. Tests include `test.h` (`tests/include/`, `CHECK`,
   `CHECK_EQ`, `CHECK_NEAR`, `test::rnd`, ...) and the template via `#include "<area>/<name>.cpp"`.
 - `python3 tests/run.py [filter]` runs lint, standalone compilation of each template, the C++
   tests (`-Werror`, ASan/UBSan, `_GLIBCXX_DEBUG`), the examples, the docs check and the nvim

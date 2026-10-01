@@ -6,11 +6,7 @@
 //   SuffixMax<int, long long, greater<long long>> mn(LLONG_MAX);   // min instead of max
 //   SuffixMax<K, V, CmpV, greater<K>>                 // keys x <= X instead of x >= X
 //   The identity defaults to the worst value for less/greater (lowest() / max()), else V{}.
-// Presets:
-//   K, V default to long long; add(x, y), query(X) as above
-//   SuffixMax sm;   SuffixMin sm;     // best y over x >= X (max / min)
-//   PrefixMax pm;   PrefixMin pm;     // best y over x <= X (max / min)
-//   PrefixMax<int, int> pm(-1);       // other types / identity
+//   K, V default to long long: SuffixMax sm.  Plain suffix-min, prefix-max, prefix-min: variants.
 // Complexity: O(log n) amortized per operation.
 template <class K = long long, class V = long long, class Cmp = less<V>, class KCmp = less<K>> struct SuffixMax {
     map<K, V, KCmp> m;  // in map order (keys increasing for less<K>) values strictly worse
@@ -38,7 +34,3 @@ template <class K = long long, class V = long long, class Cmp = less<V>, class K
     }
 };
 
-// ---- presets ----
-template <class K = long long, class V = long long> using SuffixMin = SuffixMax<K, V, greater<V>>;
-template <class K = long long, class V = long long> using PrefixMax = SuffixMax<K, V, less<V>, greater<K>>;
-template <class K = long long, class V = long long> using PrefixMin = SuffixMax<K, V, greater<V>, greater<K>>;
