@@ -8,7 +8,7 @@
 init.lua                 bootstrap
 lua/config/              options, keymaps, autocmds, lazy.nvim setup (LazyVim conventions)
 lua/plugins/
-  colorscheme.lua        gruvbox (transparent), rainbow indent + cursor-word highlights
+  colorscheme.lua        kanagawa dragon, higher contrast palette, rainbow indent colors
   ui.lua                 BENDER VIM dashboard, bubbles lualine, rainbow indent, dropbar winbar
   cpp.lua                clangd, clang-format, CompetiTest
 lua/util/cp.lua          g++ compile / run helpers
