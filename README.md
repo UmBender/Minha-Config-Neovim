@@ -16,6 +16,8 @@ after/ftplugin/cpp.lua   C++ keymaps (<leader>r)
 templates/cp.cpp         template for new .cpp files and received problems
 snippets/cpp.json        extra snippets (fori, all, vread, yesno)
 .clang-format            fallback style when a project has none
+AGENTS.md                conventions for agents working on this config
+tasks/                   Obsidian vault: tasks, decisions and guides (keymaps, workflows)
 ```
 
 Enabled LazyVim extras: `lang.clangd`, `dap.core`, `util.mini-hipatterns`. Use `:LazyExtras` for more languages.

@@ -1,0 +1,7 @@
+# local symlink to the ICPC notebook (~/gempro-notebook), used only as a template source
+/notebook
+
+# Obsidian per-device state
+/tasks/.obsidian/workspace*.json
+/tasks/.obsidian/cache
+/tasks/.trash/
