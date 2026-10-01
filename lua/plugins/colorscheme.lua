@@ -26,7 +26,13 @@ return {
           dragonOrange2 = "#c4886f", -- extended color 2
         },
         theme = {
-          all = { ui = { bg_gutter = "none" } }, -- keep the gutter transparent too
+          all = {
+            ui = {
+              bg_gutter = "none", -- keep the gutter transparent too
+              -- floats (explorer, pickers, hover) look like the editor
+              float = { fg = "#c5c9c5", bg = "none", bg_border = "none" },
+            },
+          },
         },
       },
       overrides = function(colors)
@@ -40,6 +46,8 @@ return {
           RainbowGreen = { fg = p.dragonGreen2 },
           RainbowViolet = { fg = p.dragonPink },
           RainbowCyan = { fg = p.dragonAqua },
+          -- separator between the explorer and splits, visible without a background
+          WinSeparator = { fg = p.dragonBlack5 },
           -- underline the word under the cursor and its references
           LspReferenceText = { underline = true },
           LspReferenceRead = { underline = true },
