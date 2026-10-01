@@ -9,10 +9,14 @@
 //   divisorZeta(a)      b[m] = sum of a[d], d | m        (indices 1..n, a.size() = n + 1, a[0] untouched)
 //   multipleZeta(a)     b[d] = sum of a[m], d | m <= n
 //   divisorMobius / multipleMobius    inverses
-//   gcd convolution: multipleMobius(multipleZeta(a) * multipleZeta(b) pointwise)
+//   gcd convolution by hand: multipleMobius(multipleZeta(a) * multipleZeta(b) pointwise)
+// Presets (a, b: vector<long long> on indices 1..n, index 0 ignored; mod = 0 means exact):
+//   gcdConv(a, b[, mod])   c[k] = sum over gcd(i, j) == k of a[i] b[j]
+//   lcmConv(a, b[, mod])   c[k] = sum over lcm(i, j) == k of a[i] b[j]   (lcms > n dropped)
+//   c.size() = max(a.size(), b.size()), c[0] = 0
 // Complexity: O(n log n) for masks (n = 2^k), O(n log log n) for divisors.
 // Verify: https://judge.yosupo.jp/problem/gcd_convolution
-// Pending: example + presets (T-009..T-011), remove when done
+// Verify: https://judge.yosupo.jp/problem/lcm_convolution
 template <class T, class Op = plus<T>> vector<T> subsetZeta(vector<T> a, Op op = Op()) {
     int n = (int)a.size();
     for (int j = 1; j < n; j <<= 1)
@@ -82,4 +86,30 @@ template <class T> vector<T> multipleMobius(vector<T> a) {
     for (int p : zetaPrimes(n))
         for (int i = 1; i <= n / p; i++) a[i] -= a[i * p];
     return a;
+}
+
+// gcd (lcm = false) or lcm (lcm = true) convolution on indices 1..n; index 0 ignored (c[0] = 0)
+inline vector<long long> divisorConv(vector<long long> a, vector<long long> b, long long mod, bool lcm) {
+    size_t n = max(a.size(), b.size());
+    a.resize(n), b.resize(n);
+    if (!n) return a;
+    a[0] = b[0] = 0;
+    auto norm = [&](vector<long long> &v) {
+        if (mod)
+            for (auto &x : v) x = (x % mod + mod) % mod;
+    };
+    norm(a), norm(b);
+    a = lcm ? divisorZeta(move(a)) : multipleZeta(move(a));
+    b = lcm ? divisorZeta(move(b)) : multipleZeta(move(b));
+    norm(a), norm(b);
+    for (size_t i = 0; i < n; i++) a[i] = mod ? a[i] * b[i] % mod : a[i] * b[i];
+    a = lcm ? divisorMobius(move(a)) : multipleMobius(move(a));
+    norm(a);
+    return a;
+}
+inline vector<long long> gcdConv(const vector<long long> &a, const vector<long long> &b, long long mod = 0) {
+    return divisorConv(a, b, mod, false);
+}
+inline vector<long long> lcmConv(const vector<long long> &a, const vector<long long> &b, long long mod = 0) {
+    return divisorConv(a, b, mod, true);
 }

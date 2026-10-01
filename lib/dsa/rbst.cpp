@@ -9,10 +9,11 @@
 //                                           // sizes are long long, e.g. doubling a string 60 times)
 //   t.toVector(r)
 //   Old roots stay valid. Memory grows by O(log n) nodes per operation.
+// Presets:
+//   PersistentRBST t;   // T defaults to long long
 // Complexity: O(log n) expected per operation.
 // Verify: https://atcoder.jp/contests/abc417/tasks/abc417_g
-// Pending: example + presets (T-009..T-011), remove when done
-template <class T> struct PersistentRBST {
+template <class T = long long> struct PersistentRBST {
     vector<int> L{0}, R{0};
     vector<long long> cnt{0};
     vector<T> val{T{}};

@@ -48,6 +48,16 @@ int main() {
         for (size_t i = 0; i < roots.size(); i++) CHECK_EQ(t.toVector(roots[i]), vers[i]);
     }
 
+    // preset: T defaults to long long
+    {
+        PersistentRBST d;
+        static_assert(is_same_v<decltype(d), PersistentRBST<long long>>);
+        int r0 = d.build({1, 2, 3});
+        int r1 = d.set(r0, 1, 5000000000LL);
+        CHECK_EQ(d.toVector(r0), (vector<long long>{1, 2, 3}));
+        CHECK_EQ(d.toVector(r1), (vector<long long>{1, 5000000000LL, 3}));
+    }
+
     // exponential sharing: sizes beyond 2^40 via repeated self-merge
     PersistentRBST<char> t;
     int r = t.build({'a', 'b'});

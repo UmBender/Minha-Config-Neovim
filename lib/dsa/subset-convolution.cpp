@@ -5,7 +5,6 @@
 //   subsetConvolution(a, b, 998244353)                      // modulo (mod = 0 means exact)
 // Complexity: O(2^k k^2).
 // Verify: https://judge.yosupo.jp/problem/subset_convolution
-// Pending: example + presets (T-009..T-011), remove when done
 inline vector<long long> subsetConvolution(const vector<long long> &a, const vector<long long> &b, long long mod = 0) {
     int n = (int)a.size(), k = 0;
     while ((1 << k) < n) k++;

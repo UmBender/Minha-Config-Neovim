@@ -43,6 +43,14 @@ int main() {
             }
         }
     }
+    // preset: T defaults to long long
+    {
+        ImplicitTreap d;
+        static_assert(is_same_v<decltype(d), ImplicitTreap<ll>>);
+        d.insert(0, 3000000000LL), d.insert(0, 1);
+        CHECK_EQ(d.sum(0, 2), 3000000001LL);
+        CHECK_EQ(d.min(0, 2), 1LL);
+    }
     // push_back on a big sequence + split/merge by hand (move a block to the front)
     ImplicitTreap<int> t;
     vector<int> a;

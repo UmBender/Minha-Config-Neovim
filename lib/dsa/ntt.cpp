@@ -8,7 +8,6 @@
 // Complexity: O(n log n) (convMod: 3 NTT convolutions).
 // Verify: https://judge.yosupo.jp/problem/convolution_mod
 // Verify: https://judge.yosupo.jp/problem/convolution_mod_1000000007
-// Pending: example + presets (T-009..T-011), remove when done
 template <unsigned MOD> long long nttPow(long long b, long long e) {
     long long r = 1;
     for (b %= MOD; e; e >>= 1, b = b * b % MOD)
