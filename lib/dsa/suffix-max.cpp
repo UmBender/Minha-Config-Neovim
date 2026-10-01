@@ -4,14 +4,24 @@
 //   SuffixMax<int, long long> sm(LLONG_MIN);          // value returned when nothing qualifies
 //   sm.add(x, y);  sm.query(X);                        // max y over x >= X
 //   SuffixMax<int, long long, greater<long long>> mn(LLONG_MAX);   // min instead of max
-//   For x <= X, insert -x and query -X.
+//   SuffixMax<K, V, CmpV, greater<K>>                 // keys x <= X instead of x >= X
+//   The identity defaults to the worst value for less/greater (lowest() / max()), else V{}.
+// Presets:
+//   K, V default to long long; add(x, y), query(X) as above
+//   SuffixMax sm;   SuffixMin sm;     // best y over x >= X (max / min)
+//   PrefixMax pm;   PrefixMin pm;     // best y over x <= X (max / min)
+//   PrefixMax<int, int> pm(-1);       // other types / identity
 // Complexity: O(log n) amortized per operation.
-// Pending: example + presets (T-009..T-011), remove when done
-template <class K, class V, class Cmp = less<V>> struct SuffixMax {
-    map<K, V> m;  // keys increasing => values strictly worse
+template <class K = long long, class V = long long, class Cmp = less<V>, class KCmp = less<K>> struct SuffixMax {
+    map<K, V, KCmp> m;  // in map order (keys increasing for less<K>) values strictly worse
     V e;
     Cmp cmp;
-    SuffixMax(V e_ = V{}) : e(e_) {}
+    static V worst() {
+        if constexpr (is_same_v<Cmp, less<V>>) return numeric_limits<V>::lowest();
+        else if constexpr (is_same_v<Cmp, greater<V>>) return numeric_limits<V>::max();
+        else return V{};
+    }
+    SuffixMax(V e_ = worst()) : e(e_) {}
     void add(K x, V y) {
         auto it = m.lower_bound(x);
         if (it != m.end() && !cmp(it->second, y)) return;
@@ -27,3 +37,8 @@ template <class K, class V, class Cmp = less<V>> struct SuffixMax {
         return it == m.end() ? e : it->second;
     }
 };
+
+// ---- presets ----
+template <class K = long long, class V = long long> using SuffixMin = SuffixMax<K, V, greater<V>>;
+template <class K = long long, class V = long long> using PrefixMax = SuffixMax<K, V, less<V>, greater<K>>;
+template <class K = long long, class V = long long> using PrefixMin = SuffixMax<K, V, greater<V>, greater<K>>;

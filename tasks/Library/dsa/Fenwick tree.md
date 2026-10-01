@@ -20,9 +20,80 @@ fw.sum(r)      sum of [0, r)        fw.sum(l, r)   sum of [l, r)
 fw.lowerBound(s)  smallest r with sum(r) >= s (all values >= 0); n + 1 if none, 0 if s <= 0
 ```
 
+## Presets
+
+```cpp
+Fenwick fw(n);                  // T defaults to long long
+RangeFenwick rf(n or a);        // range add + range sum (long long by default)
+rf.add(l, r, x);  rf.sum(l, r);  rf.sum(r);  rf.get(i);  rf.set(i, x)
+```
+
 ## Complexity
 
 O(log n) per operation, O(n) build.
+
+## Example
+
+n numbers and q queries: "1 l r x" adds x to a[l..r), "2 i x" adds x to a[i] only,
+"3 l r" prints the sum of a[l..r).
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+#include "dsa/fenwick-tree.cpp"  // in a solution: <leader>rl -> dsa/fenwick-tree
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<ll> a(n);
+    for (auto &x : a) cin >> x;
+
+    RangeFenwick rf(a);  // preset: range add + range sum (long long)
+    // point updates only? the plain form is enough: Fenwick fw(n); fw.add(i, x); fw.sum(l, r);
+
+    while (q--) {
+        int type;
+        cin >> type;
+        if (type == 1) {
+            int l, r;
+            ll x;
+            cin >> l >> r >> x;
+            rf.add(l, r, x);
+        } else if (type == 2) {
+            int i;
+            ll x;
+            cin >> i >> x;
+            rf.add(i, i + 1, x);
+        } else {
+            int l, r;
+            cin >> l >> r;
+            cout << rf.sum(l, r) << '\n';
+        }
+    }
+}
+```
+
+Input:
+
+```
+5 5
+1 2 3 4 5
+3 0 5
+1 1 4 10
+3 0 2
+2 4 100
+3 3 5
+```
+
+Output:
+
+```
+15
+13
+119
+```
 
 ## Verify
 

@@ -10,8 +10,12 @@
 //     RollbackDSU dsu(n);
 //     od.run([&](auto e) { dsu.unite(e.first, e.second); }, [&] { dsu.undo(); },
 //            [&](int qi) { ans[qi] = dsu.count(); });
+// Presets:
+//   dynamic connectivity: od is an OfflineDeletion<pair<int, int>> of edges, dsu a RollbackDSU(n)
+//   (dsa/dsu-rollback); each call runs od (so once per od) and leaves dsu as it was
+//   vector<int> comps = componentCounts(od, dsu);   // number of components at each query()
+//   vector<int> ok = connectedAt(od, dsu, ask);     // ask[qi] = {a, b}: 1 if a, b connected at query qi
 // Complexity: O(k log q) ins/undo calls, k = number of inserts, q = number of queries.
-// Pending: example + presets (T-009..T-011), remove when done
 template <class V> struct OfflineDeletion {
     int q = 0;
     map<V, vector<int>> open;  // value -> query index at which each alive copy was inserted
@@ -54,3 +58,18 @@ template <class V> struct OfflineDeletion {
         dfs(dfs, 1, 0, q);
     }
 };
+
+// ---- presets: dynamic connectivity (DSU = RollbackDSU from dsa/dsu-rollback) ----
+template <class DSU> vector<int> componentCounts(OfflineDeletion<pair<int, int>> &od, DSU &dsu) {
+    vector<int> res(od.q);
+    od.run([&](const pair<int, int> &e) { dsu.unite(e.first, e.second); }, [&] { dsu.undo(); },
+           [&](int qi) { res[qi] = dsu.count(); });
+    return res;
+}
+template <class DSU>
+vector<int> connectedAt(OfflineDeletion<pair<int, int>> &od, DSU &dsu, const vector<pair<int, int>> &ask) {
+    vector<int> res(od.q);
+    od.run([&](const pair<int, int> &e) { dsu.unite(e.first, e.second); }, [&] { dsu.undo(); },
+           [&](int qi) { res[qi] = dsu.same(ask[qi].first, ask[qi].second); });
+    return res;
+}

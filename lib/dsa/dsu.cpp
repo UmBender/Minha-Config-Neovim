@@ -7,7 +7,6 @@
 //   dsu.groups()      vector of sets (each a vector of elements)
 // Complexity: O(alpha(n)) amortized per operation.
 // Verify: https://judge.yosupo.jp/problem/unionfind
-// Pending: example + presets (T-009..T-011), remove when done
 struct DSU {
     vector<int> p;  // p[x] < 0: x is a root and -p[x] is the size
     int comps;
