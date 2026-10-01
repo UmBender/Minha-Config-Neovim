@@ -8,3 +8,6 @@
 
 # template test builds
 /tests/.build/
+
+# Claude Code local state (agent worktrees)
+/.claude/

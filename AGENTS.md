@@ -124,6 +124,8 @@ flexibility, since typing is free here (the picker inserts the code).
   commit only when asked. Push **only when asked**.
 - Don't commit directly on `main`: commit on a short-lived branch, then fast-forward merge
   into `main` when the user asks ("commit and merge to main"). Push only when asked.
+- Stage files explicitly or check `git status` first: `.claude/` (agent worktrees) is ignored, but
+  never rely on `git add -A` blindly.
 - Never commit files the user drops in temporarily for reference (e.g. a terminal palette
   `.toml`), nor the `notebook` symlink.
 - Commit messages: conventional style (`feat:`, `fix:`, ...), short bullet body.

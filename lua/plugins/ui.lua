@@ -64,6 +64,26 @@ return {
     end,
   },
 
+  -- rainbow (), [], {} with the Kanagawa palette (groups in colorscheme.lua)
+  {
+    "HiPhish/rainbow-delimiters.nvim",
+    event = "LazyFile",
+    main = "rainbow-delimiters.setup",
+    opts = {},
+  },
+
+  -- compact rounded diagnostics next to the code, replacing the default virtual text
+  {
+    "rachartier/tiny-inline-diagnostic.nvim",
+    event = "LspAttach",
+    priority = 1000,
+    opts = { preset = "modern" },
+  },
+  {
+    "neovim/nvim-lspconfig",
+    opts = { diagnostics = { virtual_text = false } },
+  },
+
   -- winbar with file path and code context
   {
     "Bekaboo/dropbar.nvim",

@@ -46,6 +46,17 @@ return {
           RainbowGreen = { fg = p.dragonGreen2 },
           RainbowViolet = { fg = p.dragonPink },
           RainbowCyan = { fg = p.dragonAqua },
+          -- rainbow brackets (rainbow-delimiters.nvim), same colors as the indent guides
+          RainbowDelimiterRed = { fg = p.dragonRed },
+          RainbowDelimiterYellow = { fg = p.dragonYellow },
+          RainbowDelimiterBlue = { fg = p.dragonBlue2 },
+          RainbowDelimiterOrange = { fg = p.dragonOrange },
+          RainbowDelimiterGreen = { fg = p.dragonGreen2 },
+          RainbowDelimiterViolet = { fg = p.dragonPink },
+          RainbowDelimiterCyan = { fg = p.dragonAqua },
+          -- sticky context (treesitter-context): subtle bar instead of a block
+          TreesitterContext = { bg = p.dragonBlack1 },
+          TreesitterContextBottom = { underline = true, sp = p.dragonBlack5 },
           -- separator between the explorer and splits, visible without a background
           WinSeparator = { fg = p.dragonBlack5 },
           -- underline the word under the cursor and its references
