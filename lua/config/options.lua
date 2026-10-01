@@ -7,3 +7,10 @@ opt.tabstop = 4
 opt.softtabstop = 4
 opt.scrolloff = 10
 opt.clipboard = "unnamedplus"
+
+-- the winbar (dropbar) already shows the code context; skip LazyVim's lualine copy of it
+vim.g.trouble_lualine = false
+
+if _G.LazyVim then
+  require("util.perf").setup()
+end

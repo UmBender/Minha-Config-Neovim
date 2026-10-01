@@ -8,14 +8,14 @@ tags: [guide, ui]
 | ------- | ------ | ----- |
 | Colorscheme | kanagawa.nvim (`dragon`, transparent, custom palette) | `lua/plugins/colorscheme.lua` |
 | Dashboard ("BENDER VIM") | snacks.dashboard | `lua/plugins/ui.lua` |
-| Statusline ("bubbles") | lualine | `lua/plugins/ui.lua` |
-| Rainbow indent guides | snacks.indent + `Rainbow*` highlights | `ui.lua` + `colorscheme.lua` |
+| Statusline ("bubbles", no code context: the winbar has it) | lualine | `lua/plugins/ui.lua`, `options.lua` |
+| Rainbow indent guides (scope guide not animated) | snacks.indent + `Rainbow*` highlights | `ui.lua` + `colorscheme.lua` |
 | Winbar (path + symbols) | dropbar.nvim | `lua/plugins/ui.lua` |
 | Color codes (`#aabbcc`) highlighted | mini.hipatterns extra | `lua/config/lazy.lua` |
 | Underlined word under the cursor | `LspReference*` highlights | `colorscheme.lua` |
 | Tabs / buffers | bufferline (LazyVim default) | none (LazyVim default) |
-| Smooth cursor (smear trail) | smear-cursor.nvim (LazyVim extra `ui.smear-cursor`) | `lua/config/lazy.lua` |
-| Smooth scrolling | snacks.scroll (LazyVim default) | none |
+| Smooth cursor (fast smear trail) | smear-cursor.nvim (LazyVim extra `ui.smear-cursor`), tuned | `lua/config/lazy.lua` + `ui.lua` |
+| Smooth scrolling | **off** (snacks.scroll), scrolling is instant | `ui.lua` |
 | Rainbow brackets | rainbow-delimiters.nvim + `RainbowDelimiter*` highlights | `ui.lua` + `colorscheme.lua` |
 | Sticky function/loop header | nvim-treesitter-context (LazyVim extra `ui.treesitter-context`) | `lua/config/lazy.lua` |
 | Inline diagnostics (rounded bubbles) | tiny-inline-diagnostic.nvim (`modern` preset), default virtual text off | `ui.lua` |
@@ -27,7 +27,15 @@ tags: [guide, ui]
 - Icons come from **mini.icons** (LazyVim default), which uses the Material Design Icons of
   Nerd Fonts (`nf-md-*`), so no extra icon plugin is needed.
 - Alacritty doesn't render ligatures, whatever the font.
-- Toggles: `:SmearCursorToggle`, `<leader>ut` (sticky context).
+- Toggles: `:SmearCursorToggle`, `<leader>ut` (sticky context), `<leader>uS` (smooth scroll, this
+  session only).
+
+## Performance
+See [[T-014 Performance]] and [[D-012 Performance budget]].
+- Smear speed: `stiffness`/`trailing_stiffness` in the smear spec of `ui.lua` (closer to 1 = faster),
+  `time_interval` is the frame time in ms.
+- Most startup time is Treesitter compiling the C++ highlight query (~250 ms, once per session).
+- Measure: `:Lazy profile`, or `nvim --startuptime /tmp/st.log file.cpp`.
 
 ## Changing colors
 - Palette overrides: `colors.palette` in `colorscheme.lua`. The mapping from terminal colors is in

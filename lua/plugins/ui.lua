@@ -32,8 +32,11 @@ return {
           },
         },
       },
+      -- smooth scrolling makes every <C-d>, <C-u>, G and search jump wait for an animation
+      scroll = { enabled = false },
       -- rainbow indent guides (colors defined in colorscheme.lua)
       indent = {
+        animate = { enabled = false }, -- the scope guide appears at once instead of being drawn
         indent = {
           hl = {
             "RainbowRed",
@@ -62,6 +65,21 @@ return {
         { "location", separator = { right = "" }, left_padding = 2 },
       }
     end,
+  },
+
+  -- smear cursor (LazyVim extra), tuned to keep up with fast movement
+  {
+    "sphamba/smear-cursor.nvim",
+    opts = {
+      stiffness = 0.8,
+      trailing_stiffness = 0.6,
+      stiffness_insert_mode = 0.7,
+      trailing_stiffness_insert_mode = 0.7,
+      damping = 0.95,
+      damping_insert_mode = 0.95,
+      distance_stop_animating = 0.5, -- stop as soon as the tail is half a cell away
+      time_interval = 7, -- ~140 fps instead of 60
+    },
   },
 
   -- rainbow (), [], {} with the Kanagawa palette (groups in colorscheme.lua)
