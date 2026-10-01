@@ -1,0 +1,7 @@
+# Fallback style for C/C++ files outside a project with its own .clang-format
+BasedOnStyle: LLVM
+IndentWidth: 4
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortLoopsOnASingleLine: true
+AllowShortBlocksOnASingleLine: Always
+ColumnLimit: 100

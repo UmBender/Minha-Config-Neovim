@@ -1,31 +1,41 @@
-# Configuração Neovim do Bender
+# Bender's Neovim
 
-<p> Esta é minha configuração neovim, use da forma que você desejar </p>
-> Esta configuração está ainda em desenvolvimento
+[LazyVim](https://www.lazyvim.org)-based config, focused on C++ competitive programming.
 
-## Lista de Plugins
-	- Packer
-	- Telescope
-	- Nvim-Treesitter
-	- Nvim Web-Deviovons
-	- Nvim-Tree
-	- Mason
-	- Null-ls
-	- Nvim-dap
-	- LSP-zero
-	- OneDark
-	- BarBar
-	- LuaLine
-	- LSP-Status
-	- Indent-Blankline
-	- Nvim-Cursorline
-	- live-server
-	- Modicator
-	- Comment
-	- Toggleterm
-	- Nvim-navic
-	- Winbar
-	- Trouble
-	- Which-key
+## Layout
 
+```
+init.lua                 bootstrap
+lua/config/              options, keymaps, autocmds, lazy.nvim setup (LazyVim conventions)
+lua/plugins/
+  colorscheme.lua        gruvbox (transparent), rainbow indent + cursor-word highlights
+  ui.lua                 BENDER VIM dashboard, bubbles lualine, rainbow indent, dropbar winbar
+  cpp.lua                clangd, clang-format, CompetiTest
+lua/util/cp.lua          g++ compile / run helpers
+after/ftplugin/cpp.lua   C++ keymaps (<leader>r)
+templates/cp.cpp         template for new .cpp files and received problems
+snippets/cpp.json        extra snippets (fori, all, vread, yesno)
+.clang-format            fallback style when a project has none
+```
 
+Enabled LazyVim extras: `lang.clangd`, `dap.core`, `util.mini-hipatterns`. Use `:LazyExtras` for more languages.
+
+## Competitive programming
+
+New `*.cpp` files start from `templates/cp.cpp`. Builds define `LOCAL`, so `dbg(...)` prints to stderr
+locally and compiles to nothing on the judge. The binary goes next to the source file.
+
+| Key          | Action                                                           |
+| ------------ | ---------------------------------------------------------------- |
+| `<leader>rr` | Compile (`-O2`) and run in a floating terminal                   |
+| `<leader>rd` | Compile with sanitizers + `_GLIBCXX_DEBUG` and run               |
+| `<leader>rc` | Compile only; errors/warnings go to the quickfix list            |
+| `<leader>rn` | Insert template into the current buffer                          |
+| `<leader>rt` | Run all test cases (`<leader>rT` without recompiling)            |
+| `<leader>ru` | Show test cases UI                                               |
+| `<leader>ra` | Add test case (`re` edit, `rx` delete)                           |
+| `<leader>rp` | Receive problem from [Competitive Companion]; `rP` contest, `rR` test cases |
+
+Debugging (codelldb) uses the LazyVim `dap.core` keymaps under `<leader>d`.
+
+[Competitive Companion]: https://github.com/jmerle/competitive-companion
