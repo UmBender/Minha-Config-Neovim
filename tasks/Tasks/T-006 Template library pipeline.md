@@ -21,7 +21,7 @@ Requirements (from the user):
 ## Plan
 - [x] Pipeline documented: AGENTS.md, [[D-008 Task pipeline]], Task template checklist
 - [x] Library format: `lib/<area>/<name>.cpp` with a metadata header ([[D-009 Template library format]])
-- [x] Test harness: `tests/test.h` + `tests/run.py` (lint, standalone compile, stress tests, nvim tests)
+- [x] Test harness: `tests/include/test.h` + `tests/run.py` (lint, standalone compile, stress tests, nvim tests)
 - [x] Picker `<leader>rl` (`lua/util/lib.lua`) inserting templates and their dependencies
 - [x] Tests for the picker (`tests/nvim/lib_test.lua`)
 - [x] Guides updated (Keymaps, Competitive Programming, new Template Library guide)

@@ -56,26 +56,21 @@ inline bool near(long double a, long double b, long double eps = 1e-6) {
 
 } // namespace test
 
-#define CHECK(cond)                                                                          \
-    do {                                                                                     \
-        if (!(cond)) test::fail(__FILE__, __LINE__, #cond);                                  \
-    } while (0)
+// All checks are expressions, so they also work in comma expressions and unbraced bodies.
+#define CHECK(cond) ((cond) ? (void)0 : test::fail(__FILE__, __LINE__, #cond))
 
 #define CHECK_EQ(got, want)                                                                  \
-    do {                                                                                     \
-        const auto &got_ = (got);                                                            \
-        const auto &want_ = (want);                                                          \
+    ([&](const auto &got_, const auto &want_) {                                              \
         if (!(got_ == want_))                                                                \
             test::fail(__FILE__, __LINE__,                                                   \
                        string(#got " == " #want "\n  got:  ") + test::show(got_) +           \
                            "\n  want: " + test::show(want_));                                \
-    } while (0)
+    }((got), (want)))
 
 #define CHECK_NEAR(got, want, eps)                                                           \
-    do {                                                                                     \
-        const long double got_ = (got), want_ = (want);                                      \
-        if (!test::near(got_, want_, eps))                                                   \
+    ([&](long double got_, long double want_) {                                              \
+        if (!test::near(got_, want_, (eps)))                                                 \
             test::fail(__FILE__, __LINE__,                                                   \
                        string(#got " ~= " #want "\n  got:  ") + test::show(got_) +           \
                            "\n  want: " + test::show(want_));                                \
-    } while (0)
+    }((got), (want)))

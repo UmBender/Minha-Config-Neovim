@@ -20,7 +20,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-004 | [[T-004 Explorer and float colors]] | done |
 | T-005 | [[T-005 Notebook-based templates]] | doing |
 | T-006 | [[T-006 Template library pipeline]] | done |
-| T-007 | [[T-007 Port dsa templates]] | todo |
+| T-007 | [[T-007 Port dsa templates]] | done |
 
 ## Decisions
 

@@ -14,6 +14,7 @@ Use the ICPC notebook (`notebook/` → `~/gempro-notebook`) as the base for temp
 - [x] Get the spec from the user
 - [x] Break it into tasks: [[T-006 Template library pipeline]] (infrastructure), then one task per
   area, starting with [[T-007 Port dsa templates]] as a pilot for review
+- [x] dsa pilot ([[T-007 Port dsa templates]])
 - [ ] graph, math, strings, geometry, tree (after the pilot is reviewed)
 
 ## Spec (2026-10-01)

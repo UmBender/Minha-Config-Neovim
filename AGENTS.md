@@ -79,7 +79,7 @@ flexibility, since typing is free here (the picker inserts the code).
   // Requires: dsa/other-template                                 (optional)
   ```
 - Every template has a test at `tests/<area>/<name>.cpp` (lint fails otherwise): fixed edge cases
-  plus a randomized **stress test against a brute force**. Tests include `test.h` (`CHECK`,
+  plus a randomized **stress test against a brute force**. Tests include `test.h` (`tests/include/`, `CHECK`,
   `CHECK_EQ`, `CHECK_NEAR`, `test::rnd`, ...) and the template via `#include "<area>/<name>.cpp"`.
 - `python3 tests/run.py [filter]` runs lint, standalone compilation of each template, the C++
   tests (`-Werror`, ASan/UBSan, `_GLIBCXX_DEBUG`) and the nvim tests. Builds are cached in
@@ -136,6 +136,13 @@ In the test script use `vim.defer_fn`, write results to a file, then `qa!`. The
   (quitting early aborts installs; wait on the package's `install():once('closed', ...)`).
 
 ## Known gotchas
+
+- GCC 16's `bits/stdc++.h` no longer includes `<cassert>`: `assert` needs `#include <cassert>`.
+  Templates must not use it (lint rejects it).
+- Test includes resolve `-I lib` then `-I tests/include`; never put tests on the include path
+  (a missing template would make a test include itself).
+- After writing tests for a template, mutate the template (reintroduce a plausible bug) and make
+  sure the suite fails. An infinite loop shows up as a 60 s timeout.
 
 - clangd 23 requires a value for `--function-arg-placeholders` (`=1`); LazyVim's default works only
   by accident. See `tasks/Decisions/D-003`.

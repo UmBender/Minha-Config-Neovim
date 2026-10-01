@@ -38,15 +38,16 @@ TEST_FLAGS = WARN + [
     "-D_GLIBCXX_DEBUG",
     "-D_GLIBCXX_DEBUG_PEDANTIC",
     f"-I{LIB}",
-    f"-I{TESTS}",
+    f"-I{TESTS / 'include'}",
 ]
-TIMEOUT = 300
+TIMEOUT = 60
 REQUIRED_KEYS = ["Title", "Description", "Usage", "Complexity"]
 FORBIDDEN = [
     (re.compile(r"^\s*#\s*include\b"), "#include (templates must be self-contained)"),
     (re.compile(r"^\s*#\s*define\b"), "#define (no macros in templates)"),
     (re.compile(r"^\s*#\s*pragma\b"), "#pragma"),
     (re.compile(r"^\s*using\s+namespace\s+std\b"), "using namespace std (already in the solution file)"),
+    (re.compile(r"\bassert\s*\("), "assert (GCC 16's bits/stdc++.h no longer includes <cassert>)"),
 ]
 
 GREEN, RED, DIM, RESET = ("\033[32m", "\033[31m", "\033[2m", "\033[0m") if sys.stdout.isatty() else ("",) * 4
@@ -60,7 +61,7 @@ def test_ids():
     return sorted(
         str(p.relative_to(TESTS).with_suffix(""))
         for p in TESTS.rglob("*.cpp")
-        if BUILD not in p.parents and "nvim" not in p.relative_to(TESTS).parts
+        if p.relative_to(TESTS).parts[0] not in (".build", "nvim", "include")
     )
 
 
@@ -98,7 +99,7 @@ def resolve(tid, seen=None, order=None):
     return order
 
 
-def lint(ids):
+def lint(ids, match=lambda tid: True):
     errors = []
     all_ids = set(lib_ids())
     for tid in ids:
@@ -116,7 +117,7 @@ def lint(ids):
                     errors.append(f"{tid}:{n}: forbidden {what}")
         if not (TESTS / f"{tid}.cpp").exists():
             errors.append(f"{tid}: no test (expected tests/{tid}.cpp)")
-    for tid in test_ids():
+    for tid in filter(match, test_ids()):
         if tid not in all_ids:
             errors.append(f"tests/{tid}.cpp: no matching template lib/{tid}.cpp")
     return errors
@@ -139,7 +140,7 @@ def standalone(tid):
 def included_files(path, acc=None):
     acc = set() if acc is None else acc
     for m in re.finditer(r'^\s*#\s*include\s+"([^"]+)"', path.read_text(), re.M):
-        for base in (path.parent, LIB, TESTS):
+        for base in (path.parent, LIB, TESTS / "include"):
             dep = (base / m.group(1)).resolve()
             if dep.exists():
                 if dep not in acc:
@@ -203,7 +204,7 @@ def main():
     failed = 0
 
     print(f"== lint ({len(ids)} templates)")
-    errors = lint(ids)
+    errors = lint(ids, match)
     for e in errors:
         print(f"{RED}FAIL{RESET} {e}")
     failed += len(errors)
