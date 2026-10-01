@@ -31,6 +31,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-015 | [[T-015 Template variant menu]] | done |
 | T-016 | [[T-016 Port strings templates]] | done |
 | T-017 | [[T-017 Collapsible templates]] | done |
+| T-018 | [[T-018 Port math templates]] | done |
 
 ## Decisions
 
@@ -48,6 +49,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 - [[D-012 Performance budget]]
 - [[D-013 Template variants]]
 - [[D-014 Collapsible templates with native folds]]
+- [[D-015 Modulus as an argument]]
 
 ## Guides
 

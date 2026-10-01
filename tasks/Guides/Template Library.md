@@ -31,6 +31,9 @@ Tested C++ templates in `lib/<area>/<name>.cpp`, based on the ICPC notebook but 
 
 Conventions in every template: 0-indexed, half-open ranges `[l, r)`, generic types, operations
 passed as lambdas (common-use variants are plain code instead).
+Modular templates (`math/*`) take the modulus as a trailing argument, `998244353` by default:
+`powMod(b, e)`, `powMod(b, e, 1000000007)`, `sqrtMod(a, p)`; there is no global `mod` to edit
+([[D-015 Modulus as an argument]]).
 
 ## Running the tests
 
