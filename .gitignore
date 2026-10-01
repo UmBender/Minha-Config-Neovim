@@ -5,3 +5,6 @@
 /tasks/.obsidian/workspace*.json
 /tasks/.obsidian/cache
 /tasks/.trash/
+
+# template test builds
+/tests/.build/

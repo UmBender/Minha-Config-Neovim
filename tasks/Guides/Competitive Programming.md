@@ -54,6 +54,6 @@ extension. Then:
 
 Snippets live in `snippets/cpp.json` (VS Code format).
 
-## Notebook
-The ICPC library is linked at `notebook/` (→ `~/gempro-notebook`). Using it for templates is
-planned in [[T-005 Notebook-based templates]].
+## Template library
+`<leader>rl` inserts a tested template (segment trees, DSU, FFT, ...) above `solve()`.
+See [[Template Library]].

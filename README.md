@@ -15,6 +15,8 @@ lua/util/cp.lua          g++ compile / run helpers
 after/ftplugin/cpp.lua   C++ keymaps (<leader>r)
 templates/cp.cpp         template for new .cpp files and received problems
 snippets/cpp.json        extra snippets (fori, all, vread, yesno)
+lib/                     tested C++ template library (<leader>rl), based on the ICPC notebook
+tests/                   template tests: python3 tests/run.py
 .clang-format            fallback style when a project has none
 AGENTS.md                conventions for agents working on this config
 tasks/                   Obsidian vault: tasks, decisions and guides (keymaps, workflows)
@@ -33,6 +35,7 @@ locally and compiles to nothing on the judge. The binary goes next to the source
 | `<leader>rd` | Compile with sanitizers + `_GLIBCXX_DEBUG` and run               |
 | `<leader>rc` | Compile only; errors/warnings go to the quickfix list            |
 | `<leader>rn` | Insert template into the current buffer                          |
+| `<leader>rl` | Insert from the template library (picker)                        |
 | `<leader>rt` | Run all test cases (`<leader>rT` without recompiling)            |
 | `<leader>ru` | Show test cases UI                                               |
 | `<leader>ra` | Add test case (`re` edit, `rx` delete)                           |

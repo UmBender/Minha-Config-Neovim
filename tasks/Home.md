@@ -4,7 +4,7 @@ tags: [index]
 # Neovim config: Home
 
 Tracking for tasks, decisions and how-to notes for this config. Conventions are in
-`../AGENTS.md` (section *Task tracking*).
+`../AGENTS.md` (sections *Task pipeline* and *Task tracking*).
 
 > [!tip] Templates
 > Templates live in `Templates/`. Enable the core **Templates** plugin in Obsidian
@@ -18,7 +18,9 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-002 | [[T-002 C++ competitive programming setup]] | done |
 | T-003 | [[T-003 Kanagawa Dragon colorscheme]] | done |
 | T-004 | [[T-004 Explorer and float colors]] | done |
-| T-005 | [[T-005 Notebook-based templates]] | todo |
+| T-005 | [[T-005 Notebook-based templates]] | doing |
+| T-006 | [[T-006 Template library pipeline]] | done |
+| T-007 | [[T-007 Port dsa templates]] | todo |
 
 ## Decisions
 
@@ -29,11 +31,14 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 - [[D-005 Transparent floats]]
 - [[D-006 Git workflow]]
 - [[D-007 Notebook is a read-only, untracked source]]
+- [[D-008 Task pipeline]]
+- [[D-009 Template library format]]
 
 ## Guides
 
 - [[Keymaps]]: every shortcut worth knowing
 - [[Competitive Programming]]: day-to-day workflow for contests and practice
+- [[Template Library]]: inserting, testing and adding templates
 - [[LSP, Formatting and Debugging]]
 - [[UI and Colorscheme]]
 - [[Plugins and Maintenance]]: Lazy, Mason, extras, updating

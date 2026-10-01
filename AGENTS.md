@@ -18,6 +18,9 @@ lua/util/cp.lua          g++ compile/run helpers used by the <leader>r keymaps
 after/ftplugin/cpp.lua   buffer-local C++ keymaps (<leader>r group)
 templates/cp.cpp         template for new *.cpp files and CompetiTest received problems
 snippets/cpp.json        VS Code-style snippets, loaded by blink.cmp
+lib/<area>/<name>.cpp    C++ template library (inserted with <leader>rl), see "Template library"
+tests/                   tests for lib/ (tests/<area>/<name>.cpp) and nvim helpers (tests/nvim/)
+lua/util/lib.lua         library picker / insertion
 .clang-format            fallback style when a project has none
 lazy-lock.json           plugin lockfile (commit it)
 tasks/                   Obsidian vault: tasks, decisions, guides (see below)
@@ -37,6 +40,51 @@ notebook -> ~/gempro-notebook   ICPC library symlink, NOT tracked (see below)
 - `content/contest/template.cpp` is the team's contest template; `content/contest/.bashrc` has the
   shell helpers used in contests (`c`, `cs`, `gen`, `rr`, `chk`).
 
+## Task pipeline (mandatory for every task)
+
+1. **Read the task**: create or update `tasks/Tasks/T-NNN <title>.md` (status `doing`), restate the
+   goal and requirements, break it into a checklist. Ask the user only for decisions that are theirs.
+2. **Branch**: `git checkout -b task/T-NNN-<slug>` from an up-to-date `main`.
+3. **Tests first**: write or extend the tests for the change (`tests/...`). Run them and see the new
+   ones fail for the right reason.
+4. **Implement** until `python3 tests/run.py` passes **in full** (not only the new tests). A change
+   that breaks an existing test either gets fixed, or the test is changed deliberately and the reason
+   is logged in the task note.
+5. **Document**: update the task log, guides (keymaps, usage) and decisions in the vault.
+6. **Commit** on the branch (conventional message), set the task `status: done`.
+7. **Merge**: `git checkout main && git merge --ff-only task/T-NNN-<slug> && git branch -d task/T-NNN-<slug>`.
+   Do **not** push unless the user asks.
+
+The user has authorized steps 6 and 7 as part of this pipeline.
+
+## Template library (`lib/`)
+
+Based on the notebook, but **not 1:1**: the notebook minimizes typing; the library favors
+flexibility, since typing is free here (the picker inserts the code).
+
+- Self-contained: compiles with only `#include <bits/stdc++.h>` + `using namespace std;` above it.
+  No `#include`, `#define`, `#pragma` or `using namespace std` inside templates (lint enforces it).
+- Generic types (`template <class T>`), operations as lambdas/functors (CTAD-friendly constructors),
+  richer APIs than the notebook (e.g. `maxRight`/`minLeft`, sizes, path recovery).
+- Conventions: 0-indexed, half-open ranges `[l, r)`, 4-space indent, warning-free under
+  `-Wall -Wextra -Wshadow`.
+- Header (parsed by the picker and the runner):
+  ```cpp
+  // Title: Fenwick tree
+  // Description: One line shown in the picker.
+  // Usage:
+  //   Fenwick<long long> fw(n); fw.add(i, x); fw.sum(l, r);
+  // Complexity: O(log n) per operation.
+  // Verify: https://judge.yosupo.jp/problem/point_add_range_sum   (optional, repeatable)
+  // Requires: dsa/other-template                                 (optional)
+  ```
+- Every template has a test at `tests/<area>/<name>.cpp` (lint fails otherwise): fixed edge cases
+  plus a randomized **stress test against a brute force**. Tests include `test.h` (`CHECK`,
+  `CHECK_EQ`, `CHECK_NEAR`, `test::rnd`, ...) and the template via `#include "<area>/<name>.cpp"`.
+- `python3 tests/run.py [filter]` runs lint, standalone compilation of each template, the C++
+  tests (`-Werror`, ASan/UBSan, `_GLIBCXX_DEBUG`) and the nvim tests. Builds are cached in
+  `tests/.build/`.
+
 ## Conventions
 
 - Follow LazyVim idioms: extend plugins with `opts` (table or `function(_, opts)`), don't fork
@@ -50,7 +98,8 @@ notebook -> ~/gempro-notebook   ICPC library symlink, NOT tracked (see below)
 
 ## Git workflow (user preferences)
 
-- Commit or push **only when asked**.
+- Pipeline tasks commit and merge on their own (see *Task pipeline*). Outside the pipeline,
+  commit only when asked. Push **only when asked**.
 - Don't commit directly on `main`: commit on a short-lived branch, then fast-forward merge
   into `main` when the user asks ("commit and merge to main"). Push only when asked.
 - Never commit files the user drops in temporarily for reference (e.g. a terminal palette

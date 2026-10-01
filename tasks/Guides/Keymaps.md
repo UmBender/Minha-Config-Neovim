@@ -16,7 +16,8 @@ See [[Competitive Programming]] for the workflow.
 | `<leader>rr` | Compile (`-O2`) and run in a floating terminal |
 | `<leader>rd` | Compile with sanitizers + `_GLIBCXX_DEBUG` and run |
 | `<leader>rc` | Compile only; errors/warnings go to quickfix |
-| `<leader>rn` | Insert the template into the current buffer |
+| `<leader>rn` | Insert the solution template into the current buffer |
+| `<leader>rl` | Insert from the template library (picker, see [[Template Library]]) |
 | `<leader>rt` | Run all test cases |
 | `<leader>rT` | Run test cases without recompiling |
 | `<leader>ru` | Show the test cases UI |
