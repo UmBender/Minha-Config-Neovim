@@ -73,4 +73,40 @@ int main() {
     };
     Segtree cnt(vector<P>{{3, 1}, {5, 1}, {5, 1}, {1, 1}}, P{INT_MIN, 0}, comb);
     CHECK_EQ(cnt.all(), P(5, 2));
+
+    // presets
+    for (int it = 0; it < 200; it++) {
+        int n = (int)test::rnd(1, 30);
+        auto a = test::rndVec<ll>(n, -1e12, 1e12);
+        auto pSum = sumSegtree(a);
+        auto pMin = minSegtree(a);
+        auto pMax = maxSegtree(a);
+        auto sum0 = sumSegtree<ll>(n);
+        auto mn0 = minSegtree<ll>(n);
+        auto mx0 = maxSegtree<ll>(n);
+        vector<ll> b(n, 0);
+        vector<char> isSet(n, 0);  // for mn0/mx0: unset positions hold the identity
+        CHECK_EQ(mn0.all(), LLONG_MAX);
+        CHECK_EQ(mx0.all(), LLONG_MIN);
+        for (int q = 0; q < 100; q++) {
+            int i = (int)test::rnd(0, n - 1);
+            ll x = test::rnd(-1e12, 1e12);
+            if (test::rnd(0, 1)) {
+                pSum.set(i, x), pMin.set(i, x), pMax.set(i, x), a[i] = x;
+                sum0.set(i, x), mn0.set(i, x), mx0.set(i, x), b[i] = x, isSet[i] = 1;
+            }
+            int l = (int)test::rnd(0, n - 1), r = (int)test::rnd(l + 1, n);
+            CHECK_EQ(pSum.query(l, r), accumulate(a.begin() + l, a.begin() + r, 0LL));
+            CHECK_EQ(pMin.query(l, r), *min_element(a.begin() + l, a.begin() + r));
+            CHECK_EQ(pMax.query(l, r), *max_element(a.begin() + l, a.begin() + r));
+            CHECK_EQ(sum0.query(0, n), accumulate(b.begin(), b.end(), 0LL));
+            ll wantMin = LLONG_MAX, wantMax = LLONG_MIN;
+            for (int j = l; j < r; j++)
+                if (isSet[j]) wantMin = min(wantMin, b[j]), wantMax = max(wantMax, b[j]);
+            CHECK_EQ(mn0.query(l, r), wantMin);
+            CHECK_EQ(mx0.query(l, r), wantMax);
+        }
+    }
+    auto ints = minSegtree(vector<int>{4, 2, 7});
+    CHECK_EQ(ints.query(0, 3), 2);
 }

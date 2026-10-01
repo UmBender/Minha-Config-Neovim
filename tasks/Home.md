@@ -21,6 +21,12 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-005 | [[T-005 Notebook-based templates]] | doing |
 | T-006 | [[T-006 Template library pipeline]] | done |
 | T-007 | [[T-007 Port dsa templates]] | done |
+| T-008 | [[T-008 Template presets and examples]] | done |
+| T-009 | [[T-009 Migrate dsa group A]] | agent |
+| T-010 | [[T-010 Migrate dsa group B]] | agent |
+| T-011 | [[T-011 Migrate dsa group C]] | agent |
+| T-012 | [[T-012 Port graph templates]] | todo |
+| T-013 | [[T-013 Editor aesthetics]] | todo |
 
 ## Decisions
 
@@ -33,12 +39,14 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 - [[D-007 Notebook is a read-only, untracked source]]
 - [[D-008 Task pipeline]]
 - [[D-009 Template library format]]
+- [[D-010 Template presets, examples and generated docs]]
 
 ## Guides
 
 - [[Keymaps]]: every shortcut worth knowing
 - [[Competitive Programming]]: day-to-day workflow for contests and practice
 - [[Template Library]]: inserting, testing and adding templates
+- [[Library]]: generated catalog, one page per template
 - [[LSP, Formatting and Debugging]]
 - [[UI and Colorscheme]]
 - [[Plugins and Maintenance]]: Lazy, Mason, extras, updating

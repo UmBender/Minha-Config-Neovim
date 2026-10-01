@@ -6,6 +6,7 @@
 //   lis(a, true, greater<long long>())         // strictly decreasing
 //   lisEnding(a, strict, cmp)[i]               // length of the longest one ending at i
 // Complexity: O(n log n).
+// Pending: example + presets (T-009..T-011), remove when done
 template <class T, class Cmp = less<T>> vector<int> lis(const vector<T> &a, bool strict = true, Cmp cmp = Cmp()) {
     int n = (int)a.size();
     vector<int> tails, par(n, -1);  // tails[k]: index of the best tail of a subsequence of length k + 1

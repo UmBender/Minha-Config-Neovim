@@ -8,6 +8,9 @@
 //   seg.maxRight(l, pred)  largest r with pred(query(l, r)); pred(e) must be true, pred monotone
 //   seg.minLeft(r, pred)   smallest l with pred(query(l, r))
 //   Types must match: e's type is the value type (write 0LL, not 0, for long long).
+// Presets:
+//   auto seg = sumSegtree(a);  auto seg = minSegtree(a);  auto seg = maxSegtree(a);   // a: vector<T>
+//   auto seg = sumSegtree<long long>(n);   // n zeros (min/max presets: n identities)
 // Complexity: O(log n) per operation, O(n) build.
 // Verify: https://judge.yosupo.jp/problem/point_set_range_composite
 template <class T, class Op> struct Segtree {
@@ -73,3 +76,16 @@ template <class T, class Op> struct Segtree {
         return 0;
     }
 };
+
+template <class T> auto sumSegtree(const vector<T> &a) {
+    return Segtree(a, T{}, [](T x, T y) { return x + y; });
+}
+template <class T> auto sumSegtree(int n) { return sumSegtree(vector<T>(n, T{})); }
+template <class T> auto minSegtree(const vector<T> &a) {
+    return Segtree(a, numeric_limits<T>::max(), [](T x, T y) { return min(x, y); });
+}
+template <class T> auto minSegtree(int n) { return minSegtree(vector<T>(n, numeric_limits<T>::max())); }
+template <class T> auto maxSegtree(const vector<T> &a) {
+    return Segtree(a, numeric_limits<T>::lowest(), [](T x, T y) { return max(x, y); });
+}
+template <class T> auto maxSegtree(int n) { return maxSegtree(vector<T>(n, numeric_limits<T>::lowest())); }

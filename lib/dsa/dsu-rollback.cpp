@@ -8,6 +8,7 @@
 //   dsu.same(a, b);  dsu.find(x);  dsu.size(x);  dsu.count()
 //   Pairs with dsa/offline-deletions for offline dynamic connectivity.
 // Complexity: O(log n) per operation.
+// Pending: example + presets (T-009..T-011), remove when done
 struct RollbackDSU {
     vector<int> p;  // p[x] < 0: root with size -p[x]
     vector<pair<int, int>> hist;  // (attached root, its old p), (-1, 0) for no-op unites

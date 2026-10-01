@@ -86,4 +86,46 @@ int main() {
             }
         }
     }
+
+    // presets: compare all of them against a plain array
+    for (int it = 0; it < 200; it++) {
+        int n = (int)test::rnd(1, 30);
+        auto a = test::rndVec<ll>(n, -1e9, 1e9);
+        RangeAddSum<ll> addSum(a);
+        RangeAddMin<ll> addMin(a);
+        RangeAddMax<ll> addMax(a);
+        RangeAssignSum<ll> asgSum(a);
+        RangeAssignMin<ll> asgMin(a);
+        RangeAssignMax<ll> asgMax(a);
+        vector<ll> b = a;  // array for the add presets
+        vector<ll> c = a;  // array for the assign presets
+        for (int q = 0; q < 150; q++) {
+            int l = (int)test::rnd(0, n - 1), r = (int)test::rnd(l + 1, n);
+            ll x = test::rnd(-1e9, 1e9);
+            int type = (int)test::rnd(0, 3);
+            if (type == 0) {
+                addSum.add(l, r, x), addMin.add(l, r, x), addMax.add(l, r, x);
+                for (int i = l; i < r; i++) b[i] += x;
+            } else if (type == 1) {
+                asgSum.assign(l, r, x), asgMin.assign(l, r, x), asgMax.assign(l, r, x);
+                for (int i = l; i < r; i++) c[i] = x;
+            } else if (type == 2) {
+                addSum.set(l, x), addMin.set(l, x), addMax.set(l, x), b[l] = x;
+                asgSum.set(l, x), asgMin.set(l, x), asgMax.set(l, x), c[l] = x;
+            } else {
+                CHECK_EQ(addSum.get(l), b[l]);
+                CHECK_EQ(addMin.get(l), b[l]);
+                CHECK_EQ(asgMax.get(l), c[l]);
+            }
+            CHECK_EQ(addSum.sum(l, r), accumulate(b.begin() + l, b.begin() + r, 0LL));
+            CHECK_EQ(addMin.min(l, r), *min_element(b.begin() + l, b.begin() + r));
+            CHECK_EQ(addMax.max(l, r), *max_element(b.begin() + l, b.begin() + r));
+            CHECK_EQ(asgSum.sum(l, r), accumulate(c.begin() + l, c.begin() + r, 0LL));
+            CHECK_EQ(asgMin.min(l, r), *min_element(c.begin() + l, c.begin() + r));
+            CHECK_EQ(asgMax.max(l, r), *max_element(c.begin() + l, c.begin() + r));
+        }
+    }
+    RangeAddSum<int> zeros(5);
+    zeros.add(1, 4, 2);
+    CHECK_EQ(zeros.sum(0, 5), 6);
 }

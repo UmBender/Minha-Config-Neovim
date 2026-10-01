@@ -10,6 +10,7 @@
 //     mo(qs, n, [&](int i) { d += cnt[a[i]]++ == 0; }, [&](int i) { d -= --cnt[a[i]] == 0; },
 //        [&](int qi) { ans[qi] = d; });
 // Complexity: O(n sqrt(q)) callback calls.
+// Pending: example + presets (T-009..T-011), remove when done
 inline vector<int> moOrder(const vector<pair<int, int>> &q, int n) {
     int nq = (int)q.size();
     int block = max(1, (int)(n / max(1.0, sqrt((double)nq))));

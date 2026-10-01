@@ -7,6 +7,7 @@
 //   fw.lowerBound(s)  smallest r with sum(r) >= s (all values >= 0); n + 1 if none, 0 if s <= 0
 // Complexity: O(log n) per operation, O(n) build.
 // Verify: https://judge.yosupo.jp/problem/point_add_range_sum
+// Pending: example + presets (T-009..T-011), remove when done
 template <class T> struct Fenwick {
     int n;
     vector<T> t;

@@ -7,6 +7,7 @@
 //   seg.get(i)
 //   For min: store negated values (add -v, negate the answer).
 // Complexity: O(log n) per operation.
+// Pending: example + presets (T-009..T-011), remove when done
 template <class T> struct MaxAddSegtree {
     int n;
     vector<T> mx, lz;  // lz[i]: pending add for the whole subtree, already included in mx[i]

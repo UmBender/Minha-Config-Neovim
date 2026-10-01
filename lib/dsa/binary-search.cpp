@@ -7,6 +7,7 @@
 //   int i = firstTrue(0, n, [&](int i) { return a[i] >= x; });           // lower_bound
 //   long long k = firstTrue(0LL, (long long)2e18, [&](long long k) { return f(k) >= target; });
 // Complexity: O(log(hi - lo)) predicate calls.
+// Pending: example + presets (T-009..T-011), remove when done
 template <class T, class F> T firstTrue(T lo, T hi, F pred) {
     while (lo < hi) {
         T mid = midpoint(lo, hi);  // rounds down, never overflows

@@ -8,6 +8,7 @@
 //   Constraints >=: negate the row;  equality: add both <= and >=;  minimize: negate c.
 // Complexity: exponential worst case, fast in practice (O(m n) per pivot).
 // Verify: https://open.kattis.com/problems/roadtimes
+// Pending: example + presets (T-009..T-011), remove when done
 struct Simplex {
     using ld = long double;
     static constexpr ld EPS = 1e-9, INF = numeric_limits<ld>::infinity();

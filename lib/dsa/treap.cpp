@@ -9,6 +9,7 @@
 //   To aggregate something else, edit Node, pull() and applyAdd().
 // Complexity: O(log n) expected per operation.
 // Verify: https://judge.yosupo.jp/problem/dynamic_sequence_range_affine_range_sum
+// Pending: example + presets (T-009..T-011), remove when done
 template <class T> struct ImplicitTreap {
     using S = conditional_t<is_integral_v<T>, long long, T>;
     struct Node {

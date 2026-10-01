@@ -10,6 +10,7 @@
 // Complexity: O(log C) per line and query, O(log^2 C) per segment, C = hi - lo.
 // Verify: https://judge.yosupo.jp/problem/line_add_get_min
 // Verify: https://judge.yosupo.jp/problem/segment_add_get_min
+// Pending: example + presets (T-009..T-011), remove when done
 template <class T, bool MAX = false> struct LiChao {
     static constexpr T NONE = MAX ? numeric_limits<T>::lowest() : numeric_limits<T>::max();
     struct Line {

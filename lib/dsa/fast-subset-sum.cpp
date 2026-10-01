@@ -5,6 +5,7 @@
 //   ss.can(s)                  // is s a subset sum?
 //   ss.recover(s)              // indices of one subset with sum s (requires can(s))
 // Complexity: O(n S / 64) time, O(S) memory, S = sum of weights.
+// Pending: example + presets (T-009..T-011), remove when done
 struct SubsetSum {
     vector<int> w, par;  // par[s]: item that first reached s (-1: unreachable or s = 0)
     int total;

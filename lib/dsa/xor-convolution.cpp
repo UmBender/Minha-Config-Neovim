@@ -1,4 +1,4 @@
-// Title: XOR / AND / OR convolution
+// Title: XOR, AND, OR convolution
 // Description: Bitwise convolutions with the fast Walsh-Hadamard / zeta transforms, exact or modulo a prime.
 // Usage:
 //   xorConv(a, b)       c[k] = sum over i ^ j == k of a[i] b[j]   (exact integers)
@@ -8,6 +8,7 @@
 // Complexity: O(n log n).
 // Verify: https://judge.yosupo.jp/problem/bitwise_xor_convolution
 // Verify: https://judge.yosupo.jp/problem/bitwise_and_convolution
+// Pending: example + presets (T-009..T-011), remove when done
 inline void bitTransform(vector<long long> &a, int kind, bool inverse, long long mod) {
     int n = (int)a.size();
     for (int k = 1; k < n; k <<= 1)

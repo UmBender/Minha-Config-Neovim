@@ -5,6 +5,7 @@
 //   st.query(l, r)   op over [l, r), requires l < r
 // Complexity: O(n log n) build, O(1) query.
 // Verify: https://judge.yosupo.jp/problem/staticrmq
+// Pending: example + presets (T-009..T-011), remove when done
 template <class T, class Op> struct SparseTable {
     Op op;
     vector<vector<T>> t;

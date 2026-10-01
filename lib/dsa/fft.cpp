@@ -7,6 +7,7 @@
 //   For results modulo a prime use dsa/ntt (nttConv / convMod).
 // Complexity: O(n log n).
 // Verify: https://judge.yosupo.jp/problem/convolution_mod
+// Pending: example + presets (T-009..T-011), remove when done
 inline void fft(vector<complex<double>> &a) {
     int n = (int)a.size(), L = 31 - __builtin_clz(n);
     static vector<complex<long double>> R(2, 1);

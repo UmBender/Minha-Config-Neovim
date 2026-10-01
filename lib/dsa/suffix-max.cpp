@@ -6,6 +6,7 @@
 //   SuffixMax<int, long long, greater<long long>> mn(LLONG_MAX);   // min instead of max
 //   For x <= X, insert -x and query -X.
 // Complexity: O(log n) amortized per operation.
+// Pending: example + presets (T-009..T-011), remove when done
 template <class K, class V, class Cmp = less<V>> struct SuffixMax {
     map<K, V> m;  // keys increasing => values strictly worse
     V e;

@@ -7,6 +7,7 @@
 //   ternaryMaxReal(lo, hi, f, iters = 200) / ternaryMinReal(...)  for real arguments
 //   long long best = ternaryMax(0LL, n - 1LL, [&](long long k) { return profit(k); });
 // Complexity: O(log(hi - lo)) evaluations (integers), O(iters) (reals).
+// Pending: example + presets (T-009..T-011), remove when done
 template <class T, class F> T ternaryMax(T lo, T hi, F f) {
     while (lo < hi) {
         T mid = midpoint(lo, hi);

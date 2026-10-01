@@ -8,6 +8,7 @@
 //     a[i] > a[j]  -> max-heap
 //   In-order traversal of the tree is 0, 1, ..., n - 1.
 // Complexity: O(n).
+// Pending: example + presets (T-009..T-011), remove when done
 template <class F> vector<int> cartesianTree(int n, F above) {
     vector<int> par(n, -1), st;
     for (int i = 0; i < n; i++) {

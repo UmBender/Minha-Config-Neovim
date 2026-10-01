@@ -1,4 +1,4 @@
-// Title: Zeta / Mobius transforms
+// Title: Zeta and Mobius transforms
 // Description: Sums over subsets/supersets (bitmask) and over divisors/multiples, plus their inverses.
 // Usage:
 //   All take the vector by value and return the transformed one (any numeric T).
@@ -12,6 +12,7 @@
 //   gcd convolution: multipleMobius(multipleZeta(a) * multipleZeta(b) pointwise)
 // Complexity: O(n log n) for masks (n = 2^k), O(n log log n) for divisors.
 // Verify: https://judge.yosupo.jp/problem/gcd_convolution
+// Pending: example + presets (T-009..T-011), remove when done
 template <class T, class Op = plus<T>> vector<T> subsetZeta(vector<T> a, Op op = Op()) {
     int n = (int)a.size();
     for (int j = 1; j < n; j <<= 1)

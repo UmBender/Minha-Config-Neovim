@@ -11,6 +11,7 @@
 //     od.run([&](auto e) { dsu.unite(e.first, e.second); }, [&] { dsu.undo(); },
 //            [&](int qi) { ans[qi] = dsu.count(); });
 // Complexity: O(k log q) ins/undo calls, k = number of inserts, q = number of queries.
+// Pending: example + presets (T-009..T-011), remove when done
 template <class V> struct OfflineDeletion {
     int q = 0;
     map<V, vector<int>> open;  // value -> query index at which each alive copy was inserted
