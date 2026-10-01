@@ -29,7 +29,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-013 | [[T-013 Editor aesthetics]] | done |
 | T-014 | [[T-014 Performance]] | done |
 | T-015 | [[T-015 Template variant menu]] | done |
-| T-016 | [[T-016 Port strings templates]] | todo |
+| T-016 | [[T-016 Port strings templates]] | done |
 
 ## Decisions
 

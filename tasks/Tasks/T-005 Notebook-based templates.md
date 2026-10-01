@@ -15,7 +15,8 @@ Use the ICPC notebook (`notebook/` → `~/gempro-notebook`) as the base for temp
 - [x] Break it into tasks: [[T-006 Template library pipeline]] (infrastructure), then one task per
   area, starting with [[T-007 Port dsa templates]] as a pilot for review
 - [x] dsa pilot ([[T-007 Port dsa templates]])
-- [ ] graph, math, strings, geometry, tree (after the pilot is reviewed)
+- [ ] graph, math, strings, geometry, tree (after the pilot is reviewed): graph done
+  ([[T-012 Port graph templates]]), strings done ([[T-016 Port strings templates]])
 
 ## Spec (2026-10-01)
 - The notebook minimizes typing; the library must be **more flexible**: generic types, lambdas for
