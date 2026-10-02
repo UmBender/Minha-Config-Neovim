@@ -23,6 +23,23 @@ template <class T> vector<T> rndVec(int n, T lo, T hi) {
     return v;
 }
 
+// random tree on n vertices as an adjacency list, with shuffled labels and neighbor order.
+// The parent of the i-th vertex is drawn from the `span` vertices before it: 1 is a path, a large
+// span a shallow tree; span <= 0 picks a random shape.
+inline vector<vector<int>> rndTree(int n, int span = 0) {
+    if (span <= 0) span = vector<int>{1, 2, 3, n}[rnd(0, 3)];
+    vector<int> id(n);
+    iota(id.begin(), id.end(), 0);
+    shuffle(id.begin(), id.end(), gen);
+    vector<vector<int>> g(n);
+    for (int i = 1; i < n; i++) {
+        int p = (int)rnd(max(0, i - span), i - 1);
+        g[id[i]].push_back(id[p]), g[id[p]].push_back(id[i]);
+    }
+    for (auto &adj : g) shuffle(adj.begin(), adj.end(), gen);
+    return g;
+}
+
 // printable representation of (nested) values, used by CHECK_EQ
 template <class T> string show(const T &x);
 inline string show(const string &s) { return '"' + s + '"'; }

@@ -33,6 +33,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-017 | [[T-017 Collapsible templates]] | done |
 | T-018 | [[T-018 Port math templates]] | done |
 | T-019 | [[T-019 Python templates and library]] | done |
+| T-020 | [[T-020 Port tree templates]] | done |
 
 ## Decisions
 

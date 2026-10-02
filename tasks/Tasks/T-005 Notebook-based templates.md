@@ -1,7 +1,7 @@
 ---
 status: doing
 created: 2026-10-01
-updated: 2026-10-01
+updated: 2026-10-02
 tags: [task, cpp, notebook]
 ---
 # T-005 Notebook-based templates
@@ -16,7 +16,8 @@ Use the ICPC notebook (`notebook/` → `~/gempro-notebook`) as the base for temp
   area, starting with [[T-007 Port dsa templates]] as a pilot for review
 - [x] dsa pilot ([[T-007 Port dsa templates]])
 - [ ] graph, math, strings, geometry, tree (after the pilot is reviewed): graph done
-  ([[T-012 Port graph templates]]), strings done ([[T-016 Port strings templates]]), math done ([[T-018 Port math templates]])
+  ([[T-012 Port graph templates]]), strings done ([[T-016 Port strings templates]]), math done ([[T-018 Port math templates]]),
+  tree done ([[T-020 Port tree templates]]); geometry left
 
 ## Spec (2026-10-01)
 - The notebook minimizes typing; the library must be **more flexible**: generic types, lambdas for

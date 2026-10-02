@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-01
+updated: 2026-10-02
 tags: [guide, cpp, notebook]
 ---
 # Template Library
@@ -34,6 +34,8 @@ passed as lambdas (common-use variants are plain code instead).
 Modular templates (`math/*`) take the modulus as a trailing argument, `998244353` by default:
 `powMod(b, e)`, `powMod(b, e, 1000000007)`, `sqrtMod(a, p)`; there is no global `mod` to edit
 ([[D-015 Modulus as an argument]]).
+Tree templates (`tree/*`) take the tree as an undirected adjacency list `vector<vector<int>>` (each
+edge in both lists) and never recurse, so deep trees (a path of 2e5 vertices) are safe.
 
 ## Running the tests
 
@@ -49,7 +51,8 @@ against the `.edu.cpp`.
 
 ## Adding or changing a template
 Follow [[D-008 Task pipeline]]: test first, then code, then the full suite.
-1. `tests/<area>/<name>.cpp`: edge cases + random stress against a brute force.
+1. `tests/<area>/<name>.cpp`: edge cases + random stress against a brute force (`test.h` has
+   `test::rnd`, `test::rndVec`, `test::rndTree`, ...).
 2. `lib/<area>/<name>.cpp`: header (`Title`, `Description`, `Usage`, `Complexity`, optional
    `Verify`/`Requires`) + code. No `#include`/`#define`/`assert`.
 3. `examples/<area>/<name>.cpp`: a small complete solution with `Problem:`, `Input:`, `Output:`.
