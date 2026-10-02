@@ -32,6 +32,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-016 | [[T-016 Port strings templates]] | done |
 | T-017 | [[T-017 Collapsible templates]] | done |
 | T-018 | [[T-018 Port math templates]] | done |
+| T-019 | [[T-019 Python templates and library]] | done |
 
 ## Decisions
 
@@ -50,11 +51,13 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 - [[D-013 Template variants]]
 - [[D-014 Collapsible templates with native folds]]
 - [[D-015 Modulus as an argument]]
+- [[D-016 Python templates and library]]
 
 ## Guides
 
 - [[Keymaps]]: every shortcut worth knowing
 - [[Competitive Programming]]: day-to-day workflow for contests and practice
+- [[Python]]: Project Euler, generators, stress tests, the Python library
 - [[Template Library]]: inserting, testing and adding templates
 - [[Library]]: generated catalog, one page per template
 - [[LSP, Formatting and Debugging]]

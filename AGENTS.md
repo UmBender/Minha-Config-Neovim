@@ -25,6 +25,10 @@ tests/                   tests for lib/ (tests/<area>/<name>.cpp) and nvim helpe
 tasks/Library/           generated docs, one page per template (tests/run.py --write-docs)
 lua/util/lib.lua         library picker / insertion
 lua/util/fold.lua        collapsible inserted templates (`// Title:` .. `// End:` folds)
+templates/py/            Python file templates (sol, gen, stress, euler), chosen by file name
+pylib/<area>/<name>.py   Python helper library (generators, number theory), inserted with <leader>rl;
+                         tests in tests/py/, examples in examples/py/ (see tasks/Guides/Python.md)
+after/ftplugin/python.lua  buffer-local Python keymaps (<leader>r group)
 .clang-format            fallback style when a project has none
 lazy-lock.json           plugin lockfile (commit it)
 tasks/                   Obsidian vault: tasks, decisions, guides (see below)
@@ -120,7 +124,9 @@ flexibility, since typing is free here (the picker inserts the code).
   LazyVim specs. Check the upstream spec in `~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/` before
   overriding. Lists in `opts` are **replaced**, not merged.
 - Lua style: 2 spaces, 120 columns (`stylua.toml`). Match the comment density of nearby code.
-- Keep C++ keymaps buffer-local in `after/ftplugin/cpp.lua` under `<leader>r`.
+- Keep C++ keymaps buffer-local in `after/ftplugin/cpp.lua` under `<leader>r` (Python: `after/ftplugin/python.lua`).
+- Python library (`pylib/`): same header with `#`, stdlib imports inside the template, no top-level
+  side effects, no variants, Title unique across both libraries (`tasks/Decisions/D-016`).
 - Compiler flags live in two places that must stay in sync: `lua/util/cp.lua` and the
   CompetiTest `compile_command` in `lua/plugins/cpp.lua`.
 - Extras are imported in `lua/config/lazy.lua` (not via `lazyvim.json`).

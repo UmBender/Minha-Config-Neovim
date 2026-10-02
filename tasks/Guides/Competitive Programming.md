@@ -57,3 +57,6 @@ Snippets live in `snippets/cpp.json` (VS Code format).
 ## Template library
 `<leader>rl` inserts a tested template (segment trees, DSU, FFT, ...) above `solve()`.
 See [[Template Library]].
+
+## Python
+Brute forces, generators and stress tests in Python (and Project Euler): see [[Python]].

@@ -63,6 +63,9 @@ Follow [[D-008 Task pipeline]]: test first, then code, then the full suite.
   `tests/<area>/<name>.<use>.cpp` and `examples/<area>/<name>.<use>.cpp`, like a template.
 - The normal file keeps only the generic structure: the old `// Presets:` key is rejected by lint.
 
+## Python
+The Python library (`pylib/`) works the same way in Python buffers; see [[Python]].
+
 ## Catalog
 Generated: see **[[Library]]**, with one page per structure (usage, variants, a runnable example
 per variant and judge links).

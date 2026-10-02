@@ -1,5 +1,5 @@
--- Collapsible library templates: each `// Title: X` .. `// End: X` block (written by util.lib) is a level-1 fold
--- on top of the base foldexpr (LazyVim's treesitter folds), whose levels shift by one inside a template.
+-- Collapsible library templates: each `// Title: X` .. `// End: X` block (written by util.lib; `#` in Python) is a
+-- level-1 fold on top of the base foldexpr (LazyVim's treesitter folds), whose levels shift by one inside a template.
 local M = {}
 
 M.expr = "v:lua.require'util.fold'.foldexpr()"
@@ -14,6 +14,7 @@ end
 ---@field start integer 1-based `// Title:` line
 ---@field stop integer  1-based `// End:` line
 ---@field title string
+---@field comment? string "//" or "#" (scan only)
 
 local cache = {} ---@type table<integer, {tick: integer, ranges: cp.FoldRange[], at: table<integer, cp.FoldRange>}>
 
@@ -27,11 +28,14 @@ local function scan(buf)
   c = { tick = tick, ranges = {}, at = {} }
   local open ---@type cp.FoldRange?
   for i, line in ipairs(vim.api.nvim_buf_get_lines(buf, 0, -1, false)) do
-    local title = line:match("^// Title: (.*)$")
+    local comment, title = line:match("^(//) Title: (.*)$")
+    if not title then
+      comment, title = line:match("^(#) Title: (.*)$")
+    end
     if title then
-      open = { start = i, title = title }
-    elseif open and line == "// End: " .. open.title then
-      open.stop = i
+      open = { start = i, title = title, comment = comment }
+    elseif open and line == open.comment .. " End: " .. open.title then
+      open.stop, open.comment = i, nil
       c.ranges[#c.ranges + 1] = open
       for l = open.start, i do
         c.at[l] = open

@@ -27,6 +27,20 @@ See [[Competitive Programming]] for the workflow.
 | `<leader>rP` | Receive a whole contest |
 | `<leader>rR` | Receive test cases only (for the current file) |
 
+## Competitive programming (Python buffers, `<leader>r`)
+
+See [[Python]] for the workflow.
+
+| Key | Action |
+| --- | ------ |
+| `<leader>rr` | Run with `python3` in a floating terminal |
+| `<leader>ri` | Run with arguments (e.g. a seed for `gen.py`, a test count for `stress.py`) |
+| `<leader>rn` | Insert a Python template: sol / gen / stress / euler |
+| `<leader>rl` | Insert from the Python library (`pylib/`) |
+| `<leader>rf` | Collapse / open all library templates |
+| `<leader>rt` / `ru` | Run test cases / show the test cases UI (CompetiTest, `python3`) |
+| `<leader>ra` / `re` / `rx` | Add / edit / delete a test case |
+
 ## Files and search
 
 | Key | Action |

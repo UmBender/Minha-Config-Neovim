@@ -10,14 +10,19 @@ Stages:
                  the normal test also runs against each <name>.edu.cpp
   4. examples    every example compiles the same way and prints its `Output:` for its `Input:`
   5. docs        tasks/Library/ (one page per structure, from templates + variants + examples) is up to date
-  6. nvim        tests/nvim/*_test.lua pass
+  6. python      the Python library (pylib/<area>/<name>.py): lint, standalone exec, tests
+                 (tests/py/<area>/<name>.py), examples (examples/py/<area>/<name>.py); plus the
+                 Python file templates' tests (tests/py/templates/)
+  7. nvim        tests/nvim/*_test.lua pass
 
 Usage: tests/run.py [FILTER ...] [-j N] [--no-nvim] [--write-docs]
-FILTER selects templates/tests whose id ("dsa/fenwick-tree") contains it; "nvim" selects the nvim tests.
+FILTER selects templates/tests whose id ("dsa/fenwick-tree", "py/gen/tree") contains it; "nvim" selects
+the nvim tests, "py" every Python one.
 --write-docs regenerates tasks/Library/ instead of checking it.
 """
 
 import argparse
+import ast
 import concurrent.futures as cf
 import hashlib
 import os
@@ -35,6 +40,11 @@ TESTS = ROOT / "tests"
 EXAMPLES = ROOT / "examples"
 DOCS = ROOT / "tasks" / "Library"
 BUILD = TESTS / ".build"
+PYLIB = ROOT / "pylib"
+PYTESTS = TESTS / "py"
+PYEXAMPLES = EXAMPLES / "py"
+PYDOCS = DOCS / "python"
+PYTHON = [sys.executable, "-X", "dev", "-W", "error"]
 
 CXX = os.environ.get("CXX", "g++")
 WARN = ["-std=c++20", "-Wall", "-Wextra", "-Wshadow", "-Werror"]
@@ -100,13 +110,13 @@ def example_ids():
     return sorted(str(p.relative_to(EXAMPLES).with_suffix("")) for p in EXAMPLES.rglob("*.cpp"))
 
 
-def parse_header(path):
+def parse_header(path, comment="//"):
     """Header = leading `// Key: value` comment block. Indented `//   ...` lines continue the previous key."""
     meta, key = {}, None
     for line in path.read_text().splitlines():
-        if not line.startswith("//"):
+        if not line.startswith(comment):
             break
-        body = line[2:]
+        body = line[len(comment):]
         m = re.match(r"^ (\w+):\s?(.*)$", body)
         if m:
             key = m.group(1)
@@ -277,11 +287,11 @@ def run_example(tid):
 
 # ---------- docs (tasks/Library) ----------
 
-def code_lines(path):
+def code_lines(path, comment="//"):
     """Source without the leading header comment block."""
     lines = path.read_text().splitlines()
     i = 0
-    while i < len(lines) and lines[i].startswith("//"):
+    while i < len(lines) and lines[i].startswith(comment):
         i += 1
     while i < len(lines) and not lines[i].strip():
         i += 1
@@ -359,13 +369,23 @@ def gen_index():
             vs = ", ".join(variant_label(v) for v in variants(tid))
             out.append(f"| [[{meta['Title']}]] | {meta['Description'].replace('|', '\\|')} | {vs} |")
         out.append("")
+    by_area = {}
+    for tid in py_ids():
+        by_area.setdefault(tid.split("/")[0], []).append(tid)
+    for area, tids in by_area.items():
+        out += [f"## python/{area}", "", "| Template | Description |", "| -------- | ----------- |"]
+        for tid in tids:
+            meta = py_meta(tid)
+            out.append(f"| [[{meta['Title']}]] | {meta['Description'].replace('|', '\\|')} |")
+        out.append("")
     return "\n".join(out)
 
 
-def docs(ids, write, full):
+def docs(ids, pyids, write, full):
     """Returns the stale/extra pages (or the written ones when write=True)."""
     bases = sorted({base_of(t) for t in ids if (LIB / f"{base_of(t)}.cpp").exists()})
     wanted = {DOCS / tid.split("/")[0] / f"{page_name(tid)}.md": gen_page(tid) for tid in bases}
+    wanted.update({py_page_path(tid): gen_py_page(tid) for tid in pyids})
     if full:
         wanted[DOCS / "Library.md"] = gen_index()
     changed = [p for p, text in wanted.items() if not p.exists() or p.read_text() != text]
@@ -379,6 +399,182 @@ def docs(ids, write, full):
         for p in extra:
             p.unlink()
     return changed, extra
+
+
+# ---------- Python library (pylib/) ----------
+# Same header format with `#` comments. No variants. Templates are pasted into a script, so they must be
+# self-contained (stdlib imports inside the template) and have no top-level side effects.
+
+PY_TEMPLATE_TESTS = "templates"  # tests/py/templates/: tests of templates/py/*.py, not of a pylib file
+
+
+def py_ids():
+    return sorted(str(p.relative_to(PYLIB).with_suffix("")) for p in PYLIB.rglob("*.py"))
+
+
+def py_meta(tid):
+    return parse_header(PYLIB / f"{tid}.py", "#")
+
+
+def py_requires(tid):
+    return [r for r in re.split(r"[,\s]+", py_meta(tid).get("Requires", "")) if r]
+
+
+def py_resolve(tid, seen=None, order=None):
+    seen = set() if seen is None else seen
+    order = [] if order is None else order
+    if tid not in seen:
+        seen.add(tid)
+        for dep in py_requires(tid):
+            py_resolve(dep, seen, order)
+        order.append(tid)
+    return order
+
+
+def py_test_ids():
+    """tests/py/<area>/<name>.py, as "<area>/<name>" (the template tests included)."""
+    return sorted(
+        str(p.relative_to(PYTESTS).with_suffix("")) for p in PYTESTS.rglob("*.py") if p.parent.name != "include"
+    )
+
+
+def py_example_ids():
+    return sorted(str(p.relative_to(PYEXAMPLES).with_suffix("")) for p in PYEXAMPLES.rglob("*.py"))
+
+
+def py_problems(tid, path):
+    """Imports outside the stdlib, `if __name__`, top-level statements with side effects."""
+    errors = []
+    try:
+        tree = ast.parse(path.read_text())
+    except SyntaxError as e:
+        return [f"py/{tid}: syntax error: {e}"]
+    for node in tree.body:
+        if isinstance(node, (ast.Import, ast.ImportFrom)):
+            names = [a.name for a in node.names] if isinstance(node, ast.Import) else [node.module or ""]
+            for name in names:
+                if name.split(".")[0] not in sys.stdlib_module_names:
+                    errors.append(f"py/{tid}:{node.lineno}: imports '{name}' (stdlib only)")
+        elif isinstance(node, ast.If) and "__name__" in ast.unparse(node.test):
+            errors.append(f"py/{tid}:{node.lineno}: `if __name__` (the template is pasted into a script)")
+        elif isinstance(node, ast.Expr) and not isinstance(node.value, ast.Constant):
+            errors.append(f"py/{tid}:{node.lineno}: top-level expression (no side effects in templates)")
+        elif isinstance(node, (ast.For, ast.While, ast.With, ast.Try)):
+            errors.append(f"py/{tid}:{node.lineno}: top-level {type(node).__name__} (no side effects in templates)")
+    return errors
+
+
+def py_lint(ids, match):
+    errors = []
+    all_ids = set(py_ids())
+    cpp_titles = {parse_header(LIB / f"{t}.cpp").get("Title") for t in lib_ids() if variant_of(t) is None}
+    titles = {}
+    for tid in py_ids():
+        titles.setdefault(py_meta(tid).get("Title"), []).append(tid)
+    for tid in ids:
+        path = PYLIB / f"{tid}.py"
+        meta = py_meta(tid)
+        for key in REQUIRED_KEYS:
+            if not meta.get(key):
+                errors.append(f"py/{tid}: missing header key '{key}'")
+        title = meta.get("Title", "")
+        if "." in Path(tid).name:
+            errors.append(f"py/{tid}: Python templates have no variants (no '.' in the name)")
+        if re.search(r'[\\/:#^\[\]|]', title):
+            errors.append(f"py/{tid}: Title can't contain \\ / : # ^ [ ] | (it names the docs page)")
+        if title in cpp_titles or len(titles.get(title, [])) > 1:
+            errors.append(f"py/{tid}: Title '{title}' is taken (docs pages are named by Title)")
+        for dep in py_requires(tid):
+            if dep not in all_ids:
+                errors.append(f"py/{tid}: Requires unknown template '{dep}'")
+        errors += py_problems(tid, path)
+        if not (PYTESTS / f"{tid}.py").exists():
+            errors.append(f"py/{tid}: no test (expected tests/py/{tid}.py)")
+        ex = PYEXAMPLES / f"{tid}.py"
+        if not ex.exists():
+            errors.append(f"py/{tid}: no example (expected examples/py/{tid}.py)")
+        else:
+            emeta = parse_header(ex, "#")
+            for key in EXAMPLE_KEYS:
+                if not emeta.get(key):
+                    errors.append(f"examples/py/{tid}.py: missing header key '{key}'")
+            if f'include("{tid}")' not in ex.read_text():
+                errors.append(f'examples/py/{tid}.py: must include("{tid}")')
+    for tid in py_test_ids():
+        if match("py/" + tid) and tid.split("/")[0] != PY_TEMPLATE_TESTS and tid not in all_ids:
+            errors.append(f"tests/py/{tid}.py: no matching template pylib/{tid}.py")
+    for tid in py_example_ids():
+        if match("py/" + tid) and tid not in all_ids:
+            errors.append(f"examples/py/{tid}.py: no matching template pylib/{tid}.py")
+    return errors
+
+
+def py_run(args, stdin=None):
+    env = dict(os.environ, PYTHONPATH=str(PYTESTS / "include"), PYTHONDONTWRITEBYTECODE="1", PYTHON_COLORS="0")
+    t0 = time.time()
+    try:
+        r = subprocess.run([*PYTHON, *args], input=stdin, capture_output=True, text=True, timeout=TIMEOUT, env=env)
+    except subprocess.TimeoutExpired:
+        return None, f"timeout after {TIMEOUT}s", time.time() - t0
+    return r, "", time.time() - t0
+
+
+def py_standalone(tid):
+    """The template and its Requires, pasted into an empty script, run without errors or output."""
+    src = "\n".join((PYLIB / f"{dep}.py").read_text() for dep in py_resolve(tid))
+    r, err, _ = py_run(["-c", src])
+    if r is None:
+        return False, err
+    if r.returncode != 0 or r.stdout or r.stderr:
+        return False, (r.stdout + r.stderr).strip() or "printed something"
+    return True, ""
+
+
+def py_test(tid):
+    r, err, secs = py_run([str(PYTESTS / f"{tid}.py")])
+    if r is None:
+        return False, err, secs
+    return r.returncode == 0, (r.stdout + r.stderr).strip(), secs
+
+
+def py_example(tid):
+    path = PYEXAMPLES / f"{tid}.py"
+    meta = parse_header(path, "#")
+    r, err, secs = py_run([str(path)], meta.get("Input", "") + "\n")
+    if r is None:
+        return False, err, secs
+    if r.returncode != 0:
+        return False, (r.stdout + r.stderr).strip(), secs
+    want, got = normalize(meta.get("Output", "")), normalize(r.stdout)
+    if want != got:
+        return False, f"wrong output\n--- want\n{want}\n--- got\n{got}", secs
+    return True, "", secs
+
+
+def gen_py_page(tid):
+    meta = py_meta(tid)
+    area = tid.split("/")[0]
+    out = ["---", f"tags: [library, python, {area}]", "generated: true", "---", f"# {meta['Title']}", ""]
+    out += ["> [!info] Generated by `tests/run.py --write-docs` from", f"> `pylib/{tid}.py` and `examples/py/{tid}.py`. Edit those, not this page.", ""]
+    out += [meta["Description"], "", f"Insert with `<leader>rl` in a Python buffer → `{tid}`."]
+    if py_requires(tid):
+        out += ["Requires: " + ", ".join(f"[[{py_meta(d)['Title']}]]" for d in py_requires(tid)) + " (inserted automatically)."]
+    out += ["", "## Usage", "", "```python", meta["Usage"], "```", "", "## Complexity", "", meta["Complexity"]]
+    ex = PYEXAMPLES / f"{tid}.py"
+    if ex.exists():
+        em = parse_header(ex, "#")
+        out += ["", "## Example", "", em.get("Problem", ""), "", "```python", code_lines(ex, "#"), "```"]
+        if em.get("Input"):
+            out += ["", "Input:", "", "```", em["Input"], "```"]
+        out += ["", "Output:", "", "```", em.get("Output", ""), "```"]
+    verify = [v for v in meta.get("Verify", "").splitlines() if v.strip()]
+    if verify:
+        out += ["", "## Verify", ""] + [f"- {v.strip()}" for v in verify]
+    return "\n".join(out) + "\n"
+
+
+def py_page_path(tid):
+    return PYDOCS / tid.split("/")[0] / f"{py_meta(tid)['Title']}.md"
 
 
 def nvim_tests():
@@ -411,6 +607,7 @@ def main():
 
     match = lambda tid: not args.filters or any(f in tid for f in args.filters)
     ids = [t for t in lib_ids() if match(t)]
+    pyids = [t for t in py_ids() if match("py/" + t)]
     failed = 0
 
     print(f"== lint ({len(ids)} templates)")
@@ -439,8 +636,26 @@ def main():
             report(f"example {tid}", ok, out, secs)
             failed += not ok
 
+        ptids = [t for t in py_test_ids() if match("py/" + t)]
+        if pyids or ptids:
+            print(f"== python ({len(pyids)} templates)")
+            for e in py_lint(pyids, match):
+                print(f"{RED}FAIL{RESET} {e}")
+                failed += 1
+            for tid, (ok, out) in zip(pyids, pool.map(py_standalone, pyids)):
+                if not ok:
+                    report(f"standalone py/{tid}", ok, out)
+                    failed += 1
+            for tid, (ok, out, secs) in zip(ptids, pool.map(py_test, ptids)):
+                report(f"py/{tid}", ok, out, secs)
+                failed += not ok
+            peids = [t for t in py_example_ids() if match("py/" + t)]
+            for tid, (ok, out, secs) in zip(peids, pool.map(py_example, peids)):
+                report(f"example py/{tid}", ok, out, secs)
+                failed += not ok
+
     print("== docs")
-    changed, extra = docs(ids, args.write_docs, not args.filters)
+    changed, extra = docs(ids, pyids, args.write_docs, not args.filters)
     rel = lambda p: p.relative_to(ROOT)
     if args.write_docs:
         for p in changed:

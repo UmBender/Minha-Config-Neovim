@@ -61,6 +61,7 @@ return {
       },
       run_command = {
         cpp = { exec = "./$(FNOEXT)" },
+        python = { exec = "python3", args = { "$(FNAME)" } },
       },
       maximum_time = 5000,
       template_file = {
