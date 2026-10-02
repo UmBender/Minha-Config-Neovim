@@ -36,6 +36,11 @@ Modular templates (`math/*`) take the modulus as a trailing argument, `998244353
 ([[D-015 Modulus as an argument]]).
 Tree templates (`tree/*`) take the tree as an undirected adjacency list `vector<vector<int>>` (each
 edge in both lists) and never recurse, so deep trees (a path of 2e5 vertices) are safe.
+Geometry templates (`geometry/*`) are generic over the coordinate type through `Point<T>`
+(`geometry/point`, inserted automatically): `Point<long long>` is exact for orientation tests,
+hulls, areas; functions that build new points (intersections, circles, cuts) need
+`Point<long double>`. `sgn` is exact on integers and uses `EPS` on floating types
+([[D-017 Geometry point type]]).
 
 ## Running the tests
 

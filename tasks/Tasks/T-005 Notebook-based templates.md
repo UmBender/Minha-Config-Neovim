@@ -1,5 +1,5 @@
 ---
-status: doing
+status: done
 created: 2026-10-01
 updated: 2026-10-02
 tags: [task, cpp, notebook]
@@ -8,16 +8,15 @@ tags: [task, cpp, notebook]
 
 ## Goal
 Use the ICPC notebook (`notebook/` → `~/gempro-notebook`) as the base for templates in this config.
-**Waiting for the user's detailed spec.**
 
 ## Plan
 - [x] Get the spec from the user
 - [x] Break it into tasks: [[T-006 Template library pipeline]] (infrastructure), then one task per
   area, starting with [[T-007 Port dsa templates]] as a pilot for review
 - [x] dsa pilot ([[T-007 Port dsa templates]])
-- [ ] graph, math, strings, geometry, tree (after the pilot is reviewed): graph done
+- [x] graph, math, strings, geometry, tree (after the pilot is reviewed): graph done
   ([[T-012 Port graph templates]]), strings done ([[T-016 Port strings templates]]), math done ([[T-018 Port math templates]]),
-  tree done ([[T-020 Port tree templates]]); geometry left
+  tree done ([[T-020 Port tree templates]]), geometry done ([[T-021 Port geometry templates]])
 
 ## Spec (2026-10-01)
 - The notebook minimizes typing; the library must be **more flexible**: generic types, lambdas for
@@ -35,6 +34,8 @@ Use the ICPC notebook (`notebook/` → `~/gempro-notebook`) as the base for temp
 ## Log
 - 2026-10-01: created. Symlink fixed (it pointed to a relative path that didn't exist) and
   ignored in git.
+- 2026-10-02: geometry ported ([[T-021 Port geometry templates]]): every notebook area is now in the
+  library; task done.
 
 ## Related
 - Decisions: [[D-007 Notebook is a read-only, untracked source]]

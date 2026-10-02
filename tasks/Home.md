@@ -18,7 +18,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-002 | [[T-002 C++ competitive programming setup]] | done |
 | T-003 | [[T-003 Kanagawa Dragon colorscheme]] | done |
 | T-004 | [[T-004 Explorer and float colors]] | done |
-| T-005 | [[T-005 Notebook-based templates]] | doing |
+| T-005 | [[T-005 Notebook-based templates]] | done |
 | T-006 | [[T-006 Template library pipeline]] | done |
 | T-007 | [[T-007 Port dsa templates]] | done |
 | T-008 | [[T-008 Template presets and examples]] | done |
@@ -34,6 +34,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-018 | [[T-018 Port math templates]] | done |
 | T-019 | [[T-019 Python templates and library]] | done |
 | T-020 | [[T-020 Port tree templates]] | done |
+| T-021 | [[T-021 Port geometry templates]] | done |
 
 ## Decisions
 
@@ -53,6 +54,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 - [[D-014 Collapsible templates with native folds]]
 - [[D-015 Modulus as an argument]]
 - [[D-016 Python templates and library]]
+- [[D-017 Geometry point type]]
 
 ## Guides
 
