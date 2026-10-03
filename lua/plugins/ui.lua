@@ -34,6 +34,16 @@ return {
       },
       -- smooth scrolling makes every <C-d>, <C-u>, G and search jump wait for an animation
       scroll = { enabled = false },
+      -- `nvim file` is painted before plugins load, with Vim's regex syntax for every language: starting
+      -- Treesitter there would compile the highlights query first (C++: ~260 ms). util.perf starts it after.
+      quickfile = {
+        exclude = vim.list_extend(
+          { "latex" },
+          vim.tbl_map(function(p)
+            return vim.fn.fnamemodify(p, ":t:r")
+          end, vim.api.nvim_get_runtime_file("parser/*", true))
+        ),
+      },
       -- rainbow indent guides (colors defined in colorscheme.lua)
       indent = {
         animate = { enabled = false }, -- the scope guide appears at once instead of being drawn
@@ -67,27 +77,28 @@ return {
     end,
   },
 
-  -- smear cursor (LazyVim extra), tuned to keep up with fast movement
-  {
-    "sphamba/smear-cursor.nvim",
-    opts = {
-      stiffness = 0.8,
-      trailing_stiffness = 0.6,
-      stiffness_insert_mode = 0.7,
-      trailing_stiffness_insert_mode = 0.7,
-      damping = 0.95,
-      damping_insert_mode = 0.95,
-      distance_stop_animating = 0.5, -- stop as soon as the tail is half a cell away
-      time_interval = 7, -- ~140 fps instead of 60
-    },
-  },
-
   -- rainbow (), [], {} with the Kanagawa palette (groups in colorscheme.lua)
   {
     "HiPhish/rainbow-delimiters.nvim",
     event = "LazyFile",
     main = "rainbow-delimiters.setup",
-    opts = {},
+    opts = {
+      -- the first buffer of a language gets its brackets colored right after the first screen (util.perf)
+      condition = function(buf)
+        return require("util.perf").when_ready(buf, function()
+          require("rainbow-delimiters.lib").attach(buf)
+        end)
+      end,
+    },
+  },
+
+  -- Treesitter highlighting starts right after the first screen (util.perf); Vim's regex syntax until then
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = function(_, opts)
+      opts.highlight.enable = false -- LazyVim's FileType autocmd would start it before the first screen
+      require("util.perf").setup_highlight()
+    end,
   },
 
   -- compact rounded diagnostics next to the code, replacing the default virtual text

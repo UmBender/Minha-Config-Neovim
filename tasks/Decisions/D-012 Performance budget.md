@@ -30,3 +30,5 @@ exists, and that several features animated or recomputed things with no visible 
 
 ## Related
 - Tasks: [[T-014 Performance]]
+- Superseded in part by [[D-018 Paint first, Treesitter after]] (smear cursor removed, Treesitter
+  started after the first screen).

@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-01
+updated: 2026-10-03
 tags: [guide, ui]
 ---
 # UI and Colorscheme
@@ -14,9 +14,9 @@ tags: [guide, ui]
 | Color codes (`#aabbcc`) highlighted | mini.hipatterns extra | `lua/config/lazy.lua` |
 | Underlined word under the cursor | `LspReference*` highlights | `colorscheme.lua` |
 | Tabs / buffers | bufferline (LazyVim default) | none (LazyVim default) |
-| Smooth cursor (fast smear trail) | smear-cursor.nvim (LazyVim extra `ui.smear-cursor`), tuned | `lua/config/lazy.lua` + `ui.lua` |
 | Smooth scrolling | **off** (snacks.scroll), scrolling is instant | `ui.lua` |
 | Rainbow brackets | rainbow-delimiters.nvim + `RainbowDelimiter*` highlights | `ui.lua` + `colorscheme.lua` |
+| Syntax highlighting | Treesitter, started right after the first screen (Vim regex syntax until then) | `ui.lua` + `lua/util/perf.lua` |
 | Sticky function/loop header | nvim-treesitter-context (LazyVim extra `ui.treesitter-context`) | `lua/config/lazy.lua` |
 | Inline diagnostics (rounded bubbles) | tiny-inline-diagnostic.nvim (`modern` preset), default virtual text off | `ui.lua` |
 
@@ -27,15 +27,18 @@ tags: [guide, ui]
 - Icons come from **mini.icons** (LazyVim default), which uses the Material Design Icons of
   Nerd Fonts (`nf-md-*`), so no extra icon plugin is needed.
 - Alacritty doesn't render ligatures, whatever the font.
-- Toggles: `:SmearCursorToggle`, `<leader>ut` (sticky context), `<leader>uS` (smooth scroll, this
+- Toggles: `<leader>ut` (sticky context), `<leader>uS` (smooth scroll, this
   session only).
 
 ## Performance
-See [[T-014 Performance]] and [[D-012 Performance budget]].
-- Smear speed: `stiffness`/`trailing_stiffness` in the smear spec of `ui.lua` (closer to 1 = faster),
-  `time_interval` is the frame time in ms.
-- Most startup time is Treesitter compiling the C++ highlight query (~250 ms, once per session).
-- Measure: `:Lazy profile`, or `nvim --startuptime /tmp/st.log file.cpp`.
+See [[T-014 Performance]], [[T-022 Snappier editor]], [[D-012 Performance budget]] and
+[[D-018 Paint first, Treesitter after]].
+- No smear cursor: its animation kept the screen moving ~90 ms after every jump (removed in T-022).
+- The first file of each language opens with Vim's regex colors and switches to Treesitter's
+  ~0.3 s later (C++); rainbow brackets and folds arrive at the same moment. Compiling the C++
+  queries (~380 ms) happens once per session, so later C++ files get everything at once.
+- Measure: `:Lazy profile`, or `nvim --startuptime /tmp/st.log file.cpp`. Real per-key latency needs
+  a pty driver (method in [[T-022 Snappier editor]]).
 
 ## Changing colors
 - Palette overrides: `colors.palette` in `colorscheme.lua`. The mapping from terminal colors is in

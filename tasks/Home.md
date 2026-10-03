@@ -35,6 +35,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-019 | [[T-019 Python templates and library]] | done |
 | T-020 | [[T-020 Port tree templates]] | done |
 | T-021 | [[T-021 Port geometry templates]] | done |
+| T-022 | [[T-022 Snappier editor]] | done |
 
 ## Decisions
 
@@ -55,6 +56,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 - [[D-015 Modulus as an argument]]
 - [[D-016 Python templates and library]]
 - [[D-017 Geometry point type]]
+- [[D-018 Paint first, Treesitter after]]
 
 ## Guides
 
