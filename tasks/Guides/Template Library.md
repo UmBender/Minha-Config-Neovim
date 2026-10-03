@@ -45,10 +45,13 @@ hulls, areas; functions that build new points (intersections, circles, cuts) nee
 ## Running the tests
 
 ```sh
-python3 tests/run.py            # everything: lint, standalone compile, C++ tests, nvim tests
+python3 tests/run.py            # everything: lint, standalone compile, C++ tests, nvim tests, Lua format
 python3 tests/run.py segtree    # only ids containing "segtree" (variants included)
-python3 tests/run.py nvim       # only the Neovim helper tests
+python3 tests/run.py nvim       # only the Neovim helper tests (and the Lua format check)
+python3 tests/run.py lua        # only the Lua format check (`stylua --check .`; fix with `stylua .`)
 ```
+
+The Lua format check is skipped (with a note) when `stylua` is not installed.
 
 All tests run under `-Werror`, ASan/UBSan and `_GLIBCXX_DEBUG`. Builds are cached, so only changed
 tests recompile. Educational variants show up as `<area>/<name>.edu`: the normal test compiled

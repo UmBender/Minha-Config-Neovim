@@ -40,7 +40,12 @@ end)
 
 test("python list parses # headers", function()
   local items = lib.list()
-  eq(vim.tbl_map(function(i) return i.id end, items), { "x/base", "x/top" })
+  eq(
+    vim.tbl_map(function(i)
+      return i.id
+    end, items),
+    { "x/base", "x/top" }
+  )
   eq(items[2].title, "Py top")
   eq(items[2].requires, { "x/base" })
   eq(items[2].usage, "\ntop()")

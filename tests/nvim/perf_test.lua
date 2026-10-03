@@ -29,8 +29,14 @@ end
 test("have_query finds queries without compiling them", function()
   local perf = require("util.perf")
   local get, parse, calls = vim.treesitter.query.get, vim.treesitter.query.parse, 0
-  vim.treesitter.query.get = function(...) calls = calls + 1 return get(...) end
-  vim.treesitter.query.parse = function(...) calls = calls + 1 return parse(...) end
+  vim.treesitter.query.get = function(...)
+    calls = calls + 1
+    return get(...)
+  end
+  vim.treesitter.query.parse = function(...)
+    calls = calls + 1
+    return parse(...)
+  end
   local ok, err = pcall(function()
     eq(perf.have_query("c", "highlights"), true) -- shipped with Neovim
     eq(perf.have_query("c", "no-such-query"), false)
@@ -43,7 +49,12 @@ end)
 
 test("setup replaces LazyVim's have_query and keeps its cache", function()
   local perf = require("util.perf")
-  _G.LazyVim = { treesitter = { _queries = {}, have_query = function() error("compiled") end } }
+  _G.LazyVim = { treesitter = {
+    _queries = {},
+    have_query = function()
+      error("compiled")
+    end,
+  } }
   perf.setup()
   eq(LazyVim.treesitter.have_query("c", "highlights"), true)
   eq(LazyVim.treesitter._queries["c:highlights"], true)
@@ -68,27 +79,53 @@ end
 
 --- Let scheduled callbacks run.
 local function tick()
-  vim.wait(50, function() return false end)
+  vim.wait(50, function()
+    return false
+  end)
 end
 
 test("when_ready defers the first buffer of a language by one tick, later ones run at once", function()
   local perf = require("util.perf")
   local a, b = buffer("c"), buffer("c")
   local ran = {}
-  eq(perf.when_ready(a, function() ran[#ran + 1] = "a1" end), false)
-  eq(perf.when_ready(a, function() ran[#ran + 1] = "a2" end), false)
-  eq(perf.when_ready(b, function() ran[#ran + 1] = "b" end), false)
+  eq(
+    perf.when_ready(a, function()
+      ran[#ran + 1] = "a1"
+    end),
+    false
+  )
+  eq(
+    perf.when_ready(a, function()
+      ran[#ran + 1] = "a2"
+    end),
+    false
+  )
+  eq(
+    perf.when_ready(b, function()
+      ran[#ran + 1] = "b"
+    end),
+    false
+  )
   eq(ran, {})
   tick()
   eq(ran, { "a1", "a2", "b" })
-  eq(perf.when_ready(buffer("c"), function() error("must not be queued") end), true)
+  eq(
+    perf.when_ready(buffer("c"), function()
+      error("must not be queued")
+    end),
+    true
+  )
 end)
 
 test("when_ready drops queued work for deleted buffers and buffers that changed language", function()
   local perf = require("util.perf")
   local gone, changed, ran = buffer("lua"), buffer("lua"), {}
-  perf.when_ready(gone, function() ran[#ran + 1] = "gone" end)
-  perf.when_ready(changed, function() ran[#ran + 1] = "changed" end)
+  perf.when_ready(gone, function()
+    ran[#ran + 1] = "gone"
+  end)
+  perf.when_ready(changed, function()
+    ran[#ran + 1] = "changed"
+  end)
   vim.api.nvim_buf_delete(gone, { force = true })
   vim.bo[changed].filetype = "query"
   tick()
@@ -104,7 +141,10 @@ test("Treesitter highlighting starts after the first screen, regex syntax until 
   eq(vim.treesitter.highlighter.active[buf], nil)
   eq(vim.bo[buf].syntax, "vim")
   local start, starts = vim.treesitter.start, 0
-  vim.treesitter.start = function(...) starts = starts + 1 return start(...) end
+  vim.treesitter.start = function(...)
+    starts = starts + 1
+    return start(...)
+  end
   tick()
   vim.treesitter.start = start
   eq(starts, 1)
@@ -125,7 +165,11 @@ end)
 test("nvim-treesitter spec hands highlighting to util.perf", function()
   local s = spec("ui", "nvim-treesitter/nvim-treesitter")
   local opts = { highlight = { enable = true } }
-  _G.LazyVim = { treesitter = { have = function() return true end } }
+  _G.LazyVim = { treesitter = {
+    have = function()
+      return true
+    end,
+  } }
   s.opts(nil, opts)
   _G.LazyVim = nil
   eq(opts.highlight.enable, false)
@@ -139,7 +183,9 @@ test("Treesitter folds are flat until the language is ready, then recomputed", f
     treesitter = {
       _queries = {},
       have_query = function() end,
-      foldexpr = function() return vim.v.lnum == 1 and ">1" or "=" end,
+      foldexpr = function()
+        return vim.v.lnum == 1 and ">1" or "="
+      end,
     },
   }
   perf.setup()
@@ -155,7 +201,11 @@ end)
 
 test("rainbow delimiters attach once the language is ready", function()
   local attached = {}
-  package.loaded["rainbow-delimiters.lib"] = { attach = function(b) attached[#attached + 1] = b end }
+  package.loaded["rainbow-delimiters.lib"] = {
+    attach = function(b)
+      attached[#attached + 1] = b
+    end,
+  }
   local condition = spec("ui", "HiPhish/rainbow-delimiters.nvim").opts.condition
   local buf = buffer("vimdoc", { "*tag*" })
   eq(condition(buf), false)

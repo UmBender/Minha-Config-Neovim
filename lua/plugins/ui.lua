@@ -118,7 +118,13 @@ return {
     "Bekaboo/dropbar.nvim",
     event = "LazyFile",
     keys = {
-      { "<leader>;", function() require("dropbar.api").pick() end, desc = "Pick Winbar Symbol" },
+      {
+        "<leader>;",
+        function()
+          require("dropbar.api").pick()
+        end,
+        desc = "Pick Winbar Symbol",
+      },
     },
     opts = {},
   },

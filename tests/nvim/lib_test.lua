@@ -29,7 +29,12 @@ end
 
 test("list parses headers", function()
   local items = lib.list()
-  eq(vim.tbl_map(function(i) return i.id end, items), { "x/base", "x/top" })
+  eq(
+    vim.tbl_map(function(i)
+      return i.id
+    end, items),
+    { "x/base", "x/top" }
+  )
   local top = items[2]
   eq(top.title, "Top")
   eq(top.description, "Fixture that requires x/base.")
@@ -41,8 +46,18 @@ end)
 test("list groups variants under their structure", function()
   local items = lib.list()
   local base, top = items[1], items[2]
-  eq(vim.tbl_map(function(v) return v.id end, base.variants), { "x/base.edu", "x/base.one", "x/base.two" })
-  eq(vim.tbl_map(function(v) return v.variant end, base.variants), { "edu", "one", "two" })
+  eq(
+    vim.tbl_map(function(v)
+      return v.id
+    end, base.variants),
+    { "x/base.edu", "x/base.one", "x/base.two" }
+  )
+  eq(
+    vim.tbl_map(function(v)
+      return v.variant
+    end, base.variants),
+    { "edu", "one", "two" }
+  )
   eq(base.variants[2].title, "Base (one)")
   eq(base.variants[2].file, lib.root .. "/x/base.one.cpp")
   eq(top.variants, {})
@@ -52,12 +67,17 @@ end)
 
 test("menu lists normal, educational, then common uses", function()
   local base = lib.list()[1]
-  eq(vim.tbl_map(function(e) return { e.id, e.label } end, lib.menu(base)), {
-    { "x/base", "normal" },
-    { "x/base.edu", "educational" },
-    { "x/base.one", "one" },
-    { "x/base.two", "two" },
-  })
+  eq(
+    vim.tbl_map(function(e)
+      return { e.id, e.label }
+    end, lib.menu(base)),
+    {
+      { "x/base", "normal" },
+      { "x/base.edu", "educational" },
+      { "x/base.one", "one" },
+      { "x/base.two", "two" },
+    }
+  )
   eq(lib.menu(lib.list()[2]), {})
 end)
 
@@ -95,7 +115,8 @@ test("resolve puts dependencies first", function()
 end)
 
 test("insert goes above solve() with dependencies", function()
-  local buf = buf_with({ "#include <bits/stdc++.h>", "using namespace std;", "", "void solve() {", "}", "", "int main() {}" })
+  local buf =
+    buf_with({ "#include <bits/stdc++.h>", "using namespace std;", "", "void solve() {", "}", "", "int main() {}" })
   eq(lib.insert("x/top", buf), { "x/base", "x/top" })
   local l = lines(buf)
   eq(l[4], "// Title: Base")
@@ -109,7 +130,9 @@ test("insert skips templates already present", function()
   local buf = buf_with({ "// Title: Base", "int base() { return 1; }", "", "int main() {}" })
   eq(lib.insert("x/top", buf), { "x/top" })
   local l = lines(buf)
-  eq(#vim.tbl_filter(function(s) return s == "// Title: Base" end, l), 1)
+  eq(#vim.tbl_filter(function(s)
+    return s == "// Title: Base"
+  end, l), 1)
   eq(l[#l], "int main() {}")
   eq(lib.insert("x/top", buf), {})
 end)

@@ -14,10 +14,11 @@ Stages:
                  (tests/py/<area>/<name>.py), examples (examples/py/<area>/<name>.py); plus the
                  Python file templates' tests (tests/py/templates/)
   7. nvim        tests/nvim/*_test.lua pass
+  8. lua         every Lua file matches stylua.toml (`stylua --check .`; skipped without stylua)
 
 Usage: tests/run.py [FILTER ...] [-j N] [--no-nvim] [--write-docs]
 FILTER selects templates/tests whose id ("dsa/fenwick-tree", "py/gen/tree") contains it; "nvim" selects
-the nvim tests, "py" every Python one.
+the nvim tests and the Lua format check, "lua" only the format check, "py" every Python one.
 --write-docs regenerates tasks/Library/ instead of checking it.
 """
 
@@ -588,6 +589,14 @@ def nvim_tests():
     return results
 
 
+def lua_format():
+    """(ok, output) of `stylua --check .`, None when stylua is not installed."""
+    if not shutil.which("stylua"):
+        return None
+    r = subprocess.run(["stylua", "--check", "."], capture_output=True, text=True, cwd=ROOT)
+    return r.returncode == 0, (r.stdout + r.stderr).strip()
+
+
 def report(name, ok, out, secs=None):
     tag = f"{GREEN}PASS{RESET}" if ok else f"{RED}FAIL{RESET}"
     t = f" {DIM}({secs:.1f}s){RESET}" if secs is not None else ""
@@ -674,6 +683,15 @@ def main():
         for name, ok, out, secs in nvim_tests():
             report(name, ok, out, secs)
             failed += not ok
+
+    if not args.filters or "nvim" in args.filters or "lua" in args.filters:
+        print("== lua")
+        res = lua_format()
+        if res is None:
+            print(f"{DIM}skipped: stylua not installed{RESET}")
+        else:
+            report("stylua --check (fix with `stylua .`)", *res)
+            failed += not res[0]
 
     print()
     if failed:

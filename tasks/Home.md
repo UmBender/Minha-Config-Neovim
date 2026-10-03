@@ -37,6 +37,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-021 | [[T-021 Port geometry templates]] | done |
 | T-022 | [[T-022 Snappier editor]] | done |
 | T-023 | [[T-023 Precompiled header]] | done |
+| T-024 | [[T-024 Lua format check]] | done |
 
 ## Decisions
 

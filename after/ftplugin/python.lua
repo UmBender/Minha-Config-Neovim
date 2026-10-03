@@ -9,7 +9,9 @@ if ok then
 end
 
 -- run / templates / library
-map("<leader>rr", function() cp.run_py() end, "Run")
+map("<leader>rr", function()
+  cp.run_py()
+end, "Run")
 map("<leader>ri", function()
   vim.ui.input({ prompt = "Arguments: " }, function(args)
     if args then
@@ -17,9 +19,15 @@ map("<leader>ri", function()
     end
   end)
 end, "Run with Arguments")
-map("<leader>rn", function() cp.pick_py_template() end, "Insert Template")
-map("<leader>rl", function() require("util.lib").python.pick() end, "Insert from Library")
-map("<leader>rf", function() require("util.fold").toggle(0) end, "Toggle Template Folds")
+map("<leader>rn", function()
+  cp.pick_py_template()
+end, "Insert Template")
+map("<leader>rl", function()
+  require("util.lib").python.pick()
+end, "Insert from Library")
+map("<leader>rf", function()
+  require("util.fold").toggle(0)
+end, "Toggle Template Folds")
 
 -- library templates (`# Title:` .. `# End:`) open collapsed
 require("util.fold").attach(0)
