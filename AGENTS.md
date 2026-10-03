@@ -127,8 +127,8 @@ flexibility, since typing is free here (the picker inserts the code).
 - Keep C++ keymaps buffer-local in `after/ftplugin/cpp.lua` under `<leader>r` (Python: `after/ftplugin/python.lua`).
 - Python library (`pylib/`): same header with `#`, stdlib imports inside the template, no top-level
   side effects, no variants, Title unique across both libraries (`tasks/Decisions/D-016`).
-- Compiler flags live in two places that must stay in sync: `lua/util/cp.lua` and the
-  CompetiTest `compile_command` in `lua/plugins/cpp.lua`.
+- Compiler flags live in `lua/util/cp.lua`; the CompetiTest `compile_command` in
+  `lua/plugins/cpp.lua` is built from them, with the precompiled header (`tasks/Decisions/D-019`).
 - Extras are imported in `lua/config/lazy.lua` (not via `lazyvim.json`).
 
 ## Git workflow (user preferences)

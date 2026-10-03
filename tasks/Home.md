@@ -36,6 +36,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-020 | [[T-020 Port tree templates]] | done |
 | T-021 | [[T-021 Port geometry templates]] | done |
 | T-022 | [[T-022 Snappier editor]] | done |
+| T-023 | [[T-023 Precompiled header]] | done |
 
 ## Decisions
 
@@ -57,6 +58,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 - [[D-016 Python templates and library]]
 - [[D-017 Geometry point type]]
 - [[D-018 Paint first, Treesitter after]]
+- [[D-019 Precompiled bits-stdc++.h]]
 
 ## Guides
 

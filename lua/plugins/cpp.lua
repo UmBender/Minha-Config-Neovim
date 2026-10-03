@@ -52,22 +52,24 @@ return {
     "xeluxee/competitest.nvim",
     dependencies = { "MunifTanjim/nui.nvim" },
     cmd = "CompetiTest",
-    opts = {
-      compile_command = {
-        cpp = {
-          exec = "g++",
-          args = { "-std=c++20", "-O2", "-Wall", "-Wextra", "-Wshadow", "-DLOCAL", "$(FNAME)", "-o", "$(FNOEXT)" },
+    opts = function(_, opts)
+      -- same flags and precompiled header as util.cp (<leader>rc)
+      local cp = require("util.cp")
+      local args = vim.list_extend(vim.list_slice(cp.flags), cp.pch_args(cp.flags))
+      return vim.tbl_deep_extend("force", opts, {
+        compile_command = {
+          cpp = { exec = "g++", args = vim.list_extend(args, { "$(FNAME)", "-o", "$(FNOEXT)" }) },
         },
-      },
-      run_command = {
-        cpp = { exec = "./$(FNOEXT)" },
-        python = { exec = "python3", args = { "$(FNAME)" } },
-      },
-      maximum_time = 5000,
-      template_file = {
-        cpp = vim.fn.stdpath("config") .. "/templates/cp.cpp",
-      },
-      received_files_extension = "cpp",
-    },
+        run_command = {
+          cpp = { exec = "./$(FNOEXT)" },
+          python = { exec = "python3", args = { "$(FNAME)" } },
+        },
+        maximum_time = 5000,
+        template_file = {
+          cpp = vim.fn.stdpath("config") .. "/templates/cp.cpp",
+        },
+        received_files_extension = "cpp",
+      })
+    end,
   },
 }

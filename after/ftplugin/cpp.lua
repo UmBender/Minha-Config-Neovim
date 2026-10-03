@@ -19,6 +19,14 @@ map("<leader>rf", function() require("util.fold").toggle(0) end, "Toggle Templat
 -- library templates (`// Title:` .. `// End:`) open collapsed
 require("util.fold").attach(0)
 
+-- precompile bits/stdc++.h in the background (after the first screen) so the first <leader>rr is fast too
+local function build_pch()
+  cp.build_pch(cp.flags)
+end
+if require("util.perf").when_ready(vim.api.nvim_get_current_buf(), build_pch) then
+  build_pch()
+end
+
 -- test cases (CompetiTest)
 map("<leader>rt", "<cmd>CompetiTest run<cr>", "Run Testcases")
 map("<leader>rT", "<cmd>CompetiTest run_no_compile<cr>", "Run Testcases (no compile)")
