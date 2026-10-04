@@ -99,6 +99,30 @@ end
 --- Collapse the templates of `buf` (only those named in `titles`, if given).
 ---@param titles? string[]
 function M.close(buf, titles)
+  buf = buf == 0 and vim.api.nvim_get_current_buf() or buf
+  -- Neovim doesn't update expr folds in Insert mode (the library picker confirms from its prompt), not even after it:
+  -- a fold of the user's code can still span the lines just inserted. So leave Insert mode, recompute, then collapse.
+  if vim.api.nvim_get_mode().mode:match("^[iR]") then
+    vim.api.nvim_create_autocmd("ModeChanged", {
+      callback = function()
+        if vim.api.nvim_get_mode().mode:match("^[iR]") then
+          return
+        end
+        if vim.api.nvim_buf_is_valid(buf) then
+          for _, win in ipairs(vim.fn.win_findbuf(buf)) do
+            if vim.wo[win].foldexpr == M.expr then
+              vim.api.nvim_win_call(win, function()
+                vim.opt_local.foldexpr = M.expr
+              end)
+            end
+          end
+          M.close(buf, titles)
+        end
+        return true
+      end,
+    })
+    return
+  end
   each_window(buf, titles, function(r)
     -- open the wrapper too (closed by `zc` twice), so it is the inner fold that ends up closed
     while vim.fn.foldclosed(r.start) ~= -1 do

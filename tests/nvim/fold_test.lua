@@ -181,6 +181,24 @@ test("close collapses a template again after its wrapper was closed (zc twice)",
   eq(closed(16), { -1, -1 })
 end)
 
+-- The library picker confirms from its prompt, in Insert mode, where Neovim doesn't update expr folds: the fold of
+-- the user's code below the insertion point is still stretched over the new template lines.
+test("a template inserted and closed in Insert mode leaves the user folds below it open", function()
+  local buf = setup(function()
+    local line = vim.fn.getline(vim.v.lnum)
+    return line:match("{$") and ">1" or line == "}" and "<1" or "="
+  end)
+  local insert = { "// Title: New", "int f() {", "    return 3;", "}", "// End: New", "" }
+  _G.fold_test_insert = function()
+    vim.api.nvim_buf_set_lines(buf, 14, 14, false, insert) -- above solve(), as util.lib does
+    fold.close(buf, { "New" })
+  end
+  vim.api.nvim_feedkeys(vim.keycode("i<Cmd>lua fold_test_insert()<CR><Esc>"), "nx", false)
+  eq(closed(21), { -1, -1 }) -- solve()
+  eq(closed(16), { 15, 19 })
+  eq(closed(12), { -1, -1 }) -- other templates as they were
+end)
+
 if failures > 0 then
   os.exit(1)
 end

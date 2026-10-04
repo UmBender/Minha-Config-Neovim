@@ -26,7 +26,8 @@ Tested C++ templates in `lib/<area>/<name>.cpp`, based on the ICPC notebook but 
    again whenever the file opens. `za` / `zo` / `zc` open or close the one under the cursor,
    `<leader>rf` collapses (or opens) all of them. Keep the End line: without it the template
    doesn't fold. Only templates collapse: your own code (`solve()`, `main()`, ...) always opens
-   unfolded ([[D-020 Only templates open collapsed]]). A collapsed template takes two `zc` /
+   unfolded ([[D-020 Only templates open collapsed]]), also when a template is inserted above it
+   ([[D-021 Collapse templates outside Insert mode]]). A collapsed template takes two `zc` /
    `zo` levels (an outer fold that stays open around it); `<leader>rf` handles both.
 5. Read the `Usage:` comment at the top of the inserted code (`zo` to see it). Each structure's page in [[Library]]
    has a full example per variant.
