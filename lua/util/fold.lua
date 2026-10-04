@@ -1,5 +1,7 @@
 -- Collapsible library templates: each `// Title: X` .. `// End: X` block (written by util.lib; `#` in Python) is a
--- level-1 fold on top of the base foldexpr (LazyVim's treesitter folds), whose levels shift by one inside a template.
+-- level-2 fold (the one collapsed) inside a level-1 wrapper on the same lines that stays open, on top of the base
+-- foldexpr (LazyVim's treesitter folds), whose levels shift by two inside a template. Neovim gives a new fold the
+-- state of the fold above it, so the user's folds (siblings of the open wrapper) are never born collapsed.
 local M = {}
 
 M.expr = "v:lua.require'util.fold'.foldexpr()"
@@ -53,12 +55,12 @@ function M.ranges(buf)
   return scan(buf).ranges
 end
 
---- One more level for a foldexpr result (">1" -> ">2", "1" -> "2"); relative ones ("=", "a1", ...) stay.
+--- Two more levels for a foldexpr result (">1" -> ">3", "1" -> "3"); relative ones ("=", "a1", ...) stay.
 ---@param level string|integer
 ---@return string
 function M.shift(level)
   local prefix, n = tostring(level):match("^([<>]?)(%d+)$")
-  return n and prefix .. (tonumber(n) + 1) or tostring(level)
+  return n and prefix .. (tonumber(n) + 2) or tostring(level)
 end
 
 function M.foldexpr()
@@ -67,7 +69,7 @@ function M.foldexpr()
   if not r then
     return M.base()
   elseif lnum == r.start then
-    return ">1"
+    return ">2"
   elseif lnum == r.stop then
     return "<1"
   end
@@ -98,9 +100,11 @@ end
 ---@param titles? string[]
 function M.close(buf, titles)
   each_window(buf, titles, function(r)
-    if vim.fn.foldclosed(r.start) == -1 then
-      vim.cmd(r.start .. "foldclose")
+    -- open the wrapper too (closed by `zc` twice), so it is the inner fold that ends up closed
+    while vim.fn.foldclosed(r.start) ~= -1 do
+      vim.cmd(r.start .. "foldopen")
     end
+    vim.cmd(r.start .. "foldclose")
   end)
 end
 

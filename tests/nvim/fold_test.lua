@@ -71,7 +71,7 @@ test("ranges follow edits", function()
   eq(#fold.ranges(buf), 1)
 end)
 
-test("templates are level-1 folds over the base foldexpr, shifted inside", function()
+test("templates are a level-2 fold in a level-1 wrapper over the base foldexpr, shifted inside", function()
   local base = {}
   for i = 1, #file do
     base[i] = "0"
@@ -85,17 +85,17 @@ test("templates are level-1 folds over the base foldexpr, shifted inside", funct
   for i = 1, #file do
     levels[i] = vim.fn.foldlevel(i)
   end
-  eq(levels, { 0, 1, 1, 2, 2, 2, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1 })
+  eq(levels, { 0, 2, 2, 3, 3, 3, 2, 0, 0, 0, 2, 2, 2, 0, 1, 1 })
 end)
 
-test("shift adds one level to foldexpr results", function()
-  eq(fold.shift("0"), "1")
-  eq(fold.shift("2"), "3")
-  eq(fold.shift(">1"), ">2")
-  eq(fold.shift("<3"), "<4")
+test("shift adds two levels to foldexpr results", function()
+  eq(fold.shift("0"), "2")
+  eq(fold.shift("2"), "4")
+  eq(fold.shift(">1"), ">3")
+  eq(fold.shift("<3"), "<5")
   eq(fold.shift("="), "=")
   eq(fold.shift("a1"), "a1")
-  eq(fold.shift(0), "1")
+  eq(fold.shift(0), "2")
 end)
 
 test("close collapses every template, only templates", function()
@@ -140,6 +140,45 @@ test("attach uses the template foldexpr in the window and collapses the template
   eq(closed(4), { 2, 7 })
   eq(vim.wo.foldmethod, "expr")
   eq(vim.wo.foldexpr, "v:lua.require'util.fold'.foldexpr()")
+end)
+
+-- Neovim gives a new fold the state of the fold above it: the user's folds must not inherit a collapsed template.
+test("user folds created after the templates collapse stay open (late Treesitter parse)", function()
+  local base = {}
+  setup(function()
+    return base[vim.v.lnum] or "0"
+  end)
+  fold.close(0)
+  base[15], base[16] = ">1", "<1" -- the parser now sees solve()
+  vim.wo.foldexpr = vim.wo.foldexpr -- recompute the folds
+  eq(closed(16), { -1, -1 })
+  eq(closed(12), { 11, 13 })
+end)
+
+test("user folds created by typing below a collapsed template stay open", function()
+  local buf = setup(function()
+    local line = vim.fn.getline(vim.v.lnum)
+    return line:match("{$") and ">1" or line == "}" and "<1" or "="
+  end)
+  fold.close(0)
+  vim.api.nvim_buf_set_lines(buf, 13, 14, false, { "void f() {", "    int y;", "}" })
+  eq(closed(15), { -1, -1 })
+  eq(closed(18), { -1, -1 })
+  eq(closed(12), { 11, 13 })
+end)
+
+test("close collapses a template again after its wrapper was closed (zc twice)", function()
+  local base = {}
+  setup(function()
+    return base[vim.v.lnum] or "0"
+  end)
+  fold.close(0)
+  vim.cmd("11foldclose") -- closes the wrapper too
+  fold.close(0)
+  base[15], base[16] = ">1", "<1"
+  vim.wo.foldexpr = vim.wo.foldexpr
+  eq(closed(12), { 11, 13 })
+  eq(closed(16), { -1, -1 })
 end)
 
 if failures > 0 then

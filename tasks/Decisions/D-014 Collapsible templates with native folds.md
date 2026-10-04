@@ -1,5 +1,5 @@
 ---
-status: accepted
+status: superseded (fold layout, see D-020)
 date: 2026-10-01
 tags: [decision]
 ---
@@ -28,3 +28,4 @@ matters. They should collapse to one line and open on demand, also after reopeni
 
 ## Related
 - Tasks: [[T-017 Collapsible templates]]
+- Superseded in part by: [[D-020 Only templates open collapsed]]

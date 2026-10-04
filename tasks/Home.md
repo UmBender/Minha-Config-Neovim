@@ -38,6 +38,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-022 | [[T-022 Snappier editor]] | done |
 | T-023 | [[T-023 Precompiled header]] | done |
 | T-024 | [[T-024 Lua format check]] | done |
+| T-025 | [[T-025 Fold only templates]] | done |
 
 ## Decisions
 
@@ -60,6 +61,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 - [[D-017 Geometry point type]]
 - [[D-018 Paint first, Treesitter after]]
 - [[D-019 Precompiled bits-stdc++.h]]
+- [[D-020 Only templates open collapsed]]
 
 ## Guides
 
