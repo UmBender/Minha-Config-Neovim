@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-01
+updated: 2026-10-10
 tags: [guide]
 ---
 # Keymaps
@@ -40,6 +40,21 @@ See [[Python]] for the workflow.
 | `<leader>rf` | Collapse / open all library templates |
 | `<leader>rt` / `ru` | Run test cases / show the test cases UI (CompetiTest, `python3`) |
 | `<leader>ra` / `re` / `rx` | Add / edit / delete a test case |
+
+## Go (Go buffers, `<leader>r` and `<leader>t`)
+
+See [[LSP, Formatting and Debugging#Go]].
+
+| Key | Action |
+| --- | ------ |
+| `<leader>rr` | `go run .` in the file's directory (its package) in a floating terminal |
+| `<leader>ri` | Same, with program arguments |
+| `<leader>tr` / `tt` / `tT` | Run the nearest test / the file's tests / every test (neotest) |
+| `<leader>tl` / `tS` | Run the last test again / stop |
+| `<leader>ts` / `to` / `tO` | Test summary tree / output of a test / output panel |
+| `<leader>tw` | Watch the file: rerun its tests on save |
+| `<leader>td` | Debug the nearest test (delve) |
+| `<leader>co` | Organize imports |
 
 ## Files and search
 
@@ -83,7 +98,7 @@ See [[Python]] for the workflow.
 | `<leader>;` | Pick a symbol from the winbar (dropbar) |
 | `<leader>uf` / `<leader>uF` | Toggle format on save (global / buffer) |
 
-## Debugging (`<leader>d`, codelldb)
+## Debugging (`<leader>d`, codelldb for C++, delve for Go)
 
 | Key | Action |
 | --- | ------ |

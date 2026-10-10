@@ -40,6 +40,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-024 | [[T-024 Lua format check]] | done |
 | T-025 | [[T-025 Fold only templates]] | done |
 | T-026 | [[T-026 Insert keeps user folds]] | done |
+| T-027 | [[T-027 Go tooling]] | done |
 
 ## Decisions
 
@@ -64,6 +65,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 - [[D-019 Precompiled bits-stdc++.h]]
 - [[D-020 Only templates open collapsed]]
 - [[D-021 Collapse templates outside Insert mode]]
+- [[D-022 Go through LazyVim extras]]
 
 ## Guides
 

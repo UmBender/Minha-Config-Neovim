@@ -236,6 +236,31 @@ function M.run_py(args)
   })
 end
 
+--- `go run` for the package of `file`: run from its directory, so every file of the package is built.
+---@param file string
+---@param args? string[]
+---@return {cmd: string[], cwd: string}
+function M.go_run_cmd(file, args)
+  return { cmd = vim.list_extend({ "go", "run", "." }, args or {}), cwd = vim.fn.fnamemodify(file, ":h") }
+end
+
+--- Run the current Go file's package in a floating terminal (`args` appended).
+---@param args? string[]
+function M.run_go(args)
+  vim.cmd("silent! update")
+  local file = vim.api.nvim_buf_get_name(0)
+  local run = M.go_run_cmd(file, args)
+  Snacks.terminal.open(run.cmd, {
+    cwd = run.cwd,
+    auto_close = false,
+    win = {
+      position = "float",
+      title = (" go run %s "):format(vim.fn.fnamemodify(run.cwd, ":t")),
+      title_pos = "center",
+    },
+  })
+end
+
 --- Compile the current file with g++; errors/warnings go to the quickfix list
 ---@param opts? {debug?: boolean, on_success?: fun(exe: string)}
 function M.compile(opts)
