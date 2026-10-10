@@ -7,6 +7,8 @@ opt.tabstop = 4
 opt.softtabstop = 4
 opt.scrolloff = 10
 opt.clipboard = "unnamedplus"
+-- draw tabs blank (Go indents with tabs; the indent guides already show them), keep the other markers
+opt.listchars = { tab = "  ", trail = "-", nbsp = "+" }
 
 -- the winbar (dropbar) already shows the code context; skip LazyVim's lualine copy of it
 vim.g.trouble_lualine = false

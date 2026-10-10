@@ -19,6 +19,7 @@ toolchain itself is the system `go`.
   (`<leader>uh`) and code lenses (run test, `go mod tidy`, govulncheck: `<leader>cc`). Open the
   project at the module root (`go.mod`/`go.work`) so gopls sees the whole module.
 - **Formatting** on save: `goimports` (adds/removes imports) then `gofumpt` (stricter gofmt).
+  Go indents with tabs; they are drawn blank, not as `>` (see [[T-028 Blank tabs]]).
 - **Linting**: `golangci-lint` on save and on leaving Insert mode. It uses the project's
   `.golangci.yml` when there is one, otherwise its defaults.
 - **Code actions** (`<leader>ca`): fill a struct, add/remove struct tags (gomodifytags), stub an

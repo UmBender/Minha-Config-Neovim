@@ -1,5 +1,5 @@
 ---
-updated: 2026-10-03
+updated: 2026-10-10
 tags: [guide, ui]
 ---
 # UI and Colorscheme
@@ -18,6 +18,7 @@ tags: [guide, ui]
 | Rainbow brackets | rainbow-delimiters.nvim + `RainbowDelimiter*` highlights | `ui.lua` + `colorscheme.lua` |
 | Syntax highlighting | Treesitter, started right after the first screen (Vim regex syntax until then) | `ui.lua` + `lua/util/perf.lua` |
 | Sticky function/loop header | nvim-treesitter-context (LazyVim extra `ui.treesitter-context`) | `lua/config/lazy.lua` |
+| Invisible chars: tabs drawn blank (Go indents with tabs), trailing spaces `-`, nbsp `+` | `listchars` | `lua/config/options.lua` |
 | Inline diagnostics (rounded bubbles) | tiny-inline-diagnostic.nvim (`modern` preset), default virtual text off | `ui.lua` |
 
 ## Font and icons

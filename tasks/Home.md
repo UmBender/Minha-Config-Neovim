@@ -41,6 +41,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-025 | [[T-025 Fold only templates]] | done |
 | T-026 | [[T-026 Insert keeps user folds]] | done |
 | T-027 | [[T-027 Go tooling]] | done |
+| T-028 | [[T-028 Blank tabs]] | done |
 
 ## Decisions
 
