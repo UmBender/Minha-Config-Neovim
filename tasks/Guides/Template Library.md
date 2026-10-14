@@ -37,6 +37,10 @@ passed as lambdas (common-use variants are plain code instead).
 Modular templates (`math/*`) take the modulus as a trailing argument, `998244353` by default:
 `powMod(b, e)`, `powMod(b, e, 1000000007)`, `sqrtMod(a, p)`; there is no global `mod` to edit
 ([[D-015 Modulus as an argument]]).
+For code that does a lot of modular arithmetic, `math/modint` gives a type instead:
+`ModInt<998244353>` (static modulus) or `ModInt<0>` with `ModInt<0>::setMod(m)` (modulus from the
+input), with `+ - * /`, `pow`, `inv`; its `comb` variant adds inverses of `1..n`, factorials and
+binomials ([[D-023 Modint type]]).
 Tree templates (`tree/*`) take the tree as an undirected adjacency list `vector<vector<int>>` (each
 edge in both lists) and never recurse, so deep trees (a path of 2e5 vertices) are safe.
 Geometry templates (`geometry/*`) are generic over the coordinate type through `Point<T>`

@@ -42,6 +42,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 | T-026 | [[T-026 Insert keeps user folds]] | done |
 | T-027 | [[T-027 Go tooling]] | done |
 | T-028 | [[T-028 Blank tabs]] | done |
+| T-029 | [[T-029 Modint]] | done |
 
 ## Decisions
 
@@ -67,6 +68,7 @@ Tracking for tasks, decisions and how-to notes for this config. Conventions are 
 - [[D-020 Only templates open collapsed]]
 - [[D-021 Collapse templates outside Insert mode]]
 - [[D-022 Go through LazyVim extras]]
+- [[D-023 Modint type]]
 
 ## Guides
 
